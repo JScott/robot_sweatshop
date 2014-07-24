@@ -8,8 +8,8 @@ Jenkins is getting more and more obtuse as I try to integrate it into our flow s
 
 This README!
 
-## /git-push
+## /git-push/:job
 
 Bitbucket and Github both have a hook for POSTing on push. It has a lot of relevant data in it which should be used in the Jenkins build but Jenkins fumbles on being able to read it. I could create a plugin I guess but frankly I'd rather not.
 
-Push to this instead and Platter will wrap up the appropriate data and pass it to a paramaterized build via URL.
+POST to this instead and Platter will wrap up the appropriate data and pass it to a paramaterized build via URL.
