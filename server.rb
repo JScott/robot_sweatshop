@@ -18,7 +18,7 @@ end
 def git_push_url(bitbucket, job_name)
   commit = bitbucket['commits'].last
   repo = bitbucket['repository']
-  source_url = "https://bitbucket.org#{repo['absolute_url']}src/#{commit['raw_node']}/?at=#{commit['branch']}"
+  source_url = URI.escape "https://bitbucket.org#{repo['absolute_url']}src/#{commit['raw_node']}/?at=#{commit['branch']}"
   parameters = [
     "token=#{CONF['token']}",
     "GIT_AUTHOR=#{commit['raw_author']}",
