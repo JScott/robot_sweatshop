@@ -16,16 +16,17 @@ get '/' do
 end
 
 def git_push_url(bitbucket_data, job_name)
-  authors = []
-  bitbucket_data['commits'].each do |commit|
-    authors.push commit['raw_author']
-  end
+  commit = bitbucket['commits'].last
+  repo = bitbucket['repository']
+  source_url = "https://bitbucket.org#{repo['absolute_url']}src/#{commit['raw_node']}/?at=#{commit['branch']}"
   parameters = [
     "token=#{CONF['token']}",
-    "GIT_AUTHOR=#{authors.uniq.join ', '}",
-    "GIT_HASH=#{bitbucket_data['commits'].last['raw_node']}",
-    "GIT_MESSAGE=#{bitbucket_data['commits'].last['message']}",
-    "GIT_REPO=#{bitbucket_data['repository']['absolute_url']}"
+    "GIT_AUTHOR=#{commit['raw_author']}",
+    "GIT_HASH=#{commit['raw_node']}",
+    "GIT_MESSAGE=#{commit['message']}",
+    "GIT_REPO=#{repo['absolute_url']}".
+    "GIT_BRANCH=#{commit['branch']}",
+    "GIT_SOURCE_URL=#{source_url}"
   ].join '&'
   puts parameters
   URI.escape "http://#{CONF['host']}:#{CONF['port']}/job/#{job_name}/buildWithParameters?#{parameters}"
