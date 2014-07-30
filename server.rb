@@ -5,10 +5,15 @@ require 'yaml'
 require 'httparty'
 require 'uri'
 
-CONF = YAML.load_file 'jenkins_config.yaml'
-
 set :port, 6381
 set :bind, '0.0.0.0'
+
+configure do
+  conf = YAML.load_file('config.yaml')
+  conf.each do |key, value|
+    set key.to_sym, value
+  end
+end
 
 get '/' do
   markdown = File.read 'README'
@@ -17,10 +22,11 @@ end
 
 def git_push_url(bitbucket, job_name)
   commit = bitbucket['commits'].last
+  return '' unless settings.branches.include? commit['branch']
   repo = bitbucket['repository']
   source_url = URI.escape "https://bitbucket.org#{repo['absolute_url']}src/#{commit['raw_node']}/?at=#{commit['branch']}"
   parameters = [
-    "token=#{CONF['token']}",
+    "token=#{settings.jenkins['token']}",
     "GIT_AUTHOR=#{commit['raw_author']}",
     "GIT_HASH=#{commit['raw_node']}",
     "GIT_MESSAGE=#{commit['message']}",
@@ -28,18 +34,25 @@ def git_push_url(bitbucket, job_name)
     "GIT_BRANCH=#{commit['branch']}",
     "GIT_SOURCE_URL=#{source_url}"
   ].join '&'
-  puts parameters
-  URI.escape "http://#{CONF['host']}:#{CONF['port']}/job/#{job_name}/buildWithParameters?#{parameters}"
+  URI.escape "http://#{settings.jenkins['host']}:#{settings.jenkins['port']}/job/#{job_name}/buildWithParameters?#{parameters}"
 end
 
 post '/:tool/payload-for/:job' do
   request.body.rewind
-  case params['tool']
+  url = case params['tool']
   when 'bitbucket'
     git_data = URI.decode_www_form(request.body.read)[0][1]
     git_data = JSON.parse git_data
-    HTTParty.get git_push_url(git_data, params['job'])
+    git_push_url(git_data, params['job'])
   else
     puts 'Error: unknown tool called'
+    ''
+  end
+
+  if url.empty?
+    puts "Payload ignored:\n#{git_data}"
+  else
+    puts "Requesting:\n#{url}"
+    HTTParty.get url
   end
 end
