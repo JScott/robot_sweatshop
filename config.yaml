@@ -1,6 +1,6 @@
 branches:
 - develop
 jenkins:
-  host: uet.teluswebteam.com
-  port: 8080
-  token: GPPwFHRD9p
+  host: instance.jenkins.com
+  port: 80
+  token: secret-password!
