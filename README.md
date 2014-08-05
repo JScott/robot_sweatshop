@@ -15,4 +15,4 @@ Git hosts like Bitbucket and Github both have a hook for POSTing on push. The pa
 POST to this instead and Platter will wrap up the appropriate data and pass it to a paramaterized build via URL.
 
 Currently supported tools:
-- Bitbucket
+- bitbucket
