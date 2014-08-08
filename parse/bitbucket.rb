@@ -4,18 +4,21 @@ require 'json'
 class BitbucketPayload
   def initialize(data)
     data = URI.decode_www_form(data)[0][1]
-    @data = JSON.parse data
+    @data = JSON.parse data || {}
   end
 
   def latest_commit
+    return nil if @data['commits'].nil?
     @data['commits'].last
   end
 
   def repository
+    return nil if @data['repository'].nil?
     @data['repository']
   end
 
   def source_url
+    return '' if @data['canon_url'].nil? || self.repository.empty? || self.latest_commit.empty?
     base_url = @data['canon_url']
     repo_slug = self.repository['absolute_url']
     hash = self.latest_commit['raw_node']

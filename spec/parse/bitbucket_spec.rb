@@ -31,17 +31,15 @@ describe BitbucketPayload do
       @payload = BitbucketPayload.new @payload_data['bad_bitbucket']
     end
 
-    it 'parses commit data' do
-      expect(@payload.latest_commit['author']).to be_empty
-      expect(@payload.latest_commit['branch']).to be_empty
+    it 'returns nil for commit data' do
+      expect(@payload.latest_commit).to be_nil
     end
     
-    it 'parses repository data' do
-      expect(@payload.repository['owner']).to be_empty
-      expect(@payload.repository['absolute_url']).to be_empty
+    it 'returns nil for repository data' do
+      expect(@payload.repository).to be_nil
     end
 
-    it 'parses the source URL' do
+    it 'returns an empty source URL' do
       expect(@payload.source_url).to be_empty
     end
   end
