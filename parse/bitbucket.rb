@@ -10,7 +10,18 @@ class BitbucketPayload
   def latest_commit
     @data['commits'].last
   end
-  
+
+  def repository
+    @data['repository']
+  end
+
+  def source_url
+    base_url = @data['canon_url']
+    repo_slug = self.repository['absolute_url']
+    hash = self.latest_commit['raw_node']
+    branch = self.latest_commit['branch']
+    "#{base_url}#{repo_slug}src/#{hash}/?at=#{branch}"
+  end  
 end
 
 

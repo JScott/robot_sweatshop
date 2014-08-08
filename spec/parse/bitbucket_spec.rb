@@ -22,7 +22,7 @@ describe BitbucketPayload do
     end
 
     it 'parses the source URL' do
-      expect(@payload.source_url).to eq 'https://bitbucket.org/marcus/project-x/src/620ade18607ac42d872b568bb92acaa99a28620e9/?at=master'
+      expect(@payload.source_url).to eq 'https://bitbucket.org/marcus/project-x/src/620ade18607ac42d872b568bb92acaa9a28620e9/?at=master'
     end
   end
 
