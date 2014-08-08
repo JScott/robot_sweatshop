@@ -12,17 +12,17 @@ describe BitbucketPayload do
     end
 
     it 'parses commit data' do
-      expect(@payload.latest_commit['author']).to equal 'marcus'
-      expect(@payload.latest_commit['branch']).to equal 'master'      
+      expect(@payload.latest_commit['author']).to eq 'marcus'
+      expect(@payload.latest_commit['branch']).to eq 'master'      
     end
     
     it 'parses repository data' do
-      expect(@payload.repository['owner']).to equal 'marcus'
-      expect(@payload.repository['absolute_url']).to equal '/marcus/project-x/'
+      expect(@payload.repository['owner']).to eq 'marcus'
+      expect(@payload.repository['absolute_url']).to eq '/marcus/project-x/'
     end
 
     it 'parses the source URL' do
-      expect(@payload.source_url).to equal 'https://bitbucket.org/marcus/project-x/src/620ade18607ac42d872b568bb92acaa99a28620e9/?at=master'
+      expect(@payload.source_url).to eq 'https://bitbucket.org/marcus/project-x/src/620ade18607ac42d872b568bb92acaa99a28620e9/?at=master'
     end
   end
 
