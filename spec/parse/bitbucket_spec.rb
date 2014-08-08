@@ -12,17 +12,17 @@ describe BitbucketPayload do
     end
 
     it 'parses commit data' do
-      @payload.latest_commit['author'] = 'marcus'
-      @payload.latest_commit['branch'] = 'master'      
+      expect(@payload.latest_commit['author']).to equal 'marcus'
+      expect(@payload.latest_commit['branch']).to equal 'master'      
     end
     
     it 'parses repository data' do
-      @payload.repository['owner'] = 'marcus'
-      @payload.repository['absolute_url'] = '/marcus/project-x/'
+      expect(@payload.repository['owner']).to equal 'marcus'
+      expect(@payload.repository['absolute_url']).to equal '/marcus/project-x/'
     end
 
     it 'parses the source URL' do
-      @payload.source_url = 'https://bitbucket.org/marcus/project-x/src/620ade18607ac42d872b568bb92acaa99a28620e9/?at=master'
+      expect(@payload.source_url).to equal 'https://bitbucket.org/marcus/project-x/src/620ade18607ac42d872b568bb92acaa99a28620e9/?at=master'
     end
   end
 
@@ -32,17 +32,17 @@ describe BitbucketPayload do
     end
 
     it 'parses commit data' do
-      @payload.latest_commit['author'] = ''
-      @payload.latest_commit['branch'] = ''      
+      expect(@payload.latest_commit['author']).to be_empty
+      expect(@payload.latest_commit['branch']).to be_empty
     end
     
     it 'parses repository data' do
-      @payload.repository['owner'] = ''
-      @payload.repository['absolute_url'] = ''
+      expect(@payload.repository['owner']).to be_empty
+      expect(@payload.repository['absolute_url']).to be_empty
     end
 
     it 'parses the source URL' do
-      @payload.source_url = ''
+      expect(@payload.source_url).to be_empty
     end
   end
 end
