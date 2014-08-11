@@ -28,23 +28,42 @@ def parse_payload(tool, data)
   parse.new data
 end
 
-def verified(payload)
+def check_payload(payload)
   if payload.nil?
-    puts "Stopping. No parser for #{params['tool']}"
+    puts "Stopping. No parser for tool:", params['tool']
     return false
   end
+  return true
+end
 
+def check_branch(payload)
   unless CONF['branches'].include? payload.branch
-    puts "Stopping. '#{payload.branch}' is not in our branch watchlist:", "#{CONF['branches']}"
+    puts "Stopping. '#{payload.branch}' is not on the branch watchlist:", CONF['branches']
     return false
   end
+  return true
+end
 
-  true
+def verify_scripts(scripts)
+  missing_scripts = scripts.reject { |script| File.exists? File.expand_path(script) }
+  unless missing_scripts.empty?
+    puts "Stopping. Couldn't find scripts to run:", missing_scripts
+    return false
+  end
+  return true
+end
+
+def verify_payload(payload)
+  check_payload(payload) &&
+  check_branch(payload)
 end
 
 def run_scripts_with(payload)
   CONF['scripts'].each do |path|
-    puts "Running #{File.expand_path path}..."
+    puts "Running #{path}..."
+    path = File.expand_path path
+    system path
+    puts "Script done. (exit status: #{$?.exitstatus})"
   end
 end
 
@@ -52,5 +71,7 @@ post '/:tool/payload-for/:job' do
   puts "Received #{params['tool']} payload for #{params['job']}"
   request.body.rewind
   payload = parse_payload params['tool'], request.body.read
-  run_scripts_with payload if verified payload
+  run_scripts_with payload if verify_payload payload
 end
+
+exit unless verify_scripts CONF['scripts']

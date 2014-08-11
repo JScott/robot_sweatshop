@@ -2,8 +2,4 @@ branches:
 - develop
 
 scripts:
-- scripts/setup/repos.rb
-- scripts/setup/uss.rb
-- scripts/setup/wireline_mock_services.rb
-- scripts/run/phpunit.rb
-- scripts/archive/results.rb
+- scripts/hello_world
