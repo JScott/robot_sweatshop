@@ -8,35 +8,40 @@ class BitbucketPayload
   end
 
   def latest_commit
-    return nil if @data['commits'].nil?
+    return {} if @data['commits'].nil?
     @data['commits'].last
   end
 
   def repository
-    return nil if @data['repository'].nil?
+    return {} if @data['repository'].nil?
     @data['repository']
+  end
+
+
+  def author
+    self.latest_commit['raw_author']
+  end
+
+  def hash
+    self.latest_commit['raw_node']
+  end
+
+  def branch
+    self.latest_commit['branch']
+  end
+
+  def message
+    self.latest_commit['message']
+  end
+
+  def repo_slug
+    slug = self.repository['absolute_url']
+    slug.nil? ? nil : slug[1...-1]
   end
 
   def source_url
     return '' if @data['canon_url'].nil? || self.repository.empty? || self.latest_commit.empty?
     base_url = @data['canon_url']
-    repo_slug = self.repository['absolute_url']
-    hash = self.latest_commit['raw_node']
-    branch = self.latest_commit['branch']
-    "#{base_url}#{repo_slug}src/#{hash}/?at=#{branch}"
-  end  
+    "#{base_url}/#{self.repo_slug}/src/#{self.hash}/?at=#{self.branch}"
+  end
 end
-
-
-#  commit = bitbucket['commits'].last
-#  repo = bitbucket['repository']
-#  source_url = URI.escape "https://bitbucket.org#{repo['absolute_url']}src/#{commit['raw_node']}/?at=#{commit['branch']}"
-#  parameters = [
-#    "token=#{settings.jenkins['token']}",
-#    "GIT_AUTHOR=#{commit['raw_author']}",
-#    "GIT_HASH=#{commit['raw_node']}",
-#    "GIT_MESSAGE=#{commit['message']}",
-#    "GIT_REPO=#{repo['absolute_url']}",
-#    "GIT_BRANCH=#{commit['branch']}",
-#    "GIT_SOURCE_URL=#{source_url}"
-#  ].join '&'

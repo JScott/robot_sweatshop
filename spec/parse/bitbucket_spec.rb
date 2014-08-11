@@ -12,13 +12,16 @@ describe BitbucketPayload do
     end
 
     it 'parses commit data' do
-      expect(@payload.latest_commit['author']).to eq 'marcus'
-      expect(@payload.latest_commit['branch']).to eq 'master'      
+      expect(@payload.latest_commit).to_not be_empty
+      expect(@payload.author).to eq 'Marcus Bertrand <marcus@somedomain.com>'
+      expect(@payload.hash).to eq '620ade18607ac42d872b568bb92acaa9a28620e9'
+      expect(@payload.branch).to eq 'master'
+      expect(@payload.message).to eq "Added some more things to somefile.py\n"
     end
     
     it 'parses repository data' do
-      expect(@payload.repository['owner']).to eq 'marcus'
-      expect(@payload.repository['absolute_url']).to eq '/marcus/project-x/'
+      expect(@payload.repository).to_not be_empty
+      expect(@payload.repo_slug).to eq 'marcus/project-x'
     end
 
     it 'parses the source URL' do
@@ -26,17 +29,22 @@ describe BitbucketPayload do
     end
   end
 
-  context 'with an empty or malformed payload' do
+  context 'with a malformed payload' do
     before(:all) do
       @payload = BitbucketPayload.new @payload_data['bad_bitbucket']
     end
 
     it 'returns nil for commit data' do
-      expect(@payload.latest_commit).to be_nil
+      expect(@payload.latest_commit).to be_empty
+      expect(@payload.author).to be_nil
+      expect(@payload.hash).to be_nil
+      expect(@payload.branch).to be_nil
+      expect(@payload.message).to be_nil
     end
     
     it 'returns nil for repository data' do
-      expect(@payload.repository).to be_nil
+      expect(@payload.repository).to be_empty
+      expect(@payload.repo_slug).to be_nil
     end
 
     it 'returns an empty source URL' do

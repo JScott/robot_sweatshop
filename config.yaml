@@ -1,6 +1,2 @@
 branches:
 - develop
-jenkins:
-  host: instance.jenkins.com
-  port: 80
-  token: secret-password!
