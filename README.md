@@ -1,18 +1,31 @@
-# Platter
+# mci
 
-Jenkins is getting more and more obtuse as I try to integrate it into our flow so I'm creating a server to give it a hand.
+I was Jenkins as a glorified script runner, as I'm sure a lot of people are.
+I don't need a JVM or front-end to do this, I just want to run scripts on code that I push.
+That's what this is, just a minimal CI server.
 
-# Paths
+# use
 
-## /
-
-This README!
-
-## /:tool/payload-for/:job
-
-Git hosts like Bitbucket and Github both have a hook for POSTing on push. The payload has a lot of relevant data in it which should be used in the Jenkins build but Jenkins relies on questionable plugins to read it. I could create a better plugin I guess but frankly I'd rather not.
-
-POST to this instead and Platter will wrap up the appropriate data and pass it to a paramaterized build via URL.
+Set up config.yml with the branches you want to watch for and the scripts you want to run on push.
+Run the server and push to `url.com/:tool/payload-for/:job`. For example, `url.com/bitbucket/payload-for/selenium-tests`.
 
 Currently supported tools:
 - bitbucket
+
+# security
+
+Sandbox your process.
+
+```
+useradd --home /opt/lazyjenkins lazyjenkins
+su lazyjenkins -c "./server.rb"
+```
+
+# roadmap
+
+v1.0
+- Create the idea of multiple jobs using various scripts
+- Pass the payload to the scripts
+
+v1.1
+- Manually kick off a special script flow with custom parameters
