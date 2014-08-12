@@ -29,3 +29,6 @@ v1.0
 
 v1.1
 - Manually kick off a special script flow with custom parameters
+
+v?.0
+- Support for slaving off script running
