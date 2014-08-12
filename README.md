@@ -2,7 +2,7 @@
 
 I was Jenkins as a glorified script runner, as I'm sure a lot of people are.
 I don't need a JVM or front-end to do this, I just want to run scripts on code that I push.
-That's what this is, just a minimal CI server.
+That's what this is: a minimal CI server.
 
 # use
 
