@@ -17,9 +17,11 @@ Currently supported tools:
 Sandbox your process.
 
 ```
-useradd --home /opt/lazyjenkins lazyjenkins
-su lazyjenkins -c "./server.rb"
+useradd --home /opt/minimal-ci ci-bot
+su ci-bot -c "./server.rb"
 ```
+
+Add SSH keys as appropriate.
 
 # roadmap
 
