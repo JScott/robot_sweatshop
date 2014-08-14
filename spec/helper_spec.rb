@@ -5,8 +5,9 @@ describe 'server_helper.rb' do
   before(:all) do
     payload_data = YAML.load_file "#{Dir.pwd}/spec/data/payload.yaml"
     @tools = [
-      {name: 'bitbucket', payload: payload_data['bitbucket'], parser: BitbucketPayload}
+      {name: 'bitbucket', data: payload_data['bitbucket'], parser: BitbucketPayload}
     ]
+    @some_tool = @tools.first
   end
 
   describe 'parser_for' do
@@ -15,29 +16,15 @@ describe 'server_helper.rb' do
         expect(parser_for tool[:name]).to eq tool[:parser]
       end
     end
-    it 'returns nil if the tool is not supported' do
-      @tools.each do |tool|
-        expect(parser_for '').to be_nil
-      end
+    it 'throws an error if the tool is not supported' do
+      expect { parser_for '' }.to raise_error
     end
   end
   
-  describe 'parse_payload' do
-    it 'returns a tool-appropriate parser instance for that data' do
-      @tools.each do |tool|
-        parser = parse_payload tool[:name], tool[:payload]
-        expect(parser.class).to eq tool[:parser]
-        expect(parser.repo_slug).to eq 'marcus/project-x'
-      end
-    end
-    it 'raises an exception if the tool is not supported' do
-      expect { parse_payload '', '' }.to raise_error
-    end
-  end
-
   describe 'verify_payload' do
     before(:all) do
-      @payload = parse_payload @tools.first[:name], @tools.first[:payload]
+      parse = parser_for @some_tool[:name]
+      @payload = parse.new @some_tool[:data]
     end
     it 'does nothing if the branch is on the watchlist' do
       branch_watchlist = ['master']
@@ -64,13 +51,13 @@ describe 'server_helper.rb' do
   describe 'run_scripts' do
     before(:all) do
       @scripts = ["scripts/hello-world"]
-      @payload = @tools.first[:payload]
+      @payload = @some_tool[:data]
     end
     it 'runs the script and prints the output' do
-      expect { run_scripts @scripts, @payload }.to output(/hello world/).to_stdout
+      expect { run_scripts 'test-job', @scripts, @payload }.to output(/hello world/).to_stdout
     end
     it 'outputs the exit status of the script' do
-      expect { run_scripts @scripts, @payload }.to output(/exit status: 0/).to_stdout
+      expect { run_scripts 'test-job', @scripts, @payload }.to output(/exit status: 0/).to_stdout
     end
   end
 end

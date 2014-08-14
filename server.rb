@@ -18,7 +18,8 @@ end
 post '/:tool/payload-for/:job' do
   puts "Received #{params['tool']} payload for #{params['job']}"
   request.body.rewind
-  payload = parse_payload params['tool'], request.body.read
+  parse = parser_for params['tool']
+  payload = parse.new request.body.read
   verify_payload payload, CONF['branches']
-  run_scripts CONF['scripts'], payload
+  run_scripts params['job'], CONF['scripts'], payload
 end

@@ -5,16 +5,8 @@ def parser_for(tool)
   when 'bitbucket'
     BitbucketPayload
   else
-    nil
-  end
-end
-
-def parse_payload(tool, data)
-  parse = parser_for tool
-  if parse.nil?
     raise "Stopping. No parser for tool:\n#{tool}"
   end
-  parse.new data
 end
 
 def verify_payload(payload, branch_watchlist)
@@ -30,15 +22,22 @@ def verify_scripts(scripts)
   end
 end
 
-def run_scripts(scripts, payload_object)
-  scripts.each do |path|
-    puts "Running #{path}..."
-    IO.popen(File.expand_path path) do |io|
-      while line = io.gets
-        puts line
+def run_scripts(job, scripts, payload_object)
+  scripts.map! { |path| File.expand_path path }
+  
+  puts "Working from workspace for #{job}"
+  workspace = "workspaces/#{job}"
+  FileUtils.mkdir_p workspace
+  Dir.chdir workspace do
+    scripts.each do |path|
+      puts "Running #{path}..."
+      IO.popen(path) do |io|
+        while line = io.gets
+          puts line
+        end
       end
+      puts "Script done. (exit status: #{$?.exitstatus})"
     end
-    puts "Script done. (exit status: #{$?.exitstatus})"
   end
 end
 
