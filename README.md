@@ -2,7 +2,7 @@
 
 I was Jenkins as a glorified script runner, as I'm sure a lot of people are.
 I don't need a JVM or front-end to do this, I just want to run scripts on code that I push.
-That's what this is, just a minimal CI server.
+That's what this is: a minimal CI server.
 
 # use
 
@@ -17,9 +17,11 @@ Currently supported tools:
 Sandbox your process.
 
 ```
-useradd --home /opt/lazyjenkins lazyjenkins
-su lazyjenkins -c "./server.rb"
+useradd --home /opt/minimal-ci ci-bot
+su ci-bot -c "./server.rb"
 ```
+
+Add SSH keys as appropriate.
 
 # roadmap
 
@@ -29,3 +31,6 @@ v1.0
 
 v1.1
 - Manually kick off a special script flow with custom parameters
+
+v?.0
+- Support for slaving off script running
