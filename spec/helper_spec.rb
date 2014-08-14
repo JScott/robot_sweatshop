@@ -50,14 +50,20 @@ describe 'server_helper.rb' do
 
   describe 'run_scripts' do
     before(:all) do
-      @scripts = ["scripts/hello-world"]
+      @job = 'test-job'
+      @scripts = ["spec/data/scripts/test-script"]
       @payload = @some_tool[:data]
     end
-    it 'runs the script and prints the output' do
-      expect { run_scripts 'test-job', @scripts, @payload }.to output(/hello world/).to_stdout
+    it 'prints the output' do
+      expect { run_scripts @job, @scripts, @payload }.to output(/just a test/).to_stdout
+    end
+    it 'writes files to the workspace' do
+      run_scripts @job, @scripts, @payload
+      file_text = File.read "workspaces/#{@job}/test.txt"
+      expect(file_text).to eq 'just a test'
     end
     it 'outputs the exit status of the script' do
-      expect { run_scripts 'test-job', @scripts, @payload }.to output(/exit status: 0/).to_stdout
+      expect { run_scripts @job, @scripts, @payload }.to output(/exit status: 0/).to_stdout
     end
   end
 end

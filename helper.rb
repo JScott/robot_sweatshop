@@ -24,7 +24,6 @@ end
 
 def run_scripts(job, scripts, payload_object)
   scripts.map! { |path| File.expand_path path }
-  
   puts "Working from workspace for #{job}"
   workspace = "workspaces/#{job}"
   FileUtils.mkdir_p workspace
