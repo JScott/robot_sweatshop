@@ -12,7 +12,7 @@ CONF = YAML.load_file('config.yaml')
 verify_scripts CONF['scripts']
 
 get '/' do
-  markdown = File.read 'README'
+  markdown = File.read 'README.md'
   RDiscount.new(markdown).to_html
 end
 
