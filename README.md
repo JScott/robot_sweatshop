@@ -25,12 +25,5 @@ Add SSH keys as appropriate.
 
 # roadmap
 
-v1.0
-- Create the idea of multiple jobs using various scripts
-- Pass the payload to the scripts
-
-v1.1
 - Manually kick off a special script flow with custom parameters
-
-v?.0
 - Support for slaving off script running
