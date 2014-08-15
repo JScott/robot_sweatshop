@@ -27,9 +27,9 @@ post '/:tool/payload-for/:job' do
     payload = parse.new request.body.read
     verify_payload payload, settings.branches
 
-    Thread.new {
+    Thread.new(params['job'], settings.scripts, payload) { |job, scripts, payload|
       set_environment_variables payload
-      run_scripts params['job'], settings.scripts, payload
+      run_scripts job, scripts, payload
     }
   }
   status 200
