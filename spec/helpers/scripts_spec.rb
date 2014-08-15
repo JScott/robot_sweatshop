@@ -65,8 +65,8 @@ describe 'helper/scripts.rb' do
     end
     it 'will write files from scripts to the workspace' do
       run_scripts @job, @scripts, @payload
-      file_text = File.read "workspaces/#{@job}/test.txt"
-      expect(file_text).to eq 'just a test'
+      file_text = File.read "workspaces/#{@job}/hello.txt"
+      expect(file_text).to eq 'hello file'
     end
   end
 end
