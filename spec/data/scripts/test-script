@@ -1,3 +1,0 @@
-#!/usr/bin/ruby
-puts 'just a test'
-File.write('test.txt', 'just a test')
