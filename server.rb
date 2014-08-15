@@ -16,6 +16,12 @@ get '/' do
   RDiscount.new(markdown).to_html
 end
 
+get '/reload-scripts' do
+  CONF = YAML.load_file('config.yaml')
+  verify_scripts CONF['scripts']
+  'Scripts reloaded.'
+end
+
 post '/:tool/payload-for/:job' do
   puts "Received #{params['tool']} payload for #{params['job']}"
   request.body.rewind

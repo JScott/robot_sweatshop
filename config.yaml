@@ -2,4 +2,4 @@ branches:
 - develop
 
 scripts:
-- scripts/hello-world
+- ../webchannel-ci/uss/setup/repos.rb
