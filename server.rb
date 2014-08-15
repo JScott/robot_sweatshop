@@ -5,21 +5,18 @@ require 'rdiscount'
 require_relative 'helpers/payload'
 require_relative 'helpers/scripts'
 
+dir = File.expand_path File.dirname(__FILE__)
+config = YAML.load_file("#{dir}/config.yaml")
+
 set :port, 6381
 set :bind, '0.0.0.0'
-
-CONF = YAML.load_file('config.yaml')
-verify_scripts CONF['scripts']
+set :branches, config['branches']
+set :scripts, config['scripts']
+verify_scripts settings.scripts
 
 get '/' do
   markdown = File.read 'README.md'
   RDiscount.new(markdown).to_html
-end
-
-get '/reload-scripts' do
-  CONF = YAML.load_file('config.yaml')
-  verify_scripts CONF['scripts']
-  'Scripts reloaded.'
 end
 
 post '/:tool/payload-for/:job' do
@@ -28,9 +25,9 @@ post '/:tool/payload-for/:job' do
   puts catch (:error) {
     parse = parser_for params['tool']
     payload = parse.new request.body.read
-    verify_payload payload, CONF['branches']
+    verify_payload payload, settings.branches
 
     set_environment_variables payload
-    run_scripts params['job'], CONF['scripts'], payload
+    run_scripts params['job'], settings.scripts, payload
   }
 end

@@ -3,3 +3,4 @@ branches:
 
 scripts:
 - ../webchannel-ci/uss/setup/repos.rb
+- ../webchannel-ci/uss/setup/uss.rb

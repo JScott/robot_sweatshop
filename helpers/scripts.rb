@@ -9,8 +9,8 @@ def verify_scripts(scripts)
 end
 
 def from_workspace(job)
-  puts_info "Working from workspace for #{job}"
   path = workspace_path_for job
+  puts_info "Working from '#{path}' for '#{job}'"
   FileUtils.mkdir_p path
   Dir.chdir path do
     yield
@@ -22,7 +22,7 @@ def workspace_path_for(job)
 end
 
 def run_script(path)
-  puts_info "Running #{path}..."
+  puts_info "Running '#{path}'..."
   IO.popen(path) do |io|
     while line = io.gets
       puts_script line
@@ -37,5 +37,3 @@ def run_scripts(job, scripts, payload_object)
     scripts.each { |path| run_script path }
   end
 end
-
-
