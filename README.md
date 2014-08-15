@@ -25,5 +25,7 @@ Add SSH keys as appropriate.
 
 # roadmap
 
+- Fix multiple requests coming in at once with the Ruby EventMachine
+
 - Manually kick off a special script flow with custom parameters
 - Support for slaving off script running
