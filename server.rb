@@ -2,7 +2,8 @@
 require 'yaml'
 require 'sinatra'
 require 'rdiscount'
-require_relative 'helper'
+require_relative 'helpers/payload'
+require_relative 'helpers/script'
 
 set :port, 6381
 set :bind, '0.0.0.0'

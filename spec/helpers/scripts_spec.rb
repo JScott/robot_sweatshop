@@ -1,39 +1,11 @@
-require_relative "#{Dir.pwd}/helper.rb"
+require_relative "../../helpers/scripts.rb"
 require 'yaml'
 
-describe 'server_helper.rb' do
+describe 'helper/scripts.rb' do
   before(:all) do
-    payload_data = YAML.load_file "#{Dir.pwd}/spec/data/payload.yaml"
-    @tools = [
-      {name: 'bitbucket', data: payload_data['bitbucket'], parser: BitbucketPayload}
-    ]
-    @some_tool = @tools.first
-  end
-
-  describe 'parser_for' do
-    it 'returns a tool-appropriate class' do
-      @tools.each do |tool|
-        expect(parser_for tool[:name]).to eq tool[:parser]
-      end
-    end
-    it 'throws an error if the tool is not supported' do
-      expect { parser_for '' }.to raise_error
-    end
-  end
-  
-  describe 'verify_payload' do
-    before(:all) do
-      parse = parser_for @some_tool[:name]
-      @payload = parse.new @some_tool[:data]
-    end
-    it 'does nothing if the branch is on the watchlist' do
-      branch_watchlist = ['master']
-      expect { verify_payload @payload, branch_watchlist }.to_not raise_error
-    end
-    it 'raises an exception if the branch is not being watched' do
-      branch_watchlist = ['develop']
-      expect { verify_payload @payload, branch_watchlist }.to raise_error
-    end
+    payload_path = "#{File.expand_path File.dirname(__FILE__)}/../data/payload.yaml"
+    payload_data = YAML.load_file payload_path
+    @some_data = payload_data['bitbucket']
   end
 
   describe 'verify_scripts' do
@@ -85,7 +57,7 @@ describe 'server_helper.rb' do
         "spec/data/scripts/hello-world",
         "spec/data/scripts/hello-file"
       ]
-      @payload = @some_tool[:data]
+      @payload = @some_data
     end
     it 'calls run_script on all scripts' do
       expect_any_instance_of(Object).to receive(:run_script).twice

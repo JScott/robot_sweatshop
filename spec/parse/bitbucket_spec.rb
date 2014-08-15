@@ -3,7 +3,8 @@ require 'yaml'
 
 describe BitbucketPayload do
   before(:all) do
-    @payload_data = YAML.load_file "#{Dir.pwd}/spec/data/payload.yaml"
+    payload_path = "#{File.expand_path File.dirname(__FILE__)}/../data/payload.yaml"
+    @payload_data = YAML.load_file payload_path
   end
 
   context 'with a bitbucket payload' do
