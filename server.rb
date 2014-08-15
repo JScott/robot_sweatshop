@@ -19,11 +19,12 @@ end
 post '/:tool/payload-for/:job' do
   puts "Received #{params['tool']} payload for #{params['job']}"
   request.body.rewind
+  puts catch (:error) {
+    parse = parser_for params['tool']
+    payload = parse.new request.body.read
+    verify_payload payload, CONF['branches']
 
-  parse = parser_for params['tool']
-  payload = parse.new request.body.read
-  verify_payload payload, CONF['branches']
-
-  set_environment_variables payload
-  run_scripts params['job'], CONF['scripts'], payload
+    set_environment_variables payload
+    run_scripts params['job'], CONF['scripts'], payload
+  }
 end
