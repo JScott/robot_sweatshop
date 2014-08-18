@@ -29,3 +29,4 @@ Add SSH keys as appropriate.
 
 - Manually kick off a special script flow with custom parameters
 - Support for slaving off script running
+- Reload scripts without restarting the server
