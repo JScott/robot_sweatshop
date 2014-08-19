@@ -1,8 +1,2 @@
-pid: /var/run/mci.pid
-log: /var/log/mci.log
-
-branches:
-- develop
-
-scripts:
-- scripts/hello-world
+pid_file: /var/run/mci/mci.pid
+#log_file: /data/log/mci/mci.log

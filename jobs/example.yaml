@@ -1,0 +1,8 @@
+branches:
+- develop
+
+scripts:
+- scripts/hello-world
+
+environment:
+  world: Earth

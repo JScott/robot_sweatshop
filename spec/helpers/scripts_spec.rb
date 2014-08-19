@@ -52,8 +52,8 @@ describe 'helper/scripts.rb' do
 
   describe 'run_scripts' do
     before(:all) do
-      @job = 'test-job'
-      @scripts = [
+      @job_name = 'test-job'
+      @scripts: [
         "spec/data/scripts/hello-world",
         "spec/data/scripts/hello-file"
       ]
@@ -61,11 +61,11 @@ describe 'helper/scripts.rb' do
     end
     it 'calls run_script on all scripts' do
       expect_any_instance_of(Object).to receive(:run_script).twice
-      run_scripts @job, @scripts, @payload
+      run_scripts @job_name, @scripts, @payload
     end
     it 'will write files from scripts to the workspace' do
-      run_scripts @job, @scripts, @payload
-      file_text = File.read "workspaces/#{@job}/hello.txt"
+      run_scripts @job_name, @scripts, @payload
+      file_text = File.read "workspaces/#{@job_name}/hello.txt"
       expect(file_text).to eq 'hello file'
     end
   end

@@ -1,4 +1,5 @@
 Gemfile.lock
 workspaces
 scripts/*
-config.yaml
+jobs/*
+!jobs/example.yaml

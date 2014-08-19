@@ -31,9 +31,9 @@ def run_script(path)
   puts_info "Script done. (exit status: #{$?.exitstatus})"
 end
 
-def run_scripts(job, scripts, payload_object)
+def run_scripts(job_name, scripts, payload_object)
   scripts.map! { |path| File.expand_path path }
-  from_workspace(job) do
+  from_workspace(job_name) do
     scripts.each { |path| run_script path }
   end
 end

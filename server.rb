@@ -2,30 +2,18 @@
 require 'yaml'
 require 'sinatra'
 require 'rdiscount'
+require_relative 'helpers/output'
 require_relative 'helpers/payload'
 require_relative 'helpers/scripts'
+require_relative 'helpers/configs'
 
-dir = File.expand_path File.dirname(__FILE__)
-config = YAML.load_file("#{dir}/config.yaml")
+config = read_config 'config.yaml'
+set_log_file config
+set_pid_file config
 
 set :port, 6381
 set :bind, '0.0.0.0'
-set :branches, config['branches']
-set :scripts, config['scripts']
-verify_scripts settings.scripts
-
-unless config['log_file'].nil?
-  log = File.new config['log_file'], 'a+'
-  STDOUT.reopen log
-  STDOUT.sync = true
-  STDERR.reopen log
-  STDERR.sync = true
-end
-unless config['pid_file'].nil?
-  File.open config['pid_file'], 'w' do |f|
-    f.write Process.pid
-  end
-end
+set :jobs, get_job_data('jobs') 
 
 get '/' do
   markdown = File.read 'README.md'
@@ -34,16 +22,19 @@ end
 
 post '/:tool/payload-for/:job' do
   puts "Received #{params['tool']} payload for #{params['job']}"
-  request.body.rewind
   puts catch (:error) {
+    reject_job params['job'] unless settings.jobs.include? params['job']
+    job = settings.jobs[params['job']]
+
+    request.body.rewind
     parse = parser_for params['tool']
     payload = parse.new request.body.read
-    verify_payload payload, settings.branches
+    verify_payload payload, job['branches']
 
-    Thread.new(params['job'], settings.scripts, payload) { |job, scripts, payload|
+    Thread.new(params['job'], job, payload) { |job_name, job_data, payload|
       set_environment_variables payload
-      config['environment'].each { |key, value| ENV[key] = value }
-      run_scripts job, scripts, payload
+      job['environment'].each { |key, value| ENV[key] = value }
+      run_scripts job_name, job_data['scripts'], payload
     }
   }
   status 200
