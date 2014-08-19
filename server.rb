@@ -14,6 +14,19 @@ set :branches, config['branches']
 set :scripts, config['scripts']
 verify_scripts settings.scripts
 
+unless config['log_file'].nil?
+  log = File.new config['log_file'], 'a+'
+  STDOUT.reopen log
+  STDOUT.sync = true
+  STDERR.reopen log
+  STDERR.sync = true
+end
+unless config['pid_file'].nil?
+  File.open config['pid_file'], 'w' do |f|
+    f.write Process.pid
+  end
+end
+
 get '/' do
   markdown = File.read 'README.md'
   RDiscount.new(markdown).to_html
@@ -29,6 +42,7 @@ post '/:tool/payload-for/:job' do
 
     Thread.new(params['job'], settings.scripts, payload) { |job, scripts, payload|
       set_environment_variables payload
+      config['environment'].each { |key, value| ENV[key] = value }
       run_scripts job, scripts, payload
     }
   }
