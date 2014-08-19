@@ -1,3 +1,6 @@
+pid: /var/run/mci.pid
+log: /var/log/mci.log
+
 branches:
 - develop
 
