@@ -53,7 +53,7 @@ describe 'helper/scripts.rb' do
   describe 'run_scripts' do
     before(:all) do
       @job_name = 'test-job'
-      @scripts: [
+      @scripts = [
         "spec/data/scripts/hello-world",
         "spec/data/scripts/hello-file"
       ]
