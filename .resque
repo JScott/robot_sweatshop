@@ -1,0 +1,5 @@
+pid_file: '/var/run/resque/resque-worker.pid'
+interval: 1
+daemon: false
+timeout: 5
+graceful_term: false
