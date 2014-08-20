@@ -2,7 +2,7 @@ require_relative 'payload'
 require_relative 'output'
 
 def verify_scripts(scripts)
-  missing_scripts = scripts.reject { |script| File.exists? File.expand_path(script) }
+  missing_scripts = scripts.reject { |script| File.exists? File.expand_path(File.dirname(script)) }
   unless missing_scripts.empty?
     throw_error "Stopping. Couldn't find scripts to run:\n#{missing_scripts}"
   end

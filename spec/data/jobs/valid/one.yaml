@@ -1,0 +1,8 @@
+branches:
+- master
+
+scripts:
+- spec/data/scripts/print-env
+
+environment:
+  test: data

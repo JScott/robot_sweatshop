@@ -1,9 +1,10 @@
 require_relative 'scripts'
 require_relative 'output'
+require 'yaml'
 
 def read_config(relative_path)
-  dir = Dir.pwd
-  YAML.load_file "#{dir}/#{relative_path}"
+  dir = File.expand_path File.dirname(__FILE__)
+  YAML.load_file "#{dir}/../#{relative_path}"
 end
 
 def set_log_file(config)

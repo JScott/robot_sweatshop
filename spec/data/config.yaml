@@ -1,0 +1,2 @@
+pid_file: /tmp/mci.pid
+log_file: /tmp/mci.log
