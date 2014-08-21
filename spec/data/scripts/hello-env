@@ -1,0 +1,2 @@
+#!/usr/bin/ruby
+puts "Test is #{ENV['test_status']}"

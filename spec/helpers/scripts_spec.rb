@@ -40,13 +40,18 @@ describe 'helper/scripts.rb' do
 
   describe 'run_script' do
     before(:all) do
-      @script = "spec/data/scripts/hello-world"
+      @hello_script = "spec/data/scripts/hello-world"
+      @env_script = "spec/data/scripts/hello-env"
     end
     it 'prints the script output' do
-      expect { run_script @script }.to output(/hello world/).to_stdout
+      expect { run_script @hello_script }.to output(/hello world/).to_stdout
     end
     it 'outputs the exit status of the script' do
-      expect { run_script @script }.to output(/exit status: 0/).to_stdout
+      expect { run_script @hello_script }.to output(/exit status: 0/).to_stdout
+    end
+    it 'passes environment variables to the scripts' do
+      ENV['test_status'] = 'passing'
+      expect { run_script @env_script }.to output(/passing/).to_stdout
     end
   end
 
@@ -57,14 +62,13 @@ describe 'helper/scripts.rb' do
         "spec/data/scripts/hello-world",
         "spec/data/scripts/hello-file"
       ]
-      @payload = @some_data
     end
     it 'calls run_script on all scripts' do
       expect_any_instance_of(Object).to receive(:run_script).twice
-      run_scripts @job_name, @scripts, @payload
+      run_scripts @job_name, @scripts
     end
     it 'will write files from scripts to the workspace' do
-      run_scripts @job_name, @scripts, @payload
+      run_scripts @job_name, @scripts
       file_text = File.read "workspaces/#{@job_name}/hello.txt"
       expect(file_text).to eq 'hello file'
     end

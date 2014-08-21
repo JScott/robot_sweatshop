@@ -17,8 +17,8 @@ def from_workspace(job)
   end
 end
 
-def workspace_path_for(job)
-  "workspaces/#{job}"
+def workspace_path_for(job_name)
+  "workspaces/#{job_name}"
 end
 
 def run_script(path)
@@ -31,7 +31,7 @@ def run_script(path)
   puts_info "Script done. (exit status: #{$?.exitstatus})"
 end
 
-def run_scripts(job_name, scripts, payload_object)
+def run_scripts(job_name, scripts)
   scripts.map! { |path| File.expand_path path }
   from_workspace(job_name) do
     scripts.each { |path| run_script path }
