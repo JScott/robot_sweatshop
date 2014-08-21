@@ -5,10 +5,9 @@ require 'sidekiq'
 class RunScriptsWorker
   include Sidekiq::Worker
 
-  def perform(job_name, job_data, payload)
-    set_environment_variables payload
-    job_data['environment'].each { |key, value| ENV[key] = value }
-    run_scripts job_name, job_data['scripts'], payload
+  def perform(job_name, environment_vars, scripts)
+    environment_vars.each { |key, value| ENV[key] = value }
+    run_scripts job_name, scripts
   end
 end
 
