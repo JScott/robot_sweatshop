@@ -32,8 +32,8 @@ post '/:tool/payload-for/:job' do
     payload = parse.new request.body.read
     verify_payload payload, job['branches']
 
-    enqueue_scripts params['job'], job, payload
-    #env TERM_CHILD=1 QUEUE=scripts bundle exec rake resque:work
+    environment_vars = payload.to_hash.merge job['environment']
+    enqueue_scripts params['job'], environment_vars, job['scripts']
   }
   status 200
 end

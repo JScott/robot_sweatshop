@@ -28,6 +28,19 @@ describe BitbucketPayload do
     it 'parses the source URL' do
       expect(@payload.source_url).to eq 'https://bitbucket.org/marcus/project-x/src/620ade18607ac42d872b568bb92acaa9a28620e9/?at=master'
     end
+
+    it 'casts to hash for environment variables purposes' do
+      hash = @payload.to_hash
+      expected_hash = {
+        'CI_GIT_AUTHOR' => 'Marcus Bertrand <marcus@somedomain.com>',
+        'CI_GIT_HASH' => '620ade18607ac42d872b568bb92acaa9a28620e9',
+        'CI_GIT_BRANCH' => 'master',
+        'CI_GIT_MESSAGE' => "Added some more things to somefile.py\n",
+        'CI_GIT_REPO_SLUG' => 'marcus/project-x',
+        'CI_GIT_SOURCE_URL' => 'https://bitbucket.org/marcus/project-x/src/620ade18607ac42d872b568bb92acaa9a28620e9/?at=master'
+      }
+      expect(hash).to eq expected_hash
+    end
   end
 
   context 'with a malformed payload' do

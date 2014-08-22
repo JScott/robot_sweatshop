@@ -44,4 +44,15 @@ class BitbucketPayload
     base_url = @data['canon_url']
     "#{base_url}/#{self.repo_slug}/src/#{self.hash}/?at=#{self.branch}"
   end
+
+  def to_hash
+    {
+      'CI_GIT_AUTHOR' => self.author,
+      'CI_GIT_HASH' => self.hash,
+      'CI_GIT_BRANCH' => self.branch,
+      'CI_GIT_MESSAGE' => self.message,
+      'CI_GIT_REPO_SLUG' => self.repo_slug,
+      'CI_GIT_SOURCE_URL' => self.source_url
+    }
+  end
 end

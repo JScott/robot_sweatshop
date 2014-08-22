@@ -36,25 +36,4 @@ describe 'helper/payload.rb' do
       expect { verify_payload @payload, branch_watchlist }.to raise_error
     end
   end
-
-  describe 'set_environment_variables' do
-    before(:all) do
-      parse = parser_for @some_tool[:name]
-      @payload = parse.new @some_tool[:data]
-    end
-    it 'sets environment variables to the payload string data' do
-      set_environment_variables @payload
-      expected_values = {
-        'CI_GIT_AUTHOR' => 'Marcus Bertrand <marcus@somedomain.com>',
-        'CI_GIT_HASH' => '620ade18607ac42d872b568bb92acaa9a28620e9',
-        'CI_GIT_BRANCH' => 'master',
-        'CI_GIT_MESSAGE' => "Added some more things to somefile.py\n",
-        'CI_GIT_REPO_SLUG' => 'marcus/project-x',
-        'CI_GIT_SOURCE_URL' => 'https://bitbucket.org/marcus/project-x/src/620ade18607ac42d872b568bb92acaa9a28620e9/?at=master'
-      }
-      expected_values.each do |key, value|
-        expect(ENV[key]).to eq value
-      end
-    end
-  end
 end
