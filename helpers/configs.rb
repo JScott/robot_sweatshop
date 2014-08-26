@@ -25,7 +25,6 @@ def set_pid_file(config)
   pid_path = config['pid_file'] || '/var/run/mci.pid'
   pid = Process.pid
   puts_info "PID file: #{pid_path}"
-  puts_info "PID: #{pid}"
   File.open pid_path, 'w' do |file|
     file.write pid
   end
