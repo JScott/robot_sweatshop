@@ -9,6 +9,7 @@ end
 
 def set_log_file(config)
   unless config['log_file'].nil?
+    puts_info "Log file: #{config['log_file']}"
     log_path = config['log_file']
     log = File.new log_path, 'a+'
     STDOUT.reopen log
@@ -22,8 +23,11 @@ end
 
 def set_pid_file(config)
   pid_path = config['pid_file'] || '/var/run/mci.pid'
+  pid = Process.pid
+  puts_info "PID file: #{pid_path}"
+  puts_info "PID: #{pid}"
   File.open pid_path, 'w' do |file|
-    file.write Process.pid
+    file.write pid
   end
 end
 
