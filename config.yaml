@@ -1,2 +1,1 @@
 pid_file: /var/run/mci/mci.pid
-#log_file: /data/log/mci/mci.log

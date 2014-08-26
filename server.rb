@@ -9,7 +9,7 @@ require_relative 'helpers/queue'
 
 configure do
   server_config = read_config 'config.yaml'
-  set_log_file server_config
+  #set_log_file server_config
   set_pid_file server_config
   set :port, 6381
   set :bind, '0.0.0.0'
