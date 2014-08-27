@@ -1,0 +1,12 @@
+---
+- name: "User | {{ mci_user }}"
+  user:
+    state: present
+    name: "{{ mci_user }}"
+    uid: 3090215
+    group: "{{ mci_user }}"
+    shell: /bin/bash
+    comment: "{{ mci_user }} (mci)"
+    home: "{{ mci_install_path }}"
+  tags:
+    - mci

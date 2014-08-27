@@ -1,0 +1,7 @@
+[{{ mci_server_log_path }}]
+type: mci
+tags: service, server
+
+[{{ mci_worker_log_path }}]
+type: mci
+tags: service, worker

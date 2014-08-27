@@ -1,0 +1,40 @@
+---
+- name: "Directory Exists | {{ mci_install_path }}"
+  file:
+    state: directory
+    path: "{{ mci_install_path }}"
+    owner: root
+    group: wcadmin
+    mode: 0775
+  tags:
+    - mci
+    - software-installation
+    - directory-structure
+
+- name: Install Packages | git
+  git:
+    repo: "{{ mci_git_repo }}"
+    dest: "{{ mci_install_path }}"
+    accept_hostkey: yes
+    update: yes
+  tags:
+    - mci
+    - software-installation
+    - using-git
+    - using-github
+    - assumes-trust
+
+- name: Install Packages | gem
+  gem:
+    state: latest
+    name: "{{ item }}"
+    user_install: no
+  with_items:
+    - sinatra
+    - rdiscount
+    - thin
+    - colorize
+    - sidekiq
+  tags:
+    - mci
+    - software-installation

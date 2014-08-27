@@ -1,0 +1,31 @@
+#!/bin/bash
+SERVER='{{ mci_server_script }}'
+SERVER_LOG='{{ mci_server_log_path }}'
+SERVER_PID='{{ mci_server_pidfile_path }}'
+
+start() {
+    sudo su {{ mci_user }} -c "ruby ${SERVER} 2>&1 >> ${SERVER_LOG}"
+}
+
+stop() {
+    kill `cat ${SERVER_PID}`
+    rm ${SERVER_PID}
+}
+
+case "$1" in
+  start)
+    start
+    ;;
+  stop)
+    stop
+    ;;
+  restart)
+    stop
+    start
+    ;;
+  *)
+    echo "Usage: $0 {start|stop|restart}"
+    exit 1
+    ;;
+esac
+exit $?

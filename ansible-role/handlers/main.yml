@@ -1,0 +1,23 @@
+---
+- name: Update Package Cache
+  apt:
+    update_cache: yes
+
+- name: Reload Service | monit
+  command: monit reload
+
+- name: Reload Service | mci-server
+  monit:
+    state: restarted
+    name: mci-server
+  tags:
+    - monit
+    - disruptive
+
+- name: Reload Service | mci-worker
+  monit:
+    state: restarted
+    name: mci-worker
+  tags:
+    - monit
+    - disruptive

@@ -1,0 +1,8 @@
+---
+- name: "Group | {{ mci_user }}"
+  group:
+    state: present
+    gid: 3090216
+    name: "{{ mci_user }}"
+  tags:
+    -mci

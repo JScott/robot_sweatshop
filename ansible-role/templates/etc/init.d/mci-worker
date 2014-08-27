@@ -1,0 +1,31 @@
+#!/bin/bash
+WORKER='{{ mci_worker_script }}'
+WORKER_LOG='{{ mci_worker_log_path }}'
+WORKER_PID='{{ mci_worker_pidfile_path }}'
+
+start() {
+    sudo su {{ mci_user }} -c "ruby ${WORKER} 2>&1 >> ${WORKER_LOG}"
+}
+
+stop() {
+    kill -9 `cat ${WORKER_PID}`
+    rm ${WORKER_PID}
+}
+
+case "$1" in
+  start)
+    start
+    ;;
+  stop)
+    stop
+    ;;
+  restart)
+    stop
+    start
+    ;;
+  *)
+    echo "Usage: $0 {start|stop|restart}"
+    exit 1
+    ;;
+esac
+exit $?

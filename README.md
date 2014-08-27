@@ -16,6 +16,8 @@ Then hook into `url.com/:tool/payload-for/:job`. For example, `url.com/bitbucket
 Currently supported tools:
 - bitbucket
 
+See ansible-role for an in-depth set up through ansible scripts.
+
 # security
 
 Sandbox your process.
@@ -31,6 +33,7 @@ Add SSH keys as appropriate.
 # roadmap
 
 - Use Logger instead of whatever crazy thing I'm trying to do
+- 'empty' tool for manual kick off with no payload
 - Replace Sidekiq with rabbitmq and either the rcelery or amqp gems
 - Enhance support for slaving off script running
 - Reload scripts without restarting the server

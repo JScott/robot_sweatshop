@@ -1,0 +1,4 @@
+check process mci-worker with pidfile {{ mci_worker_pidfile_path }}
+  start program "/usr/sbin/service mci-worker start"
+  stop program "/usr/sbin/service mci-worker stop"
+  if 5 restarts within 5 cycles then timeout
