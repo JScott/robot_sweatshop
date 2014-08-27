@@ -8,6 +8,7 @@ def read_config(relative_path)
 end
 
 def set_log_file(config)
+  # TODO: use logger instead of whatever this is
   unless config['log_file'].nil?
     puts_info "Log file: #{config['log_file']}"
     log_path = config['log_file']

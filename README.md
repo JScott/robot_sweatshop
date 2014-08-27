@@ -30,6 +30,7 @@ Add SSH keys as appropriate.
 
 # roadmap
 
+- configure port
 - Use Logger instead of whatever crazy thing I'm trying to do
 - Replace Sidekiq with rabbitmq and either the rcelery or amqp gems
 - Enhance support for slaving off script running
