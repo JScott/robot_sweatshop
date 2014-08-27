@@ -4,7 +4,7 @@
     state: directory
     path: "{{ mci_install_path }}"
     owner: root
-    group: wcadmin
+    group: admin
     mode: 0775
   tags:
     - mci

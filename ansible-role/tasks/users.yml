@@ -3,7 +3,7 @@
   user:
     state: present
     name: "{{ mci_user }}"
-    uid: 3090215
+    uid: 3000001
     group: "{{ mci_user }}"
     shell: /bin/bash
     comment: "{{ mci_user }} (mci)"

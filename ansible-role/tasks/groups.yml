@@ -2,7 +2,7 @@
 - name: "Group | {{ mci_user }}"
   group:
     state: present
-    gid: 3090216
+    gid: 3000000
     name: "{{ mci_user }}"
   tags:
     -mci

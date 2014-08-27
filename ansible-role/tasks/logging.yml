@@ -4,20 +4,9 @@
     state: directory
     path: "{{ mci_log_root }}"
     owner: "{{ mci_user }}"
-    group: wcadmin
+    group: admin
     mode: 0775
   tags:
     - directory-structure
     - logging
-    - mci
-
-- name: Upload Config | beaver | mci
-  template:
-    src: etc/beaver/conf.d/mci
-    dest: /etc/beaver/conf.d/mci
-  tags:
-    - configuration
-    - template-configuration
-    - logging
-    - using-beaver
     - mci

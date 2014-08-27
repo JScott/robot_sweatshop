@@ -3,5 +3,4 @@
 - include: groups.yml
 - include: users.yml
 - include: config.yml
-- include: monitoring.yml
 - include: logging.yml

@@ -4,7 +4,7 @@
     state: directory
     path: "{{ mci_runtime_root }}"
     owner: "{{ mci_user }}"
-    group: wcadmin
+    group: admin
     mode: 0775
   tags:
     - directory-structure
@@ -16,7 +16,7 @@
     src: etc/init.d/mci-server
     dest: /etc/init.d/mci-server
     owner: root
-    group: wcadmin
+    group: admin
     mode: 0755
   tags:
     - custom-initscript
@@ -54,7 +54,7 @@
     src: etc/init.d/mci-worker
     dest: /etc/init.d/mci-worker
     owner: root
-    group: wcadmin
+    group: admin
     mode: 0755
   tags:
     - custom-initscript
