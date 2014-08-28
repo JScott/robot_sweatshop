@@ -1,3 +1,4 @@
+require 'logger'
 require 'colorize'
 
 def throw_error(string)

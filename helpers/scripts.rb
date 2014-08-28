@@ -21,19 +21,19 @@ def workspace_path_for(job_name)
   "workspaces/#{job_name}"
 end
 
-def run_script(path)
-  puts_info "Running '#{path}'..."
+def run_script(path, logger=nil)
+  logger.info "Running '#{path}'..." if logger
   IO.popen(path) do |io|
     while line = io.gets
-      puts_script line
+      logger.info line if logger
     end
   end
-  puts_info "Script done. (exit status: #{$?.exitstatus})"
+  logger.info "Script done. (exit status: #{$?.exitstatus})" if logger
 end
 
-def run_scripts(job_name, scripts)
+def run_scripts(job_name, scripts, logger=nil)
   scripts.map! { |path| File.expand_path path }
   from_workspace(job_name) do
-    scripts.each { |path| run_script path }
+    scripts.each { |path| run_script path, logger }
   end
 end

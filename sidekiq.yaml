@@ -1,2 +1,3 @@
 ---
 :pidfile: /var/run/sidekiq.pid
+:logfile: /var/log/sidekiq.log

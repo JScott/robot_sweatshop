@@ -1,5 +1,4 @@
 require_relative 'scripts'
-require_relative 'payload'
 require 'sidekiq'
 
 class RunScriptsWorker
@@ -7,7 +6,7 @@ class RunScriptsWorker
 
   def perform(job_name, environment_vars, scripts)
     environment_vars.each { |key, value| ENV[key] = value }
-    run_scripts job_name, scripts
+    run_scripts job_name, scripts, logger
   end
 end
 
