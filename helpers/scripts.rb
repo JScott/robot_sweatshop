@@ -8,9 +8,9 @@ def verify_scripts(scripts)
   end
 end
 
-def from_workspace(job)
+def from_workspace(job, logger=nil)
   path = workspace_path_for job
-  puts_info "Working from '#{path}' for '#{job}'"
+  logger.info "Working from '#{path}' for '#{job}'" if logger
   FileUtils.mkdir_p path
   Dir.chdir path do
     yield
@@ -33,7 +33,7 @@ end
 
 def run_scripts(job_name, scripts, logger=nil)
   scripts.map! { |path| File.expand_path path }
-  from_workspace(job_name) do
+  from_workspace(job_name, logger) do
     scripts.each { |path| run_script path, logger }
   end
 end
