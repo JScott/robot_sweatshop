@@ -21,7 +21,8 @@ def from_workspace(job, logger=nil)
 end
 
 def workspace_path_for(job_name)
-  "workspaces/#{job_name}"
+  current_dir = File.expand_path File.dirname(__FILE__)
+  "#{current_dir}/../workspaces/#{job_name}"
 end
 
 def run_script(path, logger=nil)
