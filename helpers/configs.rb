@@ -3,8 +3,8 @@ require_relative 'output'
 require 'yaml'
 
 def read_config(relative_path)
-  dir = File.expand_path File.dirname(__FILE__)
-  YAML.load_file "#{dir}/../#{relative_path}"
+  current_dir = File.expand_path File.dirname(__FILE__)
+  YAML.load_file "#{current_dir}/../#{relative_path}"
 end
 
 def set_log_file(config)
@@ -33,7 +33,8 @@ end
 
 def get_job_data(job_directory)
   jobs = {}
-  Dir.glob("#{job_directory}/*.yaml").each do |path|
+  current_dir = File.expand_path File.dirname(__FILE__)
+  Dir.glob("#{current_dir}/../#{job_directory}/*.yaml").each do |path|
     job = YAML.load_file path
     verify_scripts job['scripts']
     job_name = File.basename path, '.yaml'
