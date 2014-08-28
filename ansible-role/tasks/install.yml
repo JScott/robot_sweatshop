@@ -17,6 +17,7 @@
     dest: "{{ mci_install_path }}"
     accept_hostkey: yes
     update: yes
+    force: yes
   tags:
     - mci
     - software-installation

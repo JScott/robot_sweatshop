@@ -17,7 +17,8 @@ configure do
 end
 
 get '/' do
-  markdown = File.read 'README.md'
+  current_path = File.expand_path File.dirname(__FILE__)
+  markdown = File.read "#{current_path}/README.md"
   RDiscount.new(markdown).to_html
 end
 

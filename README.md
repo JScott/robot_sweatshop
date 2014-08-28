@@ -1,8 +1,9 @@
 # mci
 
-I was Jenkins as a glorified script runner, as I'm sure a lot of people are.
-I don't need a JVM or generalized plugins to do this, I just want to run scripts on code that I push.
-That's what this is: a minimal CI server from the command line.
+I was using Jenkins as a glorified script runner, as I'm sure a lot of people are.
+I just want to run scripts on code that I push and I don't need JVM or user interface overhead.
+What I do need is a way to easily configure everything from the command line so I can deploy it with config. management tools.
+So that's what you get with this: a simple, scripting-based CI server that's easily configurable from the command line.
 
 # use
 
