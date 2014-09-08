@@ -11,9 +11,9 @@ def verify_scripts(scripts)
   end
 end
 
-def from_workspace(job, logger=nil)
+def from_workspace(job, logger=Logger.new(STDOUT))
   path = workspace_path_for job
-  logger.info "Working from '#{path}' for '#{job}'" if logger
+  logger.info "Working from '#{path}' for '#{job}'"
   FileUtils.mkdir_p path
   Dir.chdir path do
     yield
@@ -25,18 +25,18 @@ def workspace_path_for(job_name)
   "#{current_dir}/../workspaces/#{job_name}"
 end
 
-def run_script(path, logger=nil)
-  logger.info "Running '#{path}'..." if logger
+def run_script(path, logger=Logger.new(STDOUT))
+  logger.info "Running '#{path}'..."
   IO.popen(path) do |io|
     while line = io.gets
-      logger.info line if logger
+      logger.info line
     end
   end
-  logger.info "Script done. (exit status: #{$?.exitstatus})" if logger
+  logger.info "Script done. (exit status: #{$?.exitstatus})"
 end
 
-def run_scripts(job_name, scripts, logger=nil)
-  scripts.map! do |path|
+def run_scripts(job_name, scripts, logger=Logger.new(STDOUT))
+  scripts = scripts.map do |path|
     current_dir = File.expand_path File.dirname(__FILE__)
     "#{current_dir}/../#{path}"
   end

@@ -34,7 +34,7 @@ describe 'helper/scripts.rb' do
 
   describe 'workspace_path_for' do
     it 'returns the workspace path for a job' do
-      expect(workspace_path_for 'test-job').to eq 'workspaces/test-job'
+      expect(workspace_path_for 'test-job').to match /workspaces\/test-job/
     end
   end
 
@@ -43,15 +43,21 @@ describe 'helper/scripts.rb' do
       @hello_script = "spec/data/scripts/hello-world"
       @env_script = "spec/data/scripts/hello-env"
     end
-    it 'prints the script output' do
-      expect { run_script @hello_script }.to output(/hello world/).to_stdout
+    before(:each) do
+      @logger = double 'logger'
     end
-    it 'outputs the exit status of the script' do
-      expect { run_script @hello_script }.to output(/exit status: 0/).to_stdout
+    it 'logs the script output and exit status' do
+      expect(@logger).to receive(:info).with(/Running/)
+      expect(@logger).to receive(:info).with(/hello world/)
+      expect(@logger).to receive(:info).with(/exit status: 0/)
+      run_script @hello_script, @logger
     end
     it 'passes environment variables to the scripts' do
       ENV['test_status'] = 'passing'
-      expect { run_script @env_script }.to output(/passing/).to_stdout
+      expect(@logger).to receive(:info).with(/Running/)
+      expect(@logger).to receive(:info).with(/passing/)
+      expect(@logger).to receive(:info).with(/done/)
+      run_script @env_script, @logger
     end
   end
 
