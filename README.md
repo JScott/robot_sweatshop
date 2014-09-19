@@ -1,9 +1,12 @@
 # mci
 
 I was using Jenkins as a glorified script runner, as I'm sure a lot of people are.
-I just want to run scripts on code that I push and I don't need JVM or user interface overhead.
-What I do need is a way to easily configure everything from the command line so I can deploy it with config. management tools.
-So that's what you get with this: a simple, scripting-based CI server that's easily configurable from the command line.
+I just want to run scripts on code that I push.
+I don't need my CI to assume what repos I use, how I record results, or how to contact people.
+I certainly don't need it to run on a JVM, have a messy plugin system, or run within virtualization.
+
+MCI is just a barebones, script-based CI server that runs from configuration files.
+It works exceptionally well in conjunction with other single-purpose tools.
 
 # use
 
