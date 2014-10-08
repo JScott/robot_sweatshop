@@ -11,6 +11,9 @@ class RunScriptsWorker
 end
 
 def configure_queue
+  Sidekiq.logger.formatter = proc do |severity, datetime, progname, msg|
+    "[#{datetime}] #{severity} - #{msg}"
+  end
   Sidekiq.configure_client do |config|
     config.redis = { :namespace => 'mci', :size => 1 }
   end
