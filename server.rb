@@ -33,7 +33,8 @@ post '/:tool/payload-for/:job' do
     payload = parse.new request.body.read
     verify_payload payload, job['branches']
 
-    environment_vars = payload.to_hash.merge job['environment']
+    environment_vars = payload.to_hash
+    environment_vars.merge! job['environment'] unless job['environment'].nil?
     enqueue_scripts params['job'], environment_vars, job['scripts']
   }
   status 200
