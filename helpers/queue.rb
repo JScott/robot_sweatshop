@@ -10,10 +10,14 @@ class RunScriptsWorker
   end
 end
 
-def configure_queue
-  Sidekiq.logger.formatter = proc do |severity, datetime, progname, msg|
-    "[#{datetime}] #{severity} - #{msg}"
+class ShortLogFormat < Logger::Formatter
+  def call(severity, time, program_name, message)
+    "[#{time.utc}] #{severity} - #{message}"
   end
+end
+
+def configure_queue
+  Sidekiq.logger.formatter = ShortLogFormatter
   Sidekiq.configure_client do |config|
     config.redis = { :namespace => 'mci', :size => 1 }
   end
