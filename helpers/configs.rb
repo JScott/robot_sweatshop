@@ -36,7 +36,8 @@ def get_job_data(job_directory)
   current_dir = File.expand_path File.dirname(__FILE__)
   Dir.glob("#{current_dir}/../#{job_directory}/*.yaml").each do |path|
     job = YAML.load_file path
-    verify_scripts job['scripts']
+    # TODO: restructure verify_scripts and script format to support command arguments
+    #verify_scripts job['scripts']
     job_name = File.basename path, '.yaml'
     jobs[job_name] = job
   end
