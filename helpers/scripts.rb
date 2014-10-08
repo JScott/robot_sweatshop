@@ -36,11 +36,7 @@ def run_script(path, logger=Logger.new(STDOUT))
 end
 
 def run_scripts(job_name, scripts, logger=Logger.new(STDOUT))
-  scripts = scripts.map do |path|
-    current_dir = File.expand_path File.dirname(__FILE__)
-    "#{current_dir}/../#{path}"
-  end
   from_workspace(job_name, logger) do
-    scripts.each { |path| run_script path, logger }
+    scripts.each { |command| run_script command, logger }
   end
 end

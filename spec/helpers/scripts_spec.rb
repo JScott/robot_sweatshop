@@ -40,8 +40,9 @@ describe 'helper/scripts.rb' do
 
   describe 'run_script' do
     before(:all) do
-      @hello_script = "spec/data/scripts/hello-world"
-      @env_script = "spec/data/scripts/hello-env"
+      CURRENT_DIR = File.expand_path File.dirname(__FILE__)
+      @hello_script = "#{CURRENT_DIR}/../data/scripts/hello-world"
+      @env_script = "#{CURRENT_DIR}/../data/scripts/hello-env"
     end
     before(:each) do
       @logger = double 'logger'
@@ -69,10 +70,11 @@ describe 'helper/scripts.rb' do
 
   describe 'run_scripts' do
     before(:all) do
+      CURRENT_DIR = File.expand_path File.dirname(__FILE__)
       @job_name = 'test-job'
       @scripts = [
-        "spec/data/scripts/hello-world",
-        "spec/data/scripts/hello-file"
+        "#{CURRENT_DIR}/../data/scripts/hello-world",
+        "#{CURRENT_DIR}/../data/scripts/hello-file"
       ]
     end
     it 'calls run_script on all scripts' do

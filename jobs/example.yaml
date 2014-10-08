@@ -2,7 +2,7 @@ branches:
 - develop
 
 scripts:
-- scripts/hello-world
+- ~/scripts/hello-world
 
 environment:
   world: Earth
