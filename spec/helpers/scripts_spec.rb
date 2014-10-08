@@ -59,6 +59,12 @@ describe 'helper/scripts.rb' do
       expect(@logger).to receive(:info).with(/done/)
       run_script @env_script, @logger
     end
+    it 'can run and log commands instead of scripts' do
+      expect(@logger).to receive(:info).with(/Running/)
+      expect(@logger).to receive(:info).with(/1/)
+      expect(@logger).to receive(:info).with(/exit status: 0/)
+      run_script 'echo 1', @logger
+    end
   end
 
   describe 'run_scripts' do
