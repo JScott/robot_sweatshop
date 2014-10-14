@@ -6,9 +6,11 @@ def throw_error(string)
 end
 
 def puts_info(string)
-  puts "> #{string}".light_blue
+  $stdout.puts "> #{string}".light_blue
+  $stdout.flush
 end
 
 def puts_script(string)
-  puts string
+  $stdout.puts string
+  $stdout.flush
 end
