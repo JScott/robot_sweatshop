@@ -1,5 +1,7 @@
 Gemfile.lock
-workspaces
+workspaces/*
+!workspaces/.keep
 scripts/*
+!scripts/hello-world
 jobs/*
 !jobs/example.yaml
