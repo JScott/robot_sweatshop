@@ -42,7 +42,7 @@ class BitbucketPayload
   def source_url
     return '' if @data['canon_url'].nil? || self.repository.empty? || self.latest_commit.empty?
     base_url = @data['canon_url']
-    "#{base_url}/#{self.repo_slug}/src/#{self.hash}/?at=#{self.branch}"
+    "#{base_url}/#{self.repo_slug}/commits/#{self.hash}/?at=#{self.branch}"
   end
 
   def to_hash
