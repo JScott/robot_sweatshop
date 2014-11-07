@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 file_path = File.expand_path File.dirname(__FILE__)
 command = [
-  "sidekiq",
+  "/usr/local/bin/sidekiq",
   "--require #{file_path}/helpers/queue.rb",
   "--config #{file_path}/sidekiq.yaml"
 ]
