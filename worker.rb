@@ -1,4 +1,4 @@
-#!/usr/bin/ruby
+#!/usr/bin/env ruby
 file_path = File.expand_path File.dirname(__FILE__)
 command = [
   "sidekiq",

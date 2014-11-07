@@ -1,4 +1,4 @@
-#!/usr/bin/ruby
+#!/usr/bin/env ruby
 require 'sinatra'
 require 'rdiscount'
 require_relative 'helpers/output'
