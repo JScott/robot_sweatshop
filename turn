@@ -2,13 +2,13 @@
 
 @process = ARGV[0]
 @status = ARGV[1]
-@processes = %w[server worker]
+@processes = %w[server worker everything]
 @statuses = %w[on off]
 
 valid_args = @processes.include?(@process) && @statuses.include?(@status)
 
 unless valid_args
-  puts "Usage: ./turn <mci-process> [on|off]"
+  puts "Usage: ./turn [#{@processes.join '|'}] [on|off]"
   exit 1
 end
 
@@ -41,6 +41,8 @@ def start(process)
       run "#{@root_path}/server.rb 2>&1 >> #{@server_log_file}"
     when 'worker'
       run "#{@root_path}/worker.rb"
+    when 'everything'
+      @processes.each { |process| start process }
   end
   puts "Done."
 end
@@ -56,6 +58,8 @@ def stop(process)
       pid = get_pid @worker_pid_file
       run "/bin/kill -9 #{pid}"
       run "rm #{@worker_pid_file}"
+    when 'everything'
+      @processes.each { |process| stop process }
   end
   puts "Done."
 end
