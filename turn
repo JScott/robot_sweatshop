@@ -43,7 +43,7 @@ def start(process)
   puts "Starting #{process}..."
   case process
     when 'server'
-      run "#{@root_path}/server.rb 2>&1 >> #{@server_log_file}"
+      run "#{@root_path}/server.rb 2>&1 >> #{@server_log_file} &"
     when 'worker'
       run "#{@root_path}/worker.rb"
     when 'everything'
