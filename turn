@@ -1,0 +1,68 @@
+#!/usr/bin/env ruby
+
+@process = ARGV[0]
+@status = ARGV[1]
+@processes = %w[server worker]
+@statuses = %w[on off]
+
+valid_args = @processes.include?(@process) && @statuses.include?(@status)
+
+unless valid_args
+  puts "Usage: ./turn <mci-process> [on|off]"
+  exit 1
+end
+
+# TODO: base installation path in configuration
+# TODO: log and pidfile paths in config
+
+@root_path = File.expand_path File.dirname(__FILE__)
+@server_log_file = '/data/log/mci/mci-server.log'
+@server_pid_file = '/data/run/mci/mci-server.pid'
+@worker_pid_file = '/data/run/mci/mci-worker.pid'
+
+def run(cmd)
+  puts cmd
+  `#{cmd}`
+end
+
+def get_pid(pid_file)
+  pid = `/bin/cat #{pid_file}`
+  if pid.empty?
+    puts "PID file missing!"
+    exit 2
+  end
+  return pid
+end
+
+def start(process)
+  puts "Starting #{process}..."
+  case process
+    when 'server'
+      run "#{@root_path}/server.rb 2>&1 >> #{@server_log_file}"
+    when 'worker'
+      run "#{@root_path}/worker.rb"
+  end
+  puts "Done."
+end
+
+def stop(process)
+  puts "Stopping #{process}..."
+  case process
+    when 'server'
+      pid = get_pid @server_pid_file
+      run "/bin/kill #{pid}"
+      run "rm #{@server_pid_file}"
+    when 'worker'
+      pid = get_pid @worker_pid_file
+      run "/bin/kill -9 #{pid}"
+      run "rm #{@worker_pid_file}"
+  end
+  puts "Done."
+end
+
+case @status
+  when 'on'
+    start @process
+  when 'off'
+    stop @process
+end
