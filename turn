@@ -22,7 +22,12 @@ end
 
 def run(cmd)
   puts cmd
-  `#{cmd}`
+  IO.popen(cmd) do |io|
+    io.each do |line|
+      $stdout.puts line
+      $stdout.flush
+    end
+  end
 end
 
 def get_pid(pid_file)
