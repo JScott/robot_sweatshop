@@ -22,6 +22,7 @@ end
 
 def workspace_path_for(job_name)
   current_dir = File.expand_path File.dirname(__FILE__)
+  # TODO: force relative to home path. less confusing that using '..'
   "#{current_dir}/../workspaces/#{job_name}"
 end
 
