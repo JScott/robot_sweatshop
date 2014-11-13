@@ -28,6 +28,7 @@ end
 
 def run_script(path, logger=Logger.new(STDOUT))
   logger.info "Running '#{path}'..."
+  # TODO: path.split(' ') to bypass the shell when we're not using env vars
   IO.popen(path) do |io|
     while line = io.gets
       logger.info line
