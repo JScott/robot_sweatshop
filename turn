@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+require 'yaml'
 
 @process = ARGV[0]
 @status = ARGV[1]
@@ -16,11 +17,14 @@ end
 # TODO: log and pidfile paths in config
 
 @root_path = File.expand_path File.dirname(__FILE__)
+@config = YAML.load_file "#{@root_path}/config.yaml"
 @server_log_file = '/data/log/mci/mci-server.log'
 @server_pid_file = '/data/run/mci/mci-server.pid'
 @worker_pid_file = '/data/run/mci/mci-worker.pid'
 
 def run(cmd)
+  user = @config['run_as']
+  cmd = "sudo -u #{user} -- #{cmd}" if user
   puts cmd
   IO.popen(cmd) do |io|
     io.each do |line|

@@ -1,2 +1,3 @@
 pid_file: /var/run/mci/mci.pid
 #port: 9886
+#run_as: ci-bot
