@@ -1,15 +1,4 @@
 require_relative 'payload'
-require_relative 'output'
-
-def verify_scripts(scripts)
-  missing_scripts = scripts.reject do |script|
-    current_dir = File.expand_path File.dirname(__FILE__)
-    File.exists? "#{current_dir}/../#{script}"
-  end
-  unless missing_scripts.empty?
-    throw_error "Stopping. Couldn't find scripts to run:\n#{missing_scripts}"
-  end
-end
 
 def from_workspace(job, logger=Logger.new(STDOUT))
   path = workspace_path_for job
@@ -22,7 +11,6 @@ end
 
 def workspace_path_for(job_name)
   current_dir = File.expand_path File.dirname(__FILE__)
-  # TODO: force relative to home path. less confusing that using '..'
   "#{current_dir}/../workspaces/#{job_name}"
 end
 
