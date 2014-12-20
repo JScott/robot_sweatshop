@@ -1,5 +1,3 @@
-require_relative 'payload'
-
 def from_workspace(job, logger=Logger.new(STDOUT))
   path = workspace_path_for job
   logger.info "Working from '#{path}' for '#{job}'"

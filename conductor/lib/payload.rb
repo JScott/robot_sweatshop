@@ -1,4 +1,3 @@
-require_relative 'output'
 require_relative '../parse/bitbucket'
 
 def parser_for(tool)

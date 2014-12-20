@@ -2,7 +2,7 @@
 file_path = File.expand_path File.dirname(__FILE__)
 command = [
   "/usr/local/bin/sidekiq",
-  "--require #{file_path}/helpers/queue.rb",
+  "--require #{file_path}/lib/queue.rb",
   "--config #{file_path}/sidekiq.yaml"
 ]
 IO.popen("#{command.join ' '}") do |io|
