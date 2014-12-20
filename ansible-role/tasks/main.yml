@@ -1,6 +1,0 @@
----
-- include: install.yml
-- include: groups.yml
-- include: users.yml
-- include: config.yml
-- include: logging.yml
