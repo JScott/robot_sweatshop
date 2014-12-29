@@ -6,8 +6,16 @@ RSpec.configure do |c|
   c.include StdoutHelper
 end
 
-describe 'lib/queuing' do
+describe 'worker', 'queuing' do
+  before(:context) do
+    @job_name = 'test-job'
+    @scripts = ['echo 1']
+    @test_environment = { test: 2 }
+  end
+  
   describe 'configure_queue' do
+    #TODO: can we get rid of this and do it all through sidekiq.yaml?
+
     it 'automatically configures the Sidekiq server and client' do
       expect(Sidekiq).to receive(:configure_client)
       expect(Sidekiq).to receive(:configure_server)
@@ -20,18 +28,16 @@ describe 'lib/queuing' do
     end
   end
   
-  describe 'enqueue_scripts' do
-    it 'adds jobs to the queue' do
-      expect(RunScriptsWorker).to receive(:perform_async)
-      enqueue_scripts 'echo 1', 'echo 2'
+  describe 'enqueue_job' do
+    it 'adds a job to the queue' do
+      pending('this is just a passthrough and may be slated for deletion')
+      expect(RunScriptsWorker).to receive(:perform_async).with(@job_name, @scripts, @test_environment)
+      enqueue_job @job_name, @scripts, with_environment_vars: @test_environment
     end
   end
   
   describe RunScriptsWorker, '#perform' do
     before(:context) do
-      @job_name = 'test-job'
-      @scripts = ['echo 1']
-      @test_environment = { test: 2 }
       @worker = RunScriptsWorker.new
     end
     

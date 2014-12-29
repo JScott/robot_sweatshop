@@ -37,7 +37,7 @@ describe 'worker', 'script_running' do
       start_job @test_job, @scripts
     end
     
-    it 'outputs the workspace to stdout' do
+    it 'outputs the workspace path to stdout' do
       expect { start_job @test_job, @scripts }.to output(/Working from/).to_stdout
     end
   end
