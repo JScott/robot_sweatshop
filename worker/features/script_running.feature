@@ -6,7 +6,7 @@ Feature: Script running
   Scenario: Run a command
     When I run a command
     Then it has access to the job configuration
-    And the output and exit status log to stdout
+    And the output and exit status are logged
 
   Scenario: Run from workspace
     When I run a command
@@ -14,6 +14,6 @@ Feature: Script running
     And files read and write to the worker's workspace
 
   Scenario: Custom logger
-    Given that I'm using a custom logger
-    When I run a script
+    Given a custom logger
+    When I run a command
     Then the output and exit status log accordingly
