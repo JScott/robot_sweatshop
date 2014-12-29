@@ -3,7 +3,7 @@ require 'fileutils'
 
 def from_workspace(job, with_logger: Logger.new(STDOUT))
   path = workspace_path_for job
-  logger.info "Working from '#{path}' for '#{job}'"
+  with_logger.info "Working from '#{path}' for '#{job}'"
   FileUtils.mkdir_p path
   Dir.chdir path do
     yield
@@ -16,18 +16,20 @@ def workspace_path_for(job_name)
 end
 
 def work_on(path, with_logger: Logger.new(STDOUT))
-  logger.info "Running '#{path}'..."
+  with_logger.info "Running '#{path}'..."
   # TODO: path.split(' ') to bypass the shell when we're not using env vars
   IO.popen(path) do |io|
     while line = io.gets
-      logger.info line
+      with_logger.info line
     end
   end
-  logger.info "Script done. (exit status: #{$?.exitstatus})"
+  with_logger.info "Script done. (exit status: #{$?.exitstatus})"
 end
 
 def start_job(job_name, scripts, with_logger: Logger.new(STDOUT))
-  from_workspace(job_name, logger) do
-    scripts.each { |command| run_script command, logger }
+  from_workspace(job_name, with_logger: with_logger) do
+    scripts.each do |command|
+      work_on command, with_logger: with_logger
+    end
   end
 end

@@ -1,6 +1,3 @@
-def test(hi: 2)
-end
-
 require_relative '../lib/scripts'
 require 'rspec/mocks'
 
@@ -13,9 +10,9 @@ describe 'work_on' do
   end
   
   it 'can take a custom logger' do
-    logger = Logger.new STDERR
-    expect(logger).to receive(:info)
-    work_on 'echo 1', with_logger: logger
+    custom_logger = Logger.new STDERR
+    expect(custom_logger).to receive(:info).at_least(:once)
+    work_on 'echo 1', with_logger: custom_logger
   end
 end
 
