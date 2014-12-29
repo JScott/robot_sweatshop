@@ -1,4 +1,4 @@
 ---
-:pidfile: /var/run/sidekiq.pid
-:logfile: /var/log/sidekiq.log
+:pidfile: /var/run/robot-sweatshop/sidekiq.pid
+:logfile: /var/log/robot-sweatshop/sidekiq.log
 :concurrency: 1
