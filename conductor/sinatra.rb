@@ -27,7 +27,7 @@ post '/:tool/payload-for/:job_name' do
   puts payload.git_commit_data
   if job['branches'].nil? || job['branches'].include?(payload.branch)
     enqueue job, payload
-    status 200, 'Payload successfully queued'  
+    status 200
   else
     message = "#{job['name']} doesn't monitor branch '#{payload.branch}'"
     puts message

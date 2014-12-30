@@ -31,6 +31,6 @@ module JobsHelper
   def enqueue(job, payload)
     env_data = payload.git_commit_data
     env_data.merge! job['environment'] unless job['environment'].nil?
-    RunScriptWorker.perform_async job, with_environment_vars: env_data
+    RunScriptsWorker.perform_async job, with_environment_vars: env_data
   end
 end
