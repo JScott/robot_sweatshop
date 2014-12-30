@@ -1,7 +1,5 @@
 Gemfile.lock
-workspaces/*
-!workspaces/.keep
-scripts/*
-!scripts/hello-world
-jobs/*
-!jobs/example.yaml
+worker/workspaces/**/*
+!worker/workspaces/.keep
+conductor/jobs/*
+!conductor/jobs/example.yaml
