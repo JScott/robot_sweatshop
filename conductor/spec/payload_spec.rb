@@ -7,7 +7,7 @@ describe 'conductor', 'payload' do
     @payload_data = YAML.load_file payload_path
   end
   
-  context 'with a bitbucket payload' do
+  context 'with a malformed bitbucket payload' do
     before(:context) do
       @payload = BitbucketPayload.new @payload_data['bitbucket']
     end
