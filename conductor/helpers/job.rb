@@ -6,6 +6,7 @@ module JobsHelper
     Dir.glob("#{__dir__}/../jobs/*.yaml").each do |path|
       name = File.basename path, '.yaml'
       jobs[name] = YAML.load_file path
+      jobs[name]['name'] = name
     end
     return jobs
   end
@@ -13,7 +14,7 @@ module JobsHelper
   def get_job(name)
     jobs = load_all_job_data
     halt 404, "Unknown job: #{name}" unless jobs.include? name
-    return jobs[name].merge name: name
+    return jobs[name]
   end
   
   def parse_payload_from(tool)
@@ -27,7 +28,7 @@ module JobsHelper
     end
   end
 
-  def enqueue(payload, job)
+  def enqueue(job, payload)
     env_data = payload.git_commit_data
     env_data.merge! job['environment'] unless job['environment'].nil?
     RunScriptWorker.perform_async job, with_environment_vars: env_data

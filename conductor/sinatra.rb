@@ -24,11 +24,13 @@ post '/:tool/payload-for/:job_name' do
   puts "Received #{params['tool']} payload for #{params['job_name']}"
   job = get_job params['job_name']
   payload = parse_payload_from params['tool']
-  puts "Payload: #{payload}"
-  if job['branches'].include? payload['branch']
+  puts payload.git_commit_data
+  if job['branches'].nil? || job['branches'].include?(payload.branch)
     enqueue job, payload
     status 200, 'Payload successfully queued'  
   else
-    halt 400, "#{payload['branch']} isn't monitored for #{job['name']}" 
+    message = "#{job['name']} doesn't monitor branch '#{payload.branch}'"
+    puts message
+    halt 400, message
   end
 end
