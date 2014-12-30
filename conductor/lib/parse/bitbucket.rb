@@ -17,7 +17,6 @@ class BitbucketPayload
     @data['repository']
   end
 
-
   def author
     self.latest_commit['raw_author']
   end
@@ -45,14 +44,11 @@ class BitbucketPayload
     "#{base_url}/#{self.repo_slug}/commits/#{self.hash}/?at=#{self.branch}"
   end
 
-  def to_hash
-    {
-      'CI_GIT_AUTHOR' => self.author,
-      'CI_GIT_HASH' => self.hash,
-      'CI_GIT_BRANCH' => self.branch,
-      'CI_GIT_MESSAGE' => self.message,
-      'CI_GIT_REPO_SLUG' => self.repo_slug,
-      'CI_GIT_SOURCE_URL' => self.source_url
-    }
+  def git_commit_data
+    data = {}
+    ['author', 'hash', 'branch', 'message', 'repo_slug', 'source_url'].each do |method|
+      data[method] = self.method(method.to_sym).call
+    end
+    return data
   end
 end

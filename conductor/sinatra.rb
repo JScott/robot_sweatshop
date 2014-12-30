@@ -1,9 +1,8 @@
 #!/usr/bin/env ruby
 require 'sinatra'
 require 'yaml'
+require_relative 'helpers/job'
 require_relative 'lib/payload'
-require_relative 'lib/jobs'
-require_relative '../worker/lib/queuing'
 
 configure do
   config = {
@@ -15,26 +14,21 @@ configure do
   set :bind, '0.0.0.0'
 end
 
+helpers JobsHelper
+
 get '/' do
   'Everything\'s on schedule!'
 end
 
-post '/:tool/payload-for/:job' do
-  jobs = get_job_data
-  puts "Received #{params['tool']} payload for #{params['job']}"
-  halt 404, "Unknown job: #{params['job']}" unless jobs.include? params['job']
-  job = params['job']
-
-  request.body.rewind
-  parse = parser_for params['tool']
-  halt 404, "Unknown tool: #{params['tool']}" if parse.nil?
-  payload = parse.new request.body.read
-  #verify_payload payload, job['branches']
-  
-  data = payload.to_hash #TODO: rename git_data
-  data.merge! job['environment'] unless job['environment'].nil?
-  RunScriptWorker.perform_async params['job'], job['scripts'], with_environment_vars: data
-  #TODO: rename with_environment_vars. it's all gross how this is called
-  
-  status 200, 'Payload successfully queued'
+post '/:tool/payload-for/:job_name' do
+  puts "Received #{params['tool']} payload for #{params['job_name']}"
+  job = get_job params['job_name']
+  payload = parse_payload_from params['tool']
+  puts "Payload: #{payload}"
+  if job['branches'].include? payload['branch']
+    enqueue job, payload
+    status 200, 'Payload successfully queued'  
+  else
+    halt 400, "#{payload['branch']} isn't monitored for #{job['name']}" 
+  end
 end
