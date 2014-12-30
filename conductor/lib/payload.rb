@@ -5,7 +5,7 @@ def parser_for(tool)
   when 'bitbucket'
     BitbucketPayload
   else
-    throw_error "Stopping. No parser for tool:\n#{tool}"
+    nil
   end
 end
 

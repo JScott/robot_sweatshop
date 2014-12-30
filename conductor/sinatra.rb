@@ -2,6 +2,7 @@
 require 'sinatra'
 require 'yaml'
 require_relative 'lib/payload'
+require_relative 'lib/jobs'
 require_relative '../worker/lib/queuing'
 
 configure do
@@ -12,7 +13,6 @@ configure do
 
   set :port, config[:port]
   set :bind, '0.0.0.0'
-  #set :jobs, get_job_data('./jobs') 
 end
 
 get '/' do
@@ -20,19 +20,21 @@ get '/' do
 end
 
 post '/:tool/payload-for/:job' do
+  jobs = get_job_data
   puts "Received #{params['tool']} payload for #{params['job']}"
-  puts catch (:error) {
-    reject_job params['job'] unless settings.jobs.include? params['job']
-    job = settings.jobs[params['job']]
+  halt 404, "Unknown job: #{params['job']}" unless jobs.include? params['job']
+  job = params['job']
 
-    request.body.rewind
-    parse = parser_for params['tool']
-    payload = parse.new request.body.read
-    verify_payload payload, job['branches']
-
-    environment_vars = payload.to_hash
-    environment_vars.merge! job['environment'] unless job['environment'].nil?
-    enqueue_scripts params['job'], environment_vars, job['scripts']
-  }
-  status 200
+  request.body.rewind
+  parse = parser_for params['tool']
+  halt 404, "Unknown tool: #{params['tool']}" if parse.nil?
+  payload = parse.new request.body.read
+  #verify_payload payload, job['branches']
+  
+  data = payload.to_hash #TODO: rename git_data
+  data.merge! job['environment'] unless job['environment'].nil?
+  RunScriptWorker.perform_async params['job'], job['scripts'], with_environment_vars: data
+  #TODO: rename with_environment_vars. it's all gross how this is called
+  
+  status 200, 'Payload successfully queued'
 end
