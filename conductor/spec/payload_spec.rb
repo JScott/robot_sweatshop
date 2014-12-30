@@ -14,7 +14,7 @@ describe 'conductor', 'payload' do
     
     it 'parses git commit data' do
       expect(@payload.repo_slug).to eq 'marcus/project-x'
-      expect(@payload.source_url).to eq 'https://bitbucket.org/marcus/project-x/src/620ade18607ac42d872b568bb92acaa9a28620e9/?at=master'
+      expect(@payload.source_url).to eq 'https://bitbucket.org/marcus/project-x/commits/620ade18607ac42d872b568bb92acaa9a28620e9/?at=master'
       expect(@payload.author).to eq 'Marcus Bertrand <marcus@somedomain.com>'
       expect(@payload.hash).to eq '620ade18607ac42d872b568bb92acaa9a28620e9'
       expect(@payload.branch).to eq 'master'
