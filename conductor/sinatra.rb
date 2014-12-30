@@ -1,8 +1,9 @@
 #!/usr/bin/env ruby
 require 'sinatra'
 require 'yaml'
-require_relative 'helpers/job'
 require_relative 'lib/payload'
+require_relative 'lib/job'
+require_relative 'helpers/data'
 
 configure do
   config = {
@@ -14,7 +15,7 @@ configure do
   set :bind, '0.0.0.0'
 end
 
-helpers JobsHelper
+helpers DataHelper
 
 get '/' do
   'Everything\'s on schedule!'

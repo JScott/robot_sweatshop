@@ -1,22 +1,14 @@
 require_relative '../../worker/lib/queuing'
+require_relative '../lib/payload'
+require_relative '../lib/job'
 
-module JobsHelper
-  def load_all_job_data
-    jobs = {}
-    Dir.glob("#{__dir__}/../jobs/*.yaml").each do |path|
-      name = File.basename path, '.yaml'
-      jobs[name] = YAML.load_file path
-      jobs[name]['name'] = name
-    end
-    return jobs
-  end
-
+module DataHelper
   def get_job(name)
     jobs = load_all_job_data
-    halt 404, "Unknown job: #{name}" unless jobs.include? name
-    return jobs[name]
+    halt 404, "Unknown job: #{name}" unless jobs.include? name                                                                                                                                   
+    return jobs[name]                                                                                                                                                                            
   end
-  
+
   def parse_payload_from(tool)
     parse = parser_for tool
     halt 404, "Unknown tool: #{tool}" if parse.nil?
