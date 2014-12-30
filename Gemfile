@@ -1,7 +1,5 @@
 source 'http://rubygems.org'
 gem 'sinatra'
-gem 'rdiscount'
-gem 'thin'
-
+gem 'pidfile'
 gem 'rspec'
 gem 'sidekiq'

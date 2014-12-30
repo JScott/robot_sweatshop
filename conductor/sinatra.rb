@@ -1,25 +1,22 @@
 #!/usr/bin/env ruby
 require 'sinatra'
-require 'rdiscount'
-require_relative 'helpers/output'
-require_relative 'helpers/payload'
-require_relative 'helpers/scripts'
-require_relative 'helpers/configs'
-require_relative 'helpers/queue'
+require 'yaml'
+require_relative 'lib/payload'
+require_relative '../worker/lib/queuing'
 
 configure do
-  server_config = read_config 'config.yaml'
-  #set_log_file server_config
-  set_pid_file server_config
-  set :port, server_config['port'] || 8080
+  config = {
+    port: 8080
+  }
+  config.merge! YAML.load_file File.join(__dir__, 'config.yaml')
+
+  set :port, config[:port]
   set :bind, '0.0.0.0'
-  set :jobs, get_job_data('./jobs') 
+  #set :jobs, get_job_data('./jobs') 
 end
 
 get '/' do
-  current_path = File.expand_path File.dirname(__FILE__)
-  markdown = File.read "#{current_path}/README.md"
-  RDiscount.new(markdown).to_html
+  'Everything\'s on schedule!'
 end
 
 post '/:tool/payload-for/:job' do
