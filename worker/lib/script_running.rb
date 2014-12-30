@@ -26,9 +26,9 @@ def work_on(path, logger = Logger.new(STDOUT))
   logger.info "Script done. (exit status: #{$?.exitstatus})"
 end
 
-def start_job(job_name, scripts, with_logger: Logger.new(STDOUT))
-  from_workspace(job_name, with_logger) do
-    scripts.each do |command|
+def start_job(job, with_logger: Logger.new(STDOUT))
+  from_workspace(job['name'], with_logger) do
+    job['scripts'].each do |command|
       work_on command, with_logger
     end
   end
