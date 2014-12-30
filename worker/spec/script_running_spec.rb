@@ -31,14 +31,23 @@ describe 'worker', 'script_running' do
       @scripts = ['echo 1']
     end
 
-    it 'works out of a job-specific workspace' do
+    it 'changes the working directory to a job-specific workspace' do
       hide_stdout
       expect(Dir).to receive(:chdir).with(/workspaces\/#{@test_job}/)
       start_job @test_job, @scripts
     end
     
-    it 'outputs the workspace path to stdout' do
+    it 'outputs the job name and workspace path to stdout' do
+      expect { start_job @test_job, @scripts }.to output(/#{@test_job}/).to_stdout
       expect { start_job @test_job, @scripts }.to output(/Working from/).to_stdout
+    end
+
+    it 'kicks off work on the given job\'s scripts' do
+      hide_stdout
+      @scripts.each do |script|
+        expect_any_instance_of(Object).to receive(:work_on).with(script)
+      end
+      start_job @test_job, @scripts
     end
   end
 end

@@ -13,23 +13,8 @@ describe 'worker', 'queuing' do
     @test_environment = { test: 2 }
   end
   
-  describe 'configure_queue' do
-    #TODO: can we get rid of this and do it all through sidekiq.yaml?
-
-    it 'automatically configures the Sidekiq server and client' do
-      expect(Sidekiq).to receive(:configure_client)
-      expect(Sidekiq).to receive(:configure_server)
-      configure_queue
-    end
-
-    it 'reads configuration from a YAML file' do
-      pending('need to plan configuration as a whole')
-      fail
-    end
-  end
-  
   describe 'enqueue_job' do
-    it 'adds a job to the queue' do
+    it 'queues the job and parameters via Sidekiq' do
       pending('this is just a passthrough and may be slated for deletion')
       expect(RunScriptsWorker).to receive(:perform_async).with(@job_name, @scripts, @test_environment)
       enqueue_job @job_name, @scripts, with_environment_vars: @test_environment
@@ -45,13 +30,13 @@ describe 'worker', 'queuing' do
       hide_stdout
     end
     
-    it 'sets environment variables as string values' do
+    it 'sets the given environment variables as string values' do
       expect {
         @worker.perform @job_name, @scripts, with_environment_vars: @test_environment
       }.to change { ENV['test'] }.from(nil).to('2')
     end
       
-    it 'runs scripts' do
+    it 'starts the queued job' do
       expect(@worker).to receive(:start_job).with(@job_name, @scripts)
       @worker.perform @job_name, @scripts, with_environment_vars: @test_environment
     end
