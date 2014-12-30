@@ -20,8 +20,10 @@ describe 'worker', 'script_running' do
     
     it 'prints script output to stdout' do
       command = 'echo 1'
-      expect { work_on command }.to output(/1/).to_stdout
-      expect { work_on command }.to output(/exit status/).to_stdout
+      expect_any_instance_of(Logger).to receive(:info).with(/Running/)
+      expect_any_instance_of(Logger).to receive(:info).with("1\n")
+      expect_any_instance_of(Logger).to receive(:info).with(/exit status/)
+      work_on command
     end
   end
 
@@ -37,9 +39,10 @@ describe 'worker', 'script_running' do
       start_job @test_job, @scripts
     end
     
-    it 'outputs the job name and workspace path to stdout' do
-      expect { start_job @test_job, @scripts }.to output(/#{@test_job}/).to_stdout
-      expect { start_job @test_job, @scripts }.to output(/Working from/).to_stdout
+    it 'outputs the workspace path to stdout' do
+      expect_any_instance_of(Logger).to receive(:info).with(/workspaces\/#{@test_job}/)
+      expect_any_instance_of(Logger).to receive(:info).at_least(:once)
+      start_job @test_job, @scripts
     end
 
     it 'kicks off work on the given job\'s scripts' do
