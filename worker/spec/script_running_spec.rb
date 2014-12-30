@@ -45,7 +45,7 @@ describe 'worker', 'script_running' do
     it 'kicks off work on the given job\'s scripts' do
       hide_stdout
       @scripts.each do |script|
-        expect_any_instance_of(Object).to receive(:work_on).with(script)
+        expect_any_instance_of(Object).to receive(:work_on).with(script, anything)
       end
       start_job @test_job, @scripts
     end

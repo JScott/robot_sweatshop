@@ -26,7 +26,7 @@ describe 'worker', 'queuing' do
     end
       
     it 'starts the queued job' do
-      expect(@worker).to receive(:start_job).with(@job_name, @scripts)
+      expect(@worker).to receive(:start_job).with(@job_name, @scripts, anything)
       @worker.perform @job_name, @scripts, with_environment_vars: @test_environment
     end
   end
