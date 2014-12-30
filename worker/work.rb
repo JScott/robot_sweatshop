@@ -6,7 +6,6 @@ command = [
   "--require #{file_path}/lib/queuing.rb",
   "--config #{file_path}/sidekiq.yaml"
 ]
-puts command.join(' ')
 IO.popen("#{command.join ' '}") do |io|
   while line = io.gets
     puts line
