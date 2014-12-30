@@ -6,7 +6,7 @@ class RunScriptsWorker
 
   def perform(job_name, scripts = [], with_environment_vars: {})
     with_environment_vars.each { |key, value| ENV[key.to_s] = value.to_s }
-    start_job job_name, scripts
+    start_job job_name, scripts, with_logger: logger
   end
 end
 
