@@ -1,8 +1,0 @@
-branches:
-- master
-
-scripts:
-- spec/data/scripts/hello-env
-
-environment:
-  test: data
