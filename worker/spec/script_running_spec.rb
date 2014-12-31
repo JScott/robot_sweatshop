@@ -29,28 +29,30 @@ describe 'worker', 'script_running' do
 
   describe 'start_job' do
     before(:context) do
-      @test_job = 'test-job'
-      @scripts = ['echo 1']
+      @test_job = {
+        'name' => 'test-job',
+        'scripts' => ['echo 1']
+      }
     end
 
     it 'changes the working directory to a job-specific workspace' do
       hide_stdout
-      expect(Dir).to receive(:chdir).with(/workspaces\/#{@test_job}/)
-      start_job @test_job, @scripts
+      expect(Dir).to receive(:chdir).with(/workspaces\/#{@test_job['name']}/)
+      start_job @test_job
     end
     
     it 'outputs the workspace path to stdout' do
-      expect_any_instance_of(Logger).to receive(:info).with(/workspaces\/#{@test_job}/)
+      expect_any_instance_of(Logger).to receive(:info).with(/workspaces\/#{@test_job['name']}/)
       expect_any_instance_of(Logger).to receive(:info).at_least(:once)
-      start_job @test_job, @scripts
+      start_job @test_job
     end
 
     it 'kicks off work on the given job\'s scripts' do
       hide_stdout
-      @scripts.each do |script|
+      @test_job['scripts'].each do |script|
         expect_any_instance_of(Object).to receive(:work_on).with(script, anything)
       end
-      start_job @test_job, @scripts
+      start_job @test_job
     end
   end
 end

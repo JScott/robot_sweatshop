@@ -9,9 +9,12 @@ end
 describe 'worker', 'queuing' do
   describe RunScriptsWorker, '#perform' do
     before(:context) do
-      @job_name = 'test-job'
-      @scripts = ['echo 1']
-      @test_environment = { test: 2 }
+      @test_job = {
+        'name' => 'test-job',
+        'scripts' => ['echo 1'],
+        'environment' => { one: 1 }
+      }
+      @test_environment = { two: 2 }
       @worker = RunScriptsWorker.new
     end
     
@@ -21,13 +24,13 @@ describe 'worker', 'queuing' do
     
     it 'sets the given environment variables as string values' do
       expect {
-        @worker.perform @job_name, @scripts, with_environment_vars: @test_environment
-      }.to change { ENV['test'] }.from(nil).to('2')
+        @worker.perform @test_job, @test_environment
+      }.to change { ENV['one'] }.from(nil).to('1').and change { ENV['two'] }.from(nil).to('2')
     end
       
     it 'starts the queued job' do
-      expect(@worker).to receive(:start_job).with(@job_name, @scripts, anything)
-      @worker.perform @job_name, @scripts, with_environment_vars: @test_environment
+      expect(@worker).to receive(:start_job).with(@test_job, anything)
+      @worker.perform @test_job, @test_environment
     end
   end
 end
