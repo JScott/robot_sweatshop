@@ -1,13 +1,10 @@
 require 'logger'
 require 'fileutils'
 
-def from_workspace(job, logger = Logger.new(STDOUT))
-  path = workspace_path_for job
-  logger.info "Working from '#{path}' for '#{job}'"
-  FileUtils.mkdir_p path
-  Dir.chdir path do
-    yield
-  end
+def from_workspace(job_name)
+  path = workspace_path_for job_name
+  FileUtils.mkpath path
+  Dir.chdir(path) { yield if block_given? }
 end
 
 def workspace_path_for(job_name)
@@ -15,21 +12,13 @@ def workspace_path_for(job_name)
   "#{current_dir}/../workspaces/#{job_name}"
 end
 
-def work_on(path, logger = Logger.new(STDOUT))
-  logger.info "Running '#{path}'..."
+def run(command, log: Logger.new(STDOUT))
+  log.info "Running '#{command}'..."
   # TODO: path.split(' ') to bypass the shell when we're not using env vars
-  IO.popen(path) do |io|
+  IO.popen(command) do |io|
     while line = io.gets
-      logger.info line
+      log.info line
     end
   end
-  logger.info "Script done. (exit status: #{$?.exitstatus})"
-end
-
-def start_job(job, with_logger: Logger.new(STDOUT))
-  from_workspace(job['name'], with_logger) do
-    job['scripts'].each do |command|
-      work_on command, with_logger
-    end
-  end
+  log.info "Script done. (exit status: #{$?.exitstatus})"
 end

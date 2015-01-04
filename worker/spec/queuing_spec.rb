@@ -11,7 +11,7 @@ describe 'worker', 'queuing' do
     before(:context) do
       @test_job = {
         'name' => 'test-job',
-        'scripts' => ['echo 1'],
+        'scripts' => ['echo 1', 'echo 2'],
         'environment' => { one: 1 }
       }
       @test_environment = { two: 2 }
@@ -27,9 +27,14 @@ describe 'worker', 'queuing' do
         @worker.perform @test_job, @test_environment
       }.to change { ENV['one'] }.from(nil).to('1').and change { ENV['two'] }.from(nil).to('2')
     end
-      
-    it 'starts the queued job' do
-      expect(@worker).to receive(:start_job).with(@test_job, anything)
+
+    it 'changes the working directory to a job-specific workspace' do
+      expect(Dir).to receive(:chdir).with(/workspaces\/#{@test_job['name']}/)
+      @worker.perform @test_job, @test_environment
+    end
+    
+    it 'runs all the scripts from the queued job' do
+      expect(@worker).to receive(:run).twice
       @worker.perform @test_job, @test_environment
     end
   end
