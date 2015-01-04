@@ -28,8 +28,8 @@ describe 'worker', 'queuing' do
       }.to change { ENV['one'] }.from(nil).to('1').and change { ENV['two'] }.from(nil).to('2')
     end
 
-    it 'changes the working directory to a job-specific workspace' do
-      expect(Dir).to receive(:chdir).with(/workspaces\/#{@test_job['name']}/)
+    it 'changes the directory to the appropriate workspace' do
+      expect(@worker).to receive(:from_workspace).with(named: @test_job['name'])
       @worker.perform @test_job, @test_environment
     end
     

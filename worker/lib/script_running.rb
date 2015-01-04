@@ -1,14 +1,14 @@
 require 'logger'
 require 'fileutils'
 
-def from_workspace(job_name)
-  path = workspace_path for_job: job_name
+def from_workspace(named:)
+  path = workspace_path named
   FileUtils.mkpath path
   Dir.chdir(path) { yield if block_given? }
 end
 
-def workspace_path(for_job:)
-  File.expand_path "#{__dir__}/../workspaces/#{for_job}"
+def workspace_path(job_name)
+  File.expand_path "#{__dir__}/../workspaces/#{job_name}"
 end
 
 def run(command, log: Logger.new(STDOUT))

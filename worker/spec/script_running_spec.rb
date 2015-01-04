@@ -26,4 +26,14 @@ describe 'worker', 'script_running' do
       run command
     end
   end
+
+  describe 'from_workspace' do
+    it 'changes the working directory' do
+      job_name = 'test'
+      expect(Dir).to receive(:chdir).with(/workspaces\/#{job_name}/)
+      from_workspace named: job_name do
+        expect(Dir.pwd).to be workspace_path(job_name)
+      end
+    end
+  end
 end
