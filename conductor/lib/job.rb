@@ -5,5 +5,5 @@ def load_all_job_data
     jobs[name] = YAML.load_file path
     jobs[name]['name'] = name
   end
-  return jobs
+  jobs
 end

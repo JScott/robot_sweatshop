@@ -1,5 +1,6 @@
 require 'logger'
 require 'fileutils'
+require 'English'
 
 def from_workspace(named:)
   path = workspace_path named
@@ -19,5 +20,5 @@ def run(command, log: Logger.new(STDOUT))
       log.info line
     end
   end
-  log.info "Script done. (exit status: #{$?.exitstatus})"
+  log.info "Script done. (exit status: #{$CHILD_STATUS.exitstatus})"
 end
