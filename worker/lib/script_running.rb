@@ -1,5 +1,6 @@
 require 'logger'
 require 'fileutils'
+require 'English'
 
 def from_workspace(job, logger = Logger.new(STDOUT))
   path = workspace_path_for job
@@ -23,7 +24,7 @@ def work_on(path, logger = Logger.new(STDOUT))
       logger.info line
     end
   end
-  logger.info "Script done. (exit status: #{$?.exitstatus})"
+  logger.info "Script done. (exit status: #{$CHILD_STATUS.exitstatus})"
 end
 
 def start_job(job, with_logger: Logger.new(STDOUT))

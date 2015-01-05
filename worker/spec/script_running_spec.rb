@@ -17,7 +17,7 @@ describe 'worker', 'script_running' do
       }.to change { File.file? temp_file }.from(false).to(true)
       FileUtils.rm temp_file
     end
-    
+
     it 'prints script output to stdout' do
       command = 'echo 1'
       expect_any_instance_of(Logger).to receive(:info).with(/Running/)
@@ -40,7 +40,7 @@ describe 'worker', 'script_running' do
       expect(Dir).to receive(:chdir).with(/workspaces\/#{@test_job['name']}/)
       start_job @test_job
     end
-    
+
     it 'outputs the workspace path to stdout' do
       expect_any_instance_of(Logger).to receive(:info).with(/workspaces\/#{@test_job['name']}/)
       expect_any_instance_of(Logger).to receive(:info).at_least(:once)

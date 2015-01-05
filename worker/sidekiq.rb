@@ -2,7 +2,7 @@
 
 file_path = File.expand_path File.dirname(__FILE__)
 command = [
-  "/usr/local/bin/sidekiq",
+  '/usr/local/bin/sidekiq',
   "--require #{file_path}/lib/queuing.rb",
   "--config #{file_path}/sidekiq.yaml"
 ]

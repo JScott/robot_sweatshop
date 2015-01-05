@@ -1,3 +1,4 @@
-#!/usr/bin/ruby
+#!/usr/bin/env ruby
+
 puts "hello #{ENV['world']}"
 File.write('hello.txt', 'hello file')
