@@ -19,7 +19,17 @@ class BitbucketPayload
   end
 
   def author
-    latest_commit['raw_author']
+    name, email = latest_commit['raw_author'].split(/\s+</)
+    email.slice! '>' unless email.nil?
+    {
+      'name' => name,
+      'email' => email || '',
+      'username' => latest_commit['author']
+    }
+  end
+
+  def clone_url
+    "#{ @data['canon_url'] }/#{ repository['absolute_url'] }"
   end
 
   def hash
@@ -47,7 +57,7 @@ class BitbucketPayload
 
   def git_commit_data
     data = {}
-    %w(author hash branch message repo_slug source_url).each do |method|
+    %w(author hash branch message repo_slug source_url clone_url).each do |method|
       data[method] = method(method.to_sym).call
     end
     data
