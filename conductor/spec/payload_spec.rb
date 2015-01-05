@@ -6,12 +6,12 @@ describe 'conductor', 'payload' do
     payload_path = "#{__dir__}/data/bitbucket_payloads.yaml"
     @payload_data = YAML.load_file payload_path
   end
-  
+
   context 'with a malformed bitbucket payload' do
     before(:context) do
       @payload = BitbucketPayload.new @payload_data['bitbucket']
     end
-    
+
     it 'parses git commit data' do
       expect(@payload.repo_slug).to eq 'marcus/project-x'
       expect(@payload.source_url).to eq 'https://bitbucket.org/marcus/project-x/commits/620ade18607ac42d872b568bb92acaa9a28620e9/?at=master'
@@ -20,7 +20,7 @@ describe 'conductor', 'payload' do
       expect(@payload.branch).to eq 'master'
       expect(@payload.message).to eq "Added some more things to somefile.py\n"
     end
-    
+
     it 'can return the git commit data in a hash' do
       expect(@payload.git_commit_data.size).to eq(6)
     end

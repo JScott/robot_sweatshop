@@ -17,11 +17,11 @@ describe 'worker', 'queuing' do
       @test_environment = { two: 2 }
       @worker = RunScriptsWorker.new
     end
-    
+
     before(:each) do
       hide_stdout
     end
-    
+
     it 'sets the given environment variables as string values' do
       expect {
         @worker.perform @test_job, @test_environment

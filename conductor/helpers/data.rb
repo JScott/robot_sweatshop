@@ -5,8 +5,8 @@ require_relative '../lib/job'
 module DataHelper
   def get_job(name)
     jobs = load_all_job_data
-    halt 404, "Unknown job: #{name}" unless jobs.include? name                                                                                                                                   
-    return jobs[name]                                                                                                                                                                            
+    halt 404, "Unknown job: #{name}" unless jobs.include? name
+    jobs[name]
   end
 
   def parse_payload_from(tool)
@@ -16,7 +16,7 @@ module DataHelper
       request.body.rewind
       parse.new request.body.read
     rescue => exception
-      halt 400, "Bad payload: #{exception.to_s} (#{exception.backtrace.first})"
+      halt 400, "Bad payload: #{exception} (#{exception.backtrace.first})"
     end
   end
 

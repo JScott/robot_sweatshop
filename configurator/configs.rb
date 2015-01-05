@@ -9,7 +9,7 @@ end
 
 def set_log_file(config)
   # TODO: use logger instead of whatever this is
-  unless config['log_file'].nil?
+  if config['log_file']
     puts_info "Log file: #{config['log_file']}"
     log_path = config['log_file']
     log = File.new log_path, 'a+'
@@ -18,7 +18,7 @@ def set_log_file(config)
     STDERR.reopen log
     STDERR.sync = true
   else
-    puts_info "No log file specified, using STDOUT"
+    puts_info 'No log file specified, using STDOUT'
   end
 end
 
@@ -37,11 +37,11 @@ def get_job_data(job_directory)
   Dir.glob("#{current_dir}/../#{job_directory}/*.yaml").each do |path|
     job = YAML.load_file path
     # TODO: restructure verify_scripts and script format to support command arguments
-    #verify_scripts job['scripts']
+    # verify_scripts job['scripts']
     job_name = File.basename path, '.yaml'
     jobs[job_name] = job
   end
-  return jobs
+  jobs
 end
 
 def reject_job(name)

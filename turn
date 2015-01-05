@@ -3,8 +3,8 @@ require 'yaml'
 
 @process = ARGV[0]
 @status = ARGV[1]
-@processes = %w[server worker everything]
-@statuses = %w[on off]
+@processes = %w(server worker everything)
+@statuses = %w(on off)
 
 valid_args = @processes.include?(@process) && @statuses.include?(@status)
 
@@ -22,11 +22,11 @@ end
 @server_pid_file = '/data/run/mci/mci-server.pid'
 @worker_pid_file = '/data/run/mci/mci-worker.pid'
 
-def run(cmd)
+def run(command)
   user = @config['run_as']
-  cmd = "sudo -u #{user} -- #{cmd}" if user
-  puts cmd
-  IO.popen(cmd) do |io|
+  command = "sudo -u #{user} -- #{command}" if user
+  puts command
+  IO.popen(command) do |io|
     io.each do |line|
       $stdout.puts line
       $stdout.flush
@@ -37,45 +37,45 @@ end
 def get_pid(pid_file)
   pid = `/bin/cat #{pid_file}`
   if pid.empty?
-    puts "PID file missing!"
-    exit 2
+    puts 'PID file missing!'
+    abort
   end
-  return pid
+  pid
 end
 
 def start(process)
   puts "Starting #{process}..."
   case process
-    when 'server'
-      run "#{@root_path}/server.rb 2>&1 >> #{@server_log_file} &"
-    when 'worker'
-      run "#{@root_path}/worker.rb"
-    when 'everything'
-      @processes.each { |process| start process }
+  when 'server'
+    run "#{@root_path}/server.rb 2>&1 >> #{@server_log_file} &"
+  when 'worker'
+    run "#{@root_path}/worker.rb"
+  when 'everything'
+    @processes.each { |p| start p }
   end
-  puts "Done."
+  puts 'Done.'
 end
 
 def stop(process)
   puts "Stopping #{process}..."
   case process
-    when 'server'
-      pid = get_pid @server_pid_file
-      run "/bin/kill #{pid}"
-      run "rm #{@server_pid_file}"
-    when 'worker'
-      pid = get_pid @worker_pid_file
-      run "/bin/kill -9 #{pid}"
-      run "rm #{@worker_pid_file}"
-    when 'everything'
-      @processes.each { |process| stop process }
+  when 'server'
+    pid = get_pid @server_pid_file
+    run "/bin/kill #{pid}"
+    run "rm #{@server_pid_file}"
+  when 'worker'
+    pid = get_pid @worker_pid_file
+    run "/bin/kill -9 #{pid}"
+    run "rm #{@worker_pid_file}"
+  when 'everything'
+    @processes.each { |p| stop p }
   end
-  puts "Done."
+  puts 'Done.'
 end
 
 case @status
-  when 'on'
-    start @process
-  when 'off'
-    stop @process
+when 'on'
+  start @process
+when 'off'
+  stop @process
 end
