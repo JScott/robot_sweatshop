@@ -19,6 +19,7 @@ class BitbucketPayload
   end
 
   def author
+    return {} if latest_commit['raw_author'].nil?
     name, email = latest_commit['raw_author'].split(/\s+</)
     email.slice! '>' unless email.nil?
     {
@@ -29,7 +30,7 @@ class BitbucketPayload
   end
 
   def clone_url
-    "#{ @data['canon_url'] }/#{ repository['absolute_url'] }"
+    "#{ @data['canon_url'] }#{ repository['absolute_url'] }"
   end
 
   def hash

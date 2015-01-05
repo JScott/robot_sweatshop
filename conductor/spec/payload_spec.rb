@@ -39,7 +39,7 @@ describe 'conductor', 'payload' do
 
     it 'returns nil for commit data' do
       expect(@payload.latest_commit).to be_empty
-      expect(@payload.author).to be_nil
+      expect(@payload.author).to be_empty
       expect(@payload.hash).to be_nil
       expect(@payload.branch).to be_nil
       expect(@payload.message).to be_nil
