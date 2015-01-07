@@ -2,28 +2,26 @@
 require 'moneta'
 
 class FileQueue
-  attr_accessor :store
+  attr_accessor :store, :queue
 
   MONETA_DIR = File.expand_path "#{__dir__}/moneta"
   
   def initialize(name)
     @name = name
     @store ||= Moneta.new :File, dir: MONETA_DIR
-    @store[name] ||= []
+    @queue = @store[name] ||= []
   end
 
   def push(item)
-    @store[@name] = @store[@name].push item
+    @queue.push item
   end
   
   def pop
-    value = @store[@name].last
-    @store[@name] = @store[@name][0...-1]
-    value
+    @queue.pop
   end
 
   def size
-    @store[@name].size
+    @queue.size
   end
 
   def close

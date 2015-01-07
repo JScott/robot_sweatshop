@@ -9,11 +9,10 @@ Before('@run_queue_handler') do
   end
 end
 
-After('@run_queue_handler') do
-  Thread.kill $queue_handler while $queue_handler.alive?
-end
-
 at_exit do
-  $client.socket.close
-  $client.context.terminate
+  if $queue_handler_running
+    Thread.kill $queue_handler
+    $client.socket.close
+    $client.context.terminate
+  end
 end
