@@ -3,7 +3,7 @@ Feature: Queue Handler
   Pushes and pops items off the requested queues
 
   Background:
-    Given nothing is in the queue
+    Given nothing is in the 'test-queue' queue
 
   Scenario: Pop empty
     When I request 'test-queue'
@@ -13,3 +13,6 @@ Feature: Queue Handler
     When I request 'test-queue item'
     And I request 'test-queue'
     Then I receive 'item'
+
+  Scenario: test
+    When I request 'test-queue item'
