@@ -3,3 +3,4 @@ worker/workspaces/**/*
 !worker/workspaces/.keep
 conductor/jobs/*
 !conductor/jobs/example.yaml
+moneta
