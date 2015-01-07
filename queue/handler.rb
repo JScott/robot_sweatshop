@@ -4,19 +4,20 @@ require 'ezmq'
 
 # TODO: be flexible in queue names. just make it if it isn't there!
 
-@queues = {
-  raw_payloads: FileQueue.new('raw-payloads'),
-  parsed_payloads: FileQueue.new('parsed-payloads'),
-  jobs: FileQueue.new('jobs')
-}
+@queues = {}
+
+def create_queue(name)
+  @queues[name] ||= FileQueue.new name
+end
 
 handler = lambda do |message|
-  queue, item = message.split ' '
+  name, item = message.split ' '
+  create_queue name
   if item.nil?
-    @queues[queue.to_sym].pop
+    @queues[name].pop
   else
-    @queues[queue.to_sym].push item
-    @queues[queue.to_sym].size.to_s
+    @queues[name].push item
+    @queues[name].size.to_s
   end
 end
 

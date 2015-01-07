@@ -6,16 +6,10 @@ Feature: Queue Handler
     Given nothing is in the queue
 
   Scenario: Pop empty
-    When I request 'jobs'
+    When I request 'test-queue'
     Then I receive nil
 
-  Scenario: Push/pop
-    When I request 'jobs test'
-    And I request 'jobs'
-    Then I receive 'test'
-
-  Scenario: Push
-    When I request 'jobs test'
-    And I request 'jobs'
-    Then I receive 'test'
-
+  Scenario: Push and pop
+    When I request 'test-queue item'
+    And I request 'test-queue'
+    Then I receive 'item'
