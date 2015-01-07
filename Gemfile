@@ -1,6 +1,5 @@
 source 'http://rubygems.org'
 gem 'commander'
 gem 'sinatra'
-gem 'pidfile'
-gem 'rspec'
-gem 'dcell'
+gem 'cucumber'
+gem 'ezmq'
