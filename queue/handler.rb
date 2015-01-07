@@ -2,8 +2,6 @@
 require_relative 'lib/file-queue'
 require 'ezmq'
 
-# TODO: be flexible in queue names. just make it if it isn't there!
-
 def push(name, item)
   queue = FileQueue.new name
   queue.push item
