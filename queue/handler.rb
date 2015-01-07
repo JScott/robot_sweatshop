@@ -21,5 +21,9 @@ handler = lambda do |message|
   end
 end
 
+at_exit do
+  @queues.each { |name, queue| queue.close }
+end
+
 server = EZMQ::Server.new provides: handler
 server.listen

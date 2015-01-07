@@ -9,6 +9,7 @@ class FileQueue
   def initialize(name)
     @name = name
     @store ||= Moneta.new :File, dir: MONETA_DIR
+    @store[name] ||= []
   end
 
   def push(item)

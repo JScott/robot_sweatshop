@@ -15,4 +15,4 @@ Feature: Queue Handler
     Then I receive 'item'
 
   Scenario: test
-    When I request 'test-queue item'
+    When I request 'test-queue itemtest'
