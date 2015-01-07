@@ -13,8 +13,3 @@ After('@run_queue_handler') do
   Thread.kill @queue_handler
   @queue_handler_running = false
 end
-
-at_exit do
-  #@client = nil
-  #GC.start
-end
