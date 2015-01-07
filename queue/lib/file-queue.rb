@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
 require 'moneta'
+require 'json'
 
 class FileQueue
   attr_accessor :store
@@ -9,16 +10,19 @@ class FileQueue
   def initialize(name)
     @name = name
     @store ||= Moneta.new :File, dir: MONETA_DIR
-    @store[name] ||= []
+    @store[name] ||= '[]'
   end
 
   def push(item)
-    @store[@name] = @store[@name].push item
+    array = JSON.parse @store[@name]
+    array.push item
+    @store[@name] = JSON.generate array
   end
   
   def pop
-    value = @store[@name].last
-    @store[@name] = @store[@name][0...-1]
+    array = JSON.parse @store[@name]
+    value = array.pop
+    @store[@name] = array
     value
   end
 
