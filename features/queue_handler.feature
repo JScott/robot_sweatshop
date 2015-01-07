@@ -7,7 +7,7 @@ Feature: Queue Handler
 
   Scenario: Pop empty
     When I request 'test-queue'
-    Then I receive nil
+    Then I receive ''
 
   Scenario: Push and pop
     When I request 'test-queue item'
