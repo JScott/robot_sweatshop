@@ -4,8 +4,7 @@ Given /^nothing is in the queue$/ do
 end
 
 When /^I request '(.*?)'$/ do |request|
-  client = EZMQ::Client.new
-  @response = client.request request
+  @response = @client.request request
 end
 
 Then /^I receive '(.*?)'$/ do |response|
