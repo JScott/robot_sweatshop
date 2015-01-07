@@ -13,6 +13,3 @@ Feature: Queue Handler
     When I request 'test-queue item'
     And I request 'test-queue'
     Then I receive 'item'
-
-  Scenario: test
-    When I request 'test-queue itemtest'
