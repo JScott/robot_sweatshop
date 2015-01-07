@@ -4,25 +4,21 @@ require 'ezmq'
 
 # TODO: be flexible in queue names. just make it if it isn't there!
 
-@queues = {}
+def push(name, item)
+  queue = FileQueue.new name
+  queue.push item
+  queue.size.to_s
+end
 
-def create_queue(name)
-  @queues[name] ||= FileQueue.new name
+def pop(name)
+  queue = FileQueue.new name
+  queue.pop
 end
 
 handler = lambda do |message|
   name, item = message.split ' '
-  create_queue name
-  if item.nil?
-    @queues[name].pop
-  else
-    @queues[name].push item
-    @queues[name].size.to_s
-  end
-end
-
-at_exit do
-  @queues.each { |name, queue| queue.close }
+  value = item.nil? ? pop(name) : push(name, item)
+  value
 end
 
 server = EZMQ::Server.new provides: handler
