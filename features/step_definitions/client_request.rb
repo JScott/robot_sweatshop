@@ -1,14 +1,7 @@
 require 'ezmq'
 
-Given /^the queue handler is running$/ do
-  script = File.expand_path "#{__dir__}/../../queue/handler.rb"
-  unless $subprocesses.key? :queue_handler
-    $subprocesses[:queue_handler] = Process.spawn script
-  end
-end
-
 Given /^I am a connected client$/ do
-  @client = EZMQ::Client.new
+  @client = EZMQ::Client.new address: 'tcp://127.0.0.1:5556'
 end
 
 When /^I request '(.*?)'$/ do |request|

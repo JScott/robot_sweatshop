@@ -19,5 +19,5 @@ handler = lambda do |message|
   value
 end
 
-server = EZMQ::Server.new provides: handler
+server = EZMQ::Server.new provides: handler, address: 'tcp://127.0.0.1:5556'
 server.listen

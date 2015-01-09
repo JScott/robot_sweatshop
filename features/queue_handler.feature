@@ -2,8 +2,7 @@ Feature: Queue Handler
   Pushes and pops items off the requested queues
 
   Background:
-    Given the queue handler is running
-    And nothing is in the 'test-queue' queue
+    Given nothing is in the 'test-queue' queue
     And I am a connected client
 
   Scenario: Pop empty
@@ -14,3 +13,6 @@ Feature: Queue Handler
     When I request 'test-queue item'
     And I request 'test-queue'
     Then I receive 'item'
+
+  Scenario: test
+    When I request 'test-queue testtest'

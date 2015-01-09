@@ -1,15 +1,8 @@
 require 'ezmq'
 require 'timeout'
 
-Given /^the queue broadcaster is running$/ do
-  script = File.expand_path "#{__dir__}/../../queue/broadcaster.rb"
-  unless $subprocesses.key? :queue_broadcaster
-    $subprocesses[:queue_broadcaster] = Process.spawn script
-  end
-end
-
 Given /^I subscribe to the '(.*?)' queue$/ do |queue|
-  @subscriber = EZMQ::Subscriber.new
+  @subscriber = EZMQ::Subscriber.new address: 'tcp://127.0.0.1:5557'
   @subscriber.subscribe queue
 end
 
