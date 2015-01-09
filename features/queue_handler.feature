@@ -1,9 +1,10 @@
-@run_queue_handler
 Feature: Queue Handler
   Pushes and pops items off the requested queues
 
   Background:
-    Given nothing is in the 'test-queue' queue
+    Given the queue handler is running
+    And nothing is in the 'test-queue' queue
+    And I am a connected client
 
   Scenario: Pop empty
     When I request 'test-queue'
