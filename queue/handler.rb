@@ -15,8 +15,8 @@ end
 
 handler = lambda do |message|
   name, item = message.split ' '
-  value = item.nil? ? pop(name) : push(name, item)
-  value
+  is_pop_request = item.nil?
+  is_pop_request ? pop(name) : push(name, item)
 end
 
 server = EZMQ::Server.new provides: handler, address: 'tcp://127.0.0.1:5556'
