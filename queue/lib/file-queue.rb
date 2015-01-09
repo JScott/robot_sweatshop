@@ -13,12 +13,14 @@ class FileQueue
   end
 
   def push(item)
-    @store[@name].push item
+    @store[@name] = @store[@name].push item
   end
   
   def pop
     item = @store[@name].first
+    puts @store[@name].join(',')
     @store[@name] = @store[@name][1..-1]
+    puts item, @store[@name].join(',')
     item
   end
 
