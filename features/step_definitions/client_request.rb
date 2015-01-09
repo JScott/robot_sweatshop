@@ -1,7 +1,7 @@
 require 'ezmq'
 
 Given /^I am a connected client$/ do
-  @client = EZMQ::Client.new address: 'tcp://127.0.0.1:5556'
+  @client = EZMQ::Client.new port: 5556
 end
 
 When /^I request '(.*?)'$/ do |request|

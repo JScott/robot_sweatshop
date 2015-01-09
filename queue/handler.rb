@@ -13,11 +13,12 @@ def pop(name)
   queue.pop
 end
 
-handler = lambda do |message|
-  name, item = message.split ' '
+puts 'starting'
+
+server = EZMQ::Server.new port: 5556
+server.listen do |message|
+  puts 'hey'
+  name, item = message.split ''
   is_pop_request = item.nil?
   is_pop_request ? pop(name) : push(name, item)
 end
-
-server = EZMQ::Server.new provides: handler, address: 'tcp://127.0.0.1:5556'
-server.listen

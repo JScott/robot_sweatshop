@@ -2,7 +2,7 @@
 require_relative 'lib/file-queue'
 require 'ezmq'
 
-publisher = EZMQ::Publisher.new address: 'tcp://127.0.0.1:5557', topic: ''
+publisher = EZMQ::Publisher.new port: 5557, topic: ''
 queues = {}
 %w(raw-payload parsed-payload jobs testing).each do |queue|
   queues[queue.to_sym] = FileQueue.new queue

@@ -2,7 +2,7 @@ require 'ezmq'
 require 'timeout'
 
 Given /^I subscribe to the '(.*?)' queue$/ do |queue|
-  @subscriber = EZMQ::Subscriber.new address: 'tcp://127.0.0.1:5557'
+  @subscriber = EZMQ::Subscriber.new port: 5557, topic: ''
   @subscriber.subscribe queue
 end
 
