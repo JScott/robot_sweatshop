@@ -13,12 +13,9 @@ def pop(name)
   queue.pop
 end
 
-puts 'starting'
-
 server = EZMQ::Server.new port: 5556
 server.listen do |message|
-  puts 'hey'
-  name, item = message.split ''
+  name, item = message.split ' '
   is_pop_request = item.nil?
   is_pop_request ? pop(name) : push(name, item)
 end
