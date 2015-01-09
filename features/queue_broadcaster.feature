@@ -6,7 +6,7 @@ Feature: Queue Broadcaster
 
   Scenario: Publish
     Given something is in the 'testing' queue
-    Then I hear 'testing'
+    Then I hear 'testing' on 'busy-queues'
 
   Scenario: But not always
     Given nothing is in the 'testing' queue
