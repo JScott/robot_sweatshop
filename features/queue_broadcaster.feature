@@ -2,12 +2,12 @@ Feature: Queue Broadcaster
   Publishes to queue channels when the queues are not empty
 
   Background:
-    Given I subscribe to the 'jobs' queue
+    Given I subscribe to the 'testing' queue
 
   Scenario: Publish
-    Given something is in the 'jobs' queue
-    Then I hear the queue count
+    Given something is in the 'testing' queue
+    Then I hear 'testing'
 
   Scenario: But not always
-    Given nothing is in the 'jobs' queue
+    Given nothing is in the 'testing' queue
     Then I hear nothing

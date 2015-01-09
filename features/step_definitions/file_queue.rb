@@ -13,4 +13,5 @@ Given /^something is in the '(.*?)' queue$/ do |queue_name|
     queue.push 'one'
     queue.push 'two'
   end
+  expect(queue.size).to be > 0
 end

@@ -6,14 +6,19 @@ Given /^I subscribe to the '(.*?)' queue$/ do |queue|
   @subscriber.subscribe queue
 end
 
-Then /^I hear the queue count$/ do
-  response = Timeout.timeout(1) { @subscriber.listen }
-  expect(response).to_not be_nil
-  expect(response.to_i).to be > 0
+Then /^I hear '(.*?)'$/ do |expected_message|
+  response = Timeout.timeout(1) do
+    @subscriber.listen do |message|
+      expect(message).to eq expected_message
+      break
+    end
+  end
 end
 
 Then /^I hear nothing$/ do
   expect {
-    Timeout.timeout(1) { @subscriber.listen }
+    Timeout.timeout(1) do
+      @subscriber.listen { |m| }
+    end
   }.to raise_error Timeout::Error
 end
