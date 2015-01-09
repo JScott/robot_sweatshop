@@ -17,14 +17,14 @@ end
 
 $default = load_defaults
 
-Bluepill.application("robot-sweatshop") do |app|
-  app.process("handler") do |process|
+Bluepill.application "robot-sweatshop" do |app|
+  app.process "handler" do |process|
     process.start_command = File.expand_path "#{__dir__}/queue/handler.rb"
     process.pid_file = "#{$default[:pidfile_directory]}/queue_handler.pid"
     process.stdout = "#{$default[:logfile_directory]}/queue_handler_out.log"
     process.stderr = "#{$default[:logfile_directory]}/queue_handler_err.log"
     process.daemonize = true
-    process.group = "queue"
+    process.group = 'queue'
   end
   app.process("broadcaster") do |process|
     process.start_command = File.expand_path "#{__dir__}/queue/broadcaster.rb"
@@ -32,6 +32,6 @@ Bluepill.application("robot-sweatshop") do |app|
     process.stdout = "#{$default[:logfile_directory]}/queue_broadcaster_out.log"
     process.stderr = "#{$default[:logfile_directory]}/queue_broadcaster_err.log"
     process.daemonize = true
-    process.group = "queue"
+    process.group = 'queue'
   end
 end
