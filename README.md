@@ -1,3 +1,8 @@
+Note: the Cucumber tests will use the appropriate queues to store and run tests data.
+Be sure to test on a staging instance of Robot Sweatshop or backup `queue/lib/moneta`.
+
+---
+
 # mci
 
 I was using Jenkins as a glorified script runner, as I'm sure a lot of people are.
