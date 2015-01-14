@@ -23,6 +23,7 @@ class FileQueue
   end
 
   def size
+    # TODO: sometimes calling nil.size ...
     @store[@name].size
   end
 
