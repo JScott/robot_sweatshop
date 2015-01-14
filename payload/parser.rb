@@ -3,8 +3,12 @@ require 'ezmq'
 require 'json'
 
 def parse(payload, of_format:)
-  require_relative "lib/#{of_format}"
-  Object.const_get("#{of_format.capitalize}Payload").new payload
+  if File.file? "#{__dir__}/lib/#{of_format}"
+    require_relative "lib/#{of_format}"
+    Object.const_get("#{of_format.capitalize}Payload").new payload
+  else
+    nil
+  end	
 end
 
 def queue(payload)
@@ -27,8 +31,9 @@ def wait_for_raw_payload
   end
 end
 
+puts "STARTED"
 wait_for_raw_payload do |data|
   puts "QUEUEING #{data}"
   payload = parse data['payload'], of_format: data['format']
-  queue payload
+  queue payload.to_hash if payload
 end

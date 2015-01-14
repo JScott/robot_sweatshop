@@ -56,7 +56,7 @@ class BitbucketPayload < Payload
     "#{base_url}/#{repo_slug}/commits/#{hash}/?at=#{branch}"
   end
 
-  def git_commit_data
+  def to_hash
     data = {}
     %w(author hash branch message repo_slug source_url clone_url).each do |method|
       data[method] = method(method.to_sym).call

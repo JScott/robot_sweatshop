@@ -13,7 +13,7 @@ Feature: Payload Parser
 
   Scenario: Parsing malformed payloads
     Given nothing is in the 'raw-payload' queue
-    Then I expect payload parsing to happen
+    Then I expect payload parsing not to happen
     And nothing is pushed to the 'parsed-payload' queue
     When a malformed payload is put in the 'raw-payload' queue
 
