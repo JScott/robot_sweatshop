@@ -1,21 +1,34 @@
 #!/usr/bin/env ruby
-require_relative 'lib/file-queue'
 require 'ezmq'
+require 'json'
 
-def push(name, item)
-  queue = FileQueue.new name
-  queue.push item
-  queue.size.to_s
+def parse(payload, of_format:)
+  require_relative "lib/#{of_format}"
+  Object.const_get("#{of_format.capitalize}Payload").new payload
 end
 
-def pop(name)
-  queue = FileQueue.new name
-  queue.pop
+def queue(payload)
+  hash = payload.to_hash
+  client.request "parsed-payload #{JSON.generate hash}"
 end
 
-server = EZMQ::Server.new port: 5556
-server.listen do |message|
-  name, item = message.split ' '
-  is_pop_request = item.nil?
-  is_pop_request ? pop(name) : push(name, item)
+def wait_for_raw_payload
+  client = EZMQ::Client.new port: 5556
+  subscriber = EZMQ::Subscriber.new port: 5557, topic: 'busy-queues'
+  subscriber.listen do |message|
+    puts "HEARD #{message}"
+    queue = message.gsub 'busy-queues ', ''
+    puts "[#{queue}]"
+    if queue == 'raw-payload'
+      data = client.request queue
+      puts "real good! #{data}"
+      yield JSON.parse(data)
+    end
+  end
+end
+
+wait_for_raw_payload do |data|
+  puts "QUEUEING #{data}"
+  payload = parse data['payload'], of_format: data['format']
+  queue payload
 end

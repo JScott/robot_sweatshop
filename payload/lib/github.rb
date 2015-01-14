@@ -1,7 +1,7 @@
 require 'json'
+require_relative 'payload'
 
-# Parser for Github webhook payloads.
-class GithubPayload
+class GithubPayload < Payload
   def initialize(payload)
     @payload = JSON.parse payload || {}
   end

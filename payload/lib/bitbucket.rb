@@ -1,8 +1,8 @@
 require 'uri'
 require 'json'
+require_relative 'payload'
 
-# Parser for Bitbucket webhook payloads.
-class BitbucketPayload
+class BitbucketPayload < Payload
   def initialize(data)
     data = URI.decode_www_form(data)[0][1]
     @data = JSON.parse data || {}
