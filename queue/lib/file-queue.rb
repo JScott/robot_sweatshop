@@ -29,13 +29,13 @@ class FileQueue
   end
   
   def pop
+    return '' if @store[@name].empty?
     item = @store[@name].first
     @store[@name] = @store[@name][1..-1]
     item
   end
 
   def size
-    # TODO: sometimes calling nil.size when you push empty into the queue ...
     @store[@name].size
   end
 
