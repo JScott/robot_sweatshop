@@ -13,3 +13,9 @@ Feature: Queue Handler
     When I request 'testing item'
     And I request 'testing'
     Then I receive 'item'
+
+  Scenario: Mirroring
+    Given queue mirroring is enabled
+    When I request 'testing item'
+    And I request 'mirror-testing'
+    Then I receive 'item'

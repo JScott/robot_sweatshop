@@ -9,7 +9,7 @@ def push(name, item)
 end
 
 def pop(name)
-  queue = FileQueue.new name
+  queue = FileQueue.new name  
   queue.pop
 end
 

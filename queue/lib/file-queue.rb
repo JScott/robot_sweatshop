@@ -24,10 +24,9 @@ class FileQueue
     @store[@name] = @store[@name].push item
   end
   
-  def pop(from: :store)
-    name =  from == :mirror ? @mirror_name : @name
-    item = @store[name].first
-    @store[name] = @store[name][1..-1]
+  def pop
+    item = @store[@name].first
+    @store[@name] = @store[@name][1..-1]
     item
   end
 
@@ -37,6 +36,7 @@ class FileQueue
   end
 
   def clear
+    @store[@mirror_name] = []
     @store[@name] = []
   end
 end

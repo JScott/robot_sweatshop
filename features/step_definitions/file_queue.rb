@@ -15,3 +15,8 @@ Given /^something is in the '(.*?)' queue$/ do |queue_name|
   end
   expect(queue.size).to be > 0
 end
+
+Given /^queue mirroring is enabled$/ do
+  # for example purposes, already enabled in support/env.rb for all tests
+  FileQueue.mirroring = true
+end

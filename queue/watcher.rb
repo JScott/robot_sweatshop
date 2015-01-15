@@ -1,12 +1,21 @@
 #!/usr/bin/env ruby
 require_relative 'lib/file-queue'
 
-@queue = FileQueue.new ARGV[0]
+@queues = []
+[ARGV[0], "mirror-#{ARGV[0]}"].each do |queue_name|
+  @queues.push({
+    name: queue_name,
+    queue: FileQueue.new(queue_name)
+  })
+end
 
 loop do
   system 'clear'
-  puts "Queue: #{ARGV[0]}"
-  puts "Size: #{@queue.size}", "#{'|'*@queue.size}"
-  puts @queue.store[ARGV[0]].inspect
+  @queues.each do |q|
+    puts "Queue: #{q[:name]}"
+    puts "Size: #{q[:queue].size}", "#{'|'*q[:queue].size}"
+    puts q[:queue].store[q[:name]].inspect
+    puts
+  end
   sleep 1
 end
