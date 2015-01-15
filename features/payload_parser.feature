@@ -6,18 +6,22 @@ Feature: Payload Parser
     And nothing is in the 'parsed-payload' queue
     And queue mirroring is enabled
 
-  Scenario Outline: Parses from raw-payload into parsed-payload
+  Scenario: Parses from raw-payload into parsed-payload
     Given I am a connected client
-    When <Source> payload data is put in the 'raw-payload' queue
+    When Bitbucket payload data is put in the 'raw-payload' queue
     And I wait a second
     Then requesting 'raw-payload' returns ''
     And requesting 'mirror-parsed-payload' returns something
+
+  Scenario Outline: Parsing valid payloads
+    Given I am a connected client
+    When <Source> payload data is put in the 'raw-payload' queue
+    And I wait a second
+    And I request 'mirror-parsed-payload'
+    Then I receive a standardized hash of payload data
     Examples:
       | Source |
       | Bitbucket |
-
-  Scenario: Parsing valid payloads
-    Given queue mirroring is enabled
 
   Scenario: Parsing malformed payloads
     #And nothing is pushed to the 'parsed-payload' queue

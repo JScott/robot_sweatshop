@@ -17,3 +17,17 @@ end
 When /^I wait a second$/ do
   sleep 1
 end
+
+Then /^I receive a standardized hash of payload data$/ do
+  hash = JSON.parse @response
+  expect(hash).to be_instance_of Hash
+  %w(author hash branch message repo_slug source_url clone_url).each do |key|
+    expect(hash).to have_key key
+  end
+
+  author = hash['author']
+  expect(author).to be_instance_of Hash
+  %w(name email username).each do |key|
+    expect(author).to have_key key
+  end
+end

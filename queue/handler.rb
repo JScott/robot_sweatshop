@@ -17,7 +17,7 @@ end
 
 server = EZMQ::Server.new port: 5556
 server.listen do |message|
-  name, item = message.split ' '
+  name, item = message.split ' ', 2
   is_pop_request = item.nil?
   is_pop_request ? pop(name) : push(name, item)
 end
