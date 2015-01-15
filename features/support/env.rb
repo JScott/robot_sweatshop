@@ -1,3 +1,5 @@
+$LIB_DIR = "#{__dir__}/../../lib"
+
 require 'rspec/mocks'
 World(RSpec::Mocks::ExampleMethods)
 
@@ -13,7 +15,7 @@ After do
   end
 end
 
-require_relative "#{__dir__}/../../queue/lib/file-queue"
+require_relative "#{$LIB_DIR}/queue/lib/file-queue"
 
 FileQueue.mirroring = true
 

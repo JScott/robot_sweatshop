@@ -1,5 +1,5 @@
-require_relative '../../payload/lib/bitbucket'
-require_relative '../../queue/lib/file-queue'
+require_relative "#{$LIB_DIR}/payload/lib/bitbucket"
+require_relative "#{$LIB_DIR}/queue/lib/file-queue"
 require 'yaml'
 require 'ezmq'
 require 'json'

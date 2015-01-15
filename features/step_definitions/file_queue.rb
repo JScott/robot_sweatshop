@@ -1,5 +1,5 @@
 require 'moneta'
-require_relative '../../queue/lib/file-queue'
+require_relative "#{$LIB_DIR}/queue/lib/file-queue"
 
 Given /^nothing is in the '(.*?)' queue$/ do |queue_name|
   queue = FileQueue.new queue_name
