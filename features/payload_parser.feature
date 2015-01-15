@@ -1,5 +1,5 @@
 Feature: Payload Parser
-  Parses payloads from the queue
+  Parses raw payload data from the queue
 
   Background:
     Given nothing is in the 'raw-payload' queue
@@ -27,7 +27,8 @@ Feature: Payload Parser
     Given I am a connected client
     When malformed payload data is put in the 'raw-payload' queue
     And I wait a second
+    # TODO: this needs to be more clear that nothing was ever pushed to the queue. Ambiguous, could have pushed ''
     Then requesting 'mirror-parsed-payload' returns ''
     
-
+  # TODO: this should work but isn't in scope right now, thus isn't worth testing
   Scenario: Drop-in custom parsers
