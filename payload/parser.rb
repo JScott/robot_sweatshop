@@ -20,8 +20,7 @@ def queue(payload)
 end
 
 def dequeue
-  data = @client.request 'raw-payload'
-  JSON.parse data
+  @client.request 'raw-payload'
 end
 
 def wait_for_raw_payload
@@ -29,13 +28,15 @@ def wait_for_raw_payload
   subscriber.listen do |message|
     queue = message.gsub 'busy-queues ', ''
     if queue == 'raw-payload'
-      yield dequeue
+      data = dequeue
+      yield data if data
     end
   end
 end
 
 wait_for_raw_payload do |data|
+  data = JSON.parse data
   payload = parse data['payload'], of_format: data['format']
-  puts payload.inspect
-  queue payload.to_hash unless payload.nil?
+     puts payload.inspect
+  queue payload.to_hash if payload
 end

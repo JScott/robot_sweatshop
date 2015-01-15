@@ -24,14 +24,3 @@ Then /^I hear nothing$/ do
     end
   }.to raise_error Timeout::Error
 end
-
-#When /^'(.*?)' is empty after (\d+) seconds$/ do |queue_name, seconds|
-#  sleep seconds.to_i
-#  @subscriber.listen do |message|
-#    busy_queue = message.gsub 'busy-queues ', ''
-#    puts busy_queue
-#    puts busy_queue == queue_name
-#    raise "#{queue_name} still not empty" if busy_queue == queue_name
-#    break
-#  end
-#end
