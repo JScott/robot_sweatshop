@@ -24,7 +24,10 @@ Feature: Payload Parser
       | Bitbucket |
 
   Scenario: Parsing malformed payloads
-    #And nothing is pushed to the 'parsed-payload' queue
-    #When a malformed payload is put in the 'raw-payload' queue
+    Given I am a connected client
+    When malformed payload data is put in the 'raw-payload' queue
+    And I wait a second
+    Then requesting 'mirror-parsed-payload' returns ''
+    
 
   Scenario: Drop-in custom parsers
