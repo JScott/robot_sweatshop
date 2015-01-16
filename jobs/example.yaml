@@ -1,0 +1,8 @@
+branch_whitelist:
+- develop
+
+scripts:
+- echo "Hello $TEMP"
+
+environment:
+  TEMP: World

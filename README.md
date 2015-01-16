@@ -1,23 +1,6 @@
 Note: the Cucumber tests will use the appropriate queues to store and run tests data.
 Be sure to test on a staging instance of Robot Sweatshop or backup `queue/lib/moneta`.
 
-Job lifecycle: 
-```
-in/*
-  V
-  raw payload
-  v
-payload/parser
-  v
-  parsed payload
-  v
-job/assembler
-  v
-  job hash
-  v
-worker
-```
-
 ---
 
 # mci
