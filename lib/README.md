@@ -4,17 +4,13 @@ in/*
   V
   raw payload
   v
-payload/parser
-  v
-  parsed payload
-  v
-job/assembler
-  v
+job/assembler -> parsed payload ->  payload/parser
+  v           <- raw payload    <-----
   job hash
   v
 worker
 ```
 
-Also moneta core in queue/*
+All passing done via the moneta core in queue/*
 
-Also also queue/watcher for debugging
+Also queue/watcher for debugging
