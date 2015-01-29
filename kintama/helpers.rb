@@ -6,8 +6,8 @@ module QueueHelper
     queue.clear
     assert_equal queue.size, 0
   end
-  def enqueue(item)
-    queue = FileQueue.new 'testing'
+  def enqueue(queue_name, item)
+    queue = FileQueue.new queue_name
     queue.enqueue item
   end
 end
