@@ -13,9 +13,7 @@ given 'the Queue Handler' do
   end
   
   context 'dequeuing' do
-    setup do
-      @request = "#{@queue}"
-    end
+    setup { @request = "#{@queue}" }
 
     should 'return the next queued item' do
       enqueue @queue, @item
@@ -30,9 +28,7 @@ given 'the Queue Handler' do
   end
 
   context 'enqueuing' do
-    setup do
-      @request = "#{@queue} #{@item}"
-    end
+    setup { @request = "#{@queue} #{@item}" }
 
     should 'return the queue new size' do
       response = @client.request @request
@@ -41,9 +37,7 @@ given 'the Queue Handler' do
   end
 
   context 'queue mirroring' do
-    setup do
-      FileQueue.mirroring = true
-    end
+    setup { FileQueue.mirroring = true }
 
     should 'mirror queue enqueuing' do
       enqueue @queue, @item

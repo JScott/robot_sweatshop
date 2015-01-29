@@ -14,9 +14,7 @@ given 'the Queue Broadcaster' do
   end
   
   context 'a non-empty queue' do
-    setup do
-      enqueue @queue, @item
-    end
+    setup { enqueue @queue, @item }
 
     should 'have their named published to \'busy-queues\'' do
       Timeout.timeout(1) do
