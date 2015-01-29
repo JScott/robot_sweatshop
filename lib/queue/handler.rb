@@ -3,16 +3,16 @@ require_relative 'lib/file-queue'
 require 'ezmq'
 
 def enqueue(name, item)
-  puts "push #{name} #{item}"
+  puts "enqueue #{name} #{item}"
   queue = FileQueue.new name
   queue.enqueue item
   queue.size.to_s
 end
 
 def dequeue(name)
-  puts "pop #{name}"
+  puts "dequeue #{name}"
   queue = FileQueue.new name  
-  queue.pop
+  queue.dequeue
 end
 
 server = EZMQ::Server.new port: 5556
