@@ -1,8 +1,7 @@
 require 'uri'
 require 'json'
-require_relative 'payload'
 
-class BitbucketPayload < Payload
+class BitbucketPayload
   def initialize(data)
     data = URI.decode_www_form(data)[0][1]
     @data = JSON.parse data || {}
