@@ -10,8 +10,8 @@ end
 Given /^something is in the '(.*?)' queue$/ do |queue_name|
   queue = FileQueue.new queue_name
   unless queue.size > 0
-    queue.push 'one'
-    queue.push 'two'
+    queue.enqueue 'one'
+    queue.enqueue 'two'
   end
   expect(queue.size).to be > 0
 end

@@ -5,7 +5,7 @@ require 'ezmq'
 def push(name, item)
   puts "push #{name} #{item}"
   queue = FileQueue.new name
-  queue.push item
+  queue.enqueue item
   queue.size.to_s
 end
 

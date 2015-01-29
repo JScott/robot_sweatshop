@@ -23,12 +23,12 @@ class FileQueue
     @store[MIRRORING_ENABLED]
   end
 
-  def push(item)
+  def enqueue(item)
     @store[@mirror_name] = @store[@mirror_name].push item if @store[MIRRORING_ENABLED]
     @store[@name] = @store[@name].push item
   end
   
-  def pop
+  def dequeue
     return '' if @store[@name].empty?
     item = @store[@name].first
     @store[@name] = @store[@name][1..-1]
