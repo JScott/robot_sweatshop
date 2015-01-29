@@ -2,7 +2,7 @@ source 'http://rubygems.org'
 gem 'commander'
 gem 'sinatra'
 gem 'cucumber'
-gem 'ezmq', '0.3'
+gem 'ezmq'
 gem 'bluepill'
 
 gem 'rspec'
