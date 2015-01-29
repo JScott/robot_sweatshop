@@ -29,6 +29,7 @@ def wait_for_raw_payload
   subscriber.listen do |message|
     queue = message.gsub 'busy-queues ', ''
     if queue == 'raw-payload'
+puts "MESSAGE: #{message}"
       data = dequeue
       yield data unless data.empty?
     end

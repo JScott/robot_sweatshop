@@ -2,35 +2,61 @@ require 'kintama'
 require 'ezmq'
 require_relative 'helpers'
 
-context 'Queue Handler' do
+given 'the Queue Handler' do
   include QueueHelper
 
   setup do
-    FileQueue.mirroring = true
     @client = EZMQ::Client.new port: 5556
     @item = 'item'
     @queue = 'testing'
     clear_queue @queue
   end
   
-  should "dequeue items and return the item" do
-    enqueue @queue, @item
-    response = @client.request @queue
-    assert_equal response, @item
+  context 'dequeuing' do
+    setup do
+      @request = "#{@queue}"
+    end
+
+    should 'return the next queued item' do
+      enqueue @queue, @item
+      response = @client.request @request
+      assert_equal @item, response
+    end
+
+    should 'return \'\' for an empty queue' do
+      response = @client.request @request
+      assert_equal '', response
+    end
   end
-  should "return an empty string when dequeuing an empty queue" do
-    response = @client.request @queue
-    assert_equal response, ''
+
+  context 'enqueuing' do
+    setup do
+      @request = "#{@queue} #{@item}"
+    end
+
+    should 'return the queue new size' do
+      response = @client.request @request
+      assert_equal '1', response
+    end
   end
-  should "enqueue items and returns the queue size" do
-    response = @client.request "#{@queue} #{@item}"
-    assert_equal response, '1'
-  end
-  should "support queue mirroring" do
-    assert_equal FileQueue.mirroring, true
-    enqueue @queue, @item
-    response = @client.request "mirror-#{@queue}"
-    assert_equal response, @item
+
+  context 'queue mirroring' do
+    setup do
+      FileQueue.mirroring = true
+    end
+
+    should 'mirror queue enqueuing' do
+      enqueue @queue, @item
+      response = @client.request "mirror-#{@queue}"
+      assert_equal @item, response
+    end
+
+    should 'mirror queue clearing' do
+      enqueue @queue, @item
+      clear_queue @queue
+      response = @client.request "mirror-#{@queue}"
+      assert_equal '', response
+    end
   end
 
   teardown do

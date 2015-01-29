@@ -1,3 +1,4 @@
+require 'yaml'
 require_relative '../lib/queue/lib/file-queue'
 
 module QueueHelper
@@ -9,5 +10,12 @@ module QueueHelper
   def enqueue(queue_name, item)
     queue = FileQueue.new queue_name
     queue.enqueue item
+  end
+end
+
+module PayloadHelper
+  def load_payload(format)
+    payload_strings = YAML.load_file "#{__dir__}/data/payloads.yaml"
+    payload_strings[format]
   end
 end
