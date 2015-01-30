@@ -20,10 +20,9 @@ given 'the Payload Parser' do
   context 'queuing valid payload data to raw-payload' do
     setup do
       @valid_payloads = [
-        { payload: load_payload('Bitbucket'), format: 'Bitbucket' }
+        example_payload(with_format: 'Bitbucket')
         # TODO: refactor and add github
       ]
-      @valid_payloads.map! { |payload| JSON.generate payload }
     end
 
     should 'remove it from raw-payload' do
@@ -37,7 +36,7 @@ given 'the Payload Parser' do
         sleep 1
         response = @client.request @parsed_queue
         response = JSON.parse response
-        %w(author hash branch message repo_slug source_url clone_url).each do |key|
+        Payload.hash_keys.each do |key|
           assert_not_nil response[key]
           assert_not_equal key, response[key] # important for how Ruby interprets "string"['key']
         end

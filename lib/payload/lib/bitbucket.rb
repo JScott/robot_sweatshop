@@ -1,7 +1,8 @@
 require 'uri'
 require 'json'
+require_relative 'payload'
 
-class BitbucketPayload
+class BitbucketPayload < Payload
   def initialize(data)
     data = URI.decode_www_form(data)[0][1]
     @data = JSON.parse data || {}
@@ -53,13 +54,5 @@ class BitbucketPayload
     return '' if @data['canon_url'].nil? || repository.empty? || latest_commit.empty?
     base_url = @data['canon_url']
     "#{base_url}/#{repo_slug}/commits/#{hash}/?at=#{branch}"
-  end
-
-  def to_hash
-    data = {}
-    %w(author hash branch message repo_slug source_url clone_url).each do |method|
-      data[method] = method(method.to_sym).call
-    end
-    data
   end
 end
