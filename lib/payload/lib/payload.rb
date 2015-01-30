@@ -4,9 +4,8 @@ class Payload
   end
 
   def to_hash
+    keys = Payload.hash_keys
     values = Payload.hash_keys.map { |method| method(method.to_sym).call }
-    data = [Payload.hash_keys, values].transpose.to_h
-    puts "WHAT: #{data}"
-    data
+    [keys, values].transpose.to_h
   end
 end

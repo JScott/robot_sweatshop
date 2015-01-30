@@ -6,7 +6,7 @@ require 'json'
 
 def parse(payload, of_format:)
   lib_file = "#{__dir__}/lib/#{of_format.downcase}.rb"
-     #puts "#{lib_file} - #{File.file? lib_file}"
+  puts "Loading: #{lib_file} - #{File.file? lib_file}"
   if File.file? lib_file
     require_relative lib_file
     Object.const_get("#{of_format.capitalize}Payload").new payload
@@ -30,7 +30,6 @@ def wait_for_raw_payload
     queue = message.gsub 'busy-queues ', ''
     if queue == 'raw-payload'
       data = dequeue
-puts "DATA: #{data}"
       yield data unless data.empty?
     end
   end
@@ -43,8 +42,8 @@ wait_for_raw_payload do |data|
     data = nil
   end
   unless data.nil?
+    puts "Parsing: #{data}"
     payload = parse data['payload'], of_format: data['format']
-    puts "TESTTEST: #{}"
     queue payload if payload
   end
 end
