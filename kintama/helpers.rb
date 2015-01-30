@@ -27,7 +27,13 @@ module PayloadHelper
 end
 
 module JobHelper
+  include PayloadHelper
+
   def example_job
     YAML.load_file "#{__dir__}/data/job.yaml"
+  end
+
+  def example_job_request(from:)
+    example_payload with_format: from
   end
 end
