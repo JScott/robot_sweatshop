@@ -42,7 +42,7 @@ wait_for_raw_payload do |data|
   rescue JSON::ParserError => e
     data = nil
   end
-  unless data == nil
+  unless data.nil?
     payload = parse data['payload'], of_format: data['format']
     puts "TESTTEST: #{}"
     queue payload if payload

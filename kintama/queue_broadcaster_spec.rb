@@ -29,10 +29,11 @@ given 'the Queue Broadcaster' do
 
   context 'an empty queue' do
     should 'not have their name published' do
-      raise "Have not figured out fail capturing in Kintama yet..."
-      #Timeout.timeout(1) do
-      #  @subscriber.listen { |m| }
-      #end
+      assert_raises Timeout::Error do
+        Timeout.timeout(1) do
+          @subscriber.listen { |m| }
+        end
+      end
     end
   end
   
