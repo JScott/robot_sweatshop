@@ -30,7 +30,7 @@ given 'the Payload Parser' do
       assert_equal '', response
     end
 
-    should 'enqueue parsed payload data to parsed-payload' do
+    should 'enqueue parsed payload data and job name to parsed-payload' do
       @valid_payloads.each do |payload|
         @client.request "#{@raw_queue} #{payload}"
         sleep 1
@@ -40,6 +40,7 @@ given 'the Payload Parser' do
           assert_not_nil response[key]
           assert_not_equal key, response[key] # important for how Ruby interprets "string"['key']
         end
+        assert_not_nil response[:job_name]
       end
     end
   end
