@@ -14,26 +14,26 @@ module QueueHelper
   end
 end
 
-module PayloadHelper
+module InHelper
   def load_payload(of_format)
     payload_strings = YAML.load_file "#{__dir__}/data/payload_data.yaml"
     payload_strings[of_format]
   end
 
-  def example_payload(with_format:)
+  def example_raw_payload(with_format:)
     payload = load_payload with_format
     JSON.generate payload: payload, format: with_format, job_name: 'example'
   end
 end
 
-module JobHelper
-  include PayloadHelper
-
-  def example_job
-    YAML.load_file "#{__dir__}/data/job.yaml"
+module PayloadHelper
+  def example_parsed_payload(from:)
+    JSON.generate payload: { some: data }, job_name: 'example'
   end
+end
 
-  def example_job_request(from:)
-    example_payload with_format: from
+module JobHelper
+  def example_job_config
+    YAML.load_file "#{__dir__}/data/job.yaml"
   end
 end

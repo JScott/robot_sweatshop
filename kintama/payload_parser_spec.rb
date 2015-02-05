@@ -3,8 +3,9 @@ require 'ezmq'
 require 'json'
 require_relative 'helpers'
 
-given 'the Payload Parser' do
+describe 'the Payload Parser' do
   include QueueHelper
+  include InHelper
   include PayloadHelper
 
   setup do
@@ -17,20 +18,20 @@ given 'the Payload Parser' do
     clear_queue @queue
   end
   
-  context 'queuing valid payload data to raw-payload' do
+  given 'valid payload data in \'raw-payload\'' do
     setup do
       @valid_payloads = [
-        example_payload(with_format: 'Bitbucket')
+        example_raw_payload(with_format: 'Bitbucket')
         # TODO: refactor and add github
       ]
     end
 
-    should 'remove it from raw-payload' do
+    should 'remove it from \'raw-payload\'' do
       response = @client.request @raw_queue
       assert_equal '', response
     end
 
-    should 'enqueue parsed payload data and job name to parsed-payload' do
+    should 'enqueue parsed payload data and job name to \'parsed-payload\'' do
       @valid_payloads.each do |payload|
         @client.request "#{@raw_queue} #{payload}"
         sleep 1
@@ -46,7 +47,7 @@ given 'the Payload Parser' do
     end
   end
 
-  context 'queuing invalid payload data to raw-payload' do
+  given 'invalid payload data in \'raw-payload\'' do
     setup do
       bad_payload = { payload: load_payload('malformed'), format: 'asdf' }
       @client.request "#{@raw_queue} #{bad_payload}"
@@ -55,17 +56,14 @@ given 'the Payload Parser' do
       # TODO: should not crash the payload parser
     end
 
-    should 'remove it from raw-payload' do
+    should 'remove it from \'raw-payload\'' do
       response = @client.request @raw_queue
       assert_equal '', response
     end
 
-    should 'not queue anything to parsed-payload' do
+    should 'not queue anything to \'parsed-payload\'' do
       response = @client.request @parsed_queue
       assert_equal '', response
     end
-  end
-
-  teardown do
   end
 end

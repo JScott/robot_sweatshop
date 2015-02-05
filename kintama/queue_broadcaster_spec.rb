@@ -36,7 +36,4 @@ given 'the Queue Broadcaster' do
       end
     end
   end
-  
-  teardown do
-  end
 end

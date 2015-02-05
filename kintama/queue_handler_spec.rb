@@ -52,7 +52,4 @@ given 'the Queue Handler' do
       assert_equal '', response
     end
   end
-
-  teardown do
-  end
 end
