@@ -27,8 +27,7 @@ end
 def wait_for_raw_payload
   subscriber = EZMQ::Subscriber.new port: 5557, topic: 'busy-queues'
   subscriber.listen do |message|
-    queue = message.gsub 'busy-queues ', ''
-    if queue == 'raw-payload'
+    if message == 'raw-payload'
       data = dequeue
       yield data unless data.empty?
     end

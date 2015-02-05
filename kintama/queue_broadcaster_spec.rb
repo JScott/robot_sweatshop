@@ -18,8 +18,7 @@ given 'the Queue Broadcaster' do
 
     should 'have their named published to \'busy-queues\'' do
       Timeout.timeout(1) do
-        @subscriber.listen do |message|
-          topic, message = message.split ' '
+        @subscriber.listen do |message, topic|
           assert_equal @queue, message
           break
         end
