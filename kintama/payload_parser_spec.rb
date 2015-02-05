@@ -15,26 +15,23 @@ describe 'the Payload Parser' do
     @parsed_queue = 'parsed-payload'
     clear_queue @raw_queue
     clear_queue @parsed_queue
-    clear_queue @queue
   end
-  
-  given 'valid payload data in \'raw-payload\'' do
-    setup do
-      @valid_payloads = [
-        example_raw_payload(with_format: 'Bitbucket')
-        # TODO: refactor and add github
-      ]
-    end
 
-    should 'remove it from \'raw-payload\'' do
-      response = @client.request @raw_queue
-      assert_equal '', response
-    end
-
-    should 'enqueue parsed payload data and job name to \'parsed-payload\'' do
-      @valid_payloads.each do |payload|
+  # TODO: refactor and add github
+  ['Bitbucket'].each do |format|
+    given "valid #{format} data in 'raw-payload'" do
+      setup do
+        payload = example_raw_payload(with_format: format)
         @client.request "#{@raw_queue} #{payload}"
         sleep 1
+      end
+
+      should 'remove it from \'raw-payload\'' do
+        response = @client.request @raw_queue
+        assert_equal '', response
+      end
+
+      should 'enqueue parsed payload data and job name to \'parsed-payload\'' do
         response = @client.request @parsed_queue
         response = JSON.parse response
 
@@ -49,9 +46,14 @@ describe 'the Payload Parser' do
 
   given 'invalid payload data in \'raw-payload\'' do
     setup do
-      bad_payload = { payload: load_payload('malformed'), format: 'asdf' }
-      @client.request "#{@raw_queue} #{bad_payload}"
-      @client.request "#{@raw_queue} not json"
+      bad_payloads = [
+        JSON.generate(payload: load_payload('malformed'), format: 'asdf'),
+        'not json',
+        example_raw_payload(with_format: 'what')
+      ]
+      bad_payloads.each do |bad_payload|
+        @client.request "#{@raw_queue} #{bad_payload}"
+      end
       sleep 1
       # TODO: should not crash the payload parser
     end
