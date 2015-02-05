@@ -35,11 +35,12 @@ describe 'the Payload Parser' do
         response = @client.request @parsed_queue
         response = JSON.parse response
 
+        assert_equal Hash, response['payload'].class
         Payload.hash_keys.each do |key|
           assert_not_nil response['payload'][key]
           assert_not_equal key, response['payload'][key] # important for how Ruby interprets "string"['key']
         end
-        assert_not_nil response['job_name']
+        assert_equal String, response['job_name'].class
       end
     end
   end

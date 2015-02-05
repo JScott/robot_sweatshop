@@ -30,15 +30,11 @@ describe 'the Job Assembler' do
       assert_equal '', response
     end
 
-    should 'enqueue parsed payload data and job name to \'parsed-payload\'' do
+    should 'enqueue job data and job name to \'parsed-payload\'' do
       response = @client.request @parsed_queue
       response = JSON.parse response
-
-      Payload.hash_keys.each do |key|
-        assert_not_nil response['payload'][key]
-        assert_not_equal key, response['payload'][key] # important for how Ruby interprets "string"['key']
-      end
-      assert_not_nil response['job_name']
+      assert_equal Hash, response['context'].class
+      assert_equal Array, response['commands'].class
     end
   end
 
@@ -46,7 +42,8 @@ describe 'the Job Assembler' do
     setup do
       bad_payload = JSON.generate payload: 'not hash', job_name: 'asdf'
       not_json = 'not_json'
-      [ bad_payload, not_json ].each do |bad_payload|
+      ignored_branch = example_parsed_payload(for_branch: 'not_on_whitelist')
+      [ bad_payload, not_json, ignored_branch ].each do |bad_payload|
         @client.request "#{@raw_queue} #{bad_payload}"
       end
       sleep 1
