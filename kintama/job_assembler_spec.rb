@@ -21,17 +21,17 @@ describe 'the Job Assembler' do
   given "valid parsed payload data in 'parsed-payload'" do
     setup do
       payload = example_parsed_payload(for_branch: 'develop')
-      @client.request "#{@raw_queue} #{payload}"
+      @client.request "#{@parsed_payloads_queue} #{payload}"
       sleep 1
     end
 
-    should 'remove it from \'raw-payload\'' do
-      response = @client.request @raw_queue
+    should 'remove it from \'parsed-payload\'' do
+      response = @client.request @parsed_payloads_queue
       assert_equal '', response
     end
 
-    should 'enqueue job data and job name to \'parsed-payload\'' do
-      response = @client.request @parsed_queue
+    should 'enqueue job data and job name to \'jobs\'' do
+      response = @client.request @jobs_queue
       response = JSON.parse response
       assert_equal Hash, response['context'].class
       assert_equal Array, response['commands'].class
@@ -44,7 +44,7 @@ describe 'the Job Assembler' do
       not_json = 'not_json'
       ignored_branch = example_parsed_payload(for_branch: 'not_on_whitelist')
       [ bad_payload, not_json, ignored_branch ].each do |bad_payload|
-        @client.request "#{@raw_queue} #{bad_payload}"
+        @client.request "#{@parsed_payloads_queue} #{bad_payload}"
       end
       sleep 1
     end
