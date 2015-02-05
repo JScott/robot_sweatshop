@@ -15,8 +15,8 @@ def parse(payload, of_format:)
   end	
 end
 
-def queue(payload)
-  hash = payload.to_hash
+def queue(payload, for_job:)
+  hash = { payload: payload.to_hash, job_name: for_job }
   @client.request "parsed-payload #{JSON.generate hash}"
 end
 
@@ -44,6 +44,6 @@ wait_for_raw_payload do |data|
   unless data.nil?
     puts "Parsing: #{data}"
     payload = parse data['payload'], of_format: data['format']
-    queue payload if payload
+    queue payload, for_job: data['job_name'] if payload
   end
 end

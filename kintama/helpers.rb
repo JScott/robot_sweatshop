@@ -22,7 +22,7 @@ module PayloadHelper
 
   def example_payload(with_format:)
     payload = load_payload with_format
-    JSON.generate payload: payload, format: with_format, job_name: example
+    JSON.generate payload: payload, format: with_format, job_name: 'example'
   end
 end
 
