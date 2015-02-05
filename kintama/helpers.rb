@@ -27,8 +27,8 @@ module InHelper
 end
 
 module PayloadHelper
-  def example_parsed_payload(from:)
-    JSON.generate payload: { some: data }, job_name: 'example'
+  def example_parsed_payload(for_branch:)
+    JSON.generate payload: { branch: for_branch }, job_name: 'example'
   end
 end
 

@@ -3,67 +3,63 @@ require 'ezmq'
 require 'json'
 require_relative 'helpers'
 
-given 'the Job Assembler' do
+describe 'the Job Assembler' do
   include QueueHelper
+  include PayloadHelper
+  include JobHelper
 
   setup do
     FileQueue.mirroring = true
     @client = EZMQ::Client.new port: 5556
-    @raw_queue = 'raw-payload'
-    @parsed_queue = 'parsed-payload'
-    clear_queue @raw_queue
-    clear_queue @parsed_queue
-    clear_queue @queue
-  end
-  
-  context 'queuing valid payload data to raw-payload' do
-    setup do
-      @valid_payloads = [
-        { payload: load_payload('Bitbucket'), format: 'Bitbucket' }
-        # TODO: refactor and add github
-      ]
-      @valid_payloads.map! { |payload| JSON.generate payload }
-    end
-
-    should 'remove it from raw-payload' do
-      response = @client.request @raw_queue
-      assert_equal '', response
-    end
-
-    should 'enqueue parsed payload data to parsed-payload' do
-      @valid_payloads.each do |payload|
-        @client.request "#{@raw_queue} #{payload}"
-        sleep 1
-        response = @client.request @parsed_queue
-        response = JSON.parse response
-        %w(author hash branch message repo_slug source_url clone_url).each do |key|
-          assert_not_nil response[key]
-          assert_not_equal key, response[key] # important for how Ruby interprets "string"['key']
-        end
-      end
-    end
+    @parsed_payloads_queue = 'parsed-payload'
+    @jobs_queue = 'jobs'
+    clear_queue @parsed_payloads_queue
+    clear_queue @jobs_queue
+    @job_config = example_job_config
   end
 
-  context 'queuing invalid payload data to raw-payload' do
+  given "valid parsed payload data in 'parsed-payload'" do
     setup do
-      bad_payload = { payload: load_payload('malformed'), format: 'asdf' }
-      @client.request "#{@raw_queue} #{bad_payload}"
-      @client.request "#{@raw_queue} not json"
+      payload = example_parsed_payload(for_branch: 'develop')
+      @client.request "#{@raw_queue} #{payload}"
       sleep 1
-      # TODO: should not crash the payload parser
     end
 
-    should 'remove it from raw-payload' do
+    should 'remove it from \'raw-payload\'' do
       response = @client.request @raw_queue
       assert_equal '', response
     end
 
-    should 'not queue anything to parsed-payload' do
+    should 'enqueue parsed payload data and job name to \'parsed-payload\'' do
       response = @client.request @parsed_queue
-      assert_equal '', response
+      response = JSON.parse response
+
+      Payload.hash_keys.each do |key|
+        assert_not_nil response['payload'][key]
+        assert_not_equal key, response['payload'][key] # important for how Ruby interprets "string"['key']
+      end
+      assert_not_nil response['job_name']
     end
   end
 
-  teardown do
+  given 'finds invalid job data in \'parsed-payload\'' do
+    setup do
+      bad_payload = JSON.generate payload: 'not hash', job_name: 'asdf'
+      not_json = 'not_json'
+      [ bad_payload, not_json ].each do |bad_payload|
+        @client.request "#{@raw_queue} #{bad_payload}"
+      end
+      sleep 1
+    end
+
+    should 'remove it from \'parsed-payload\'' do
+      response = @client.request @parsed_payloads_queue
+      assert_equal '', response
+    end
+
+    should 'not queue anything to \'jobs\'' do
+      response = @client.request @jobs_queue
+      assert_equal '', response
+    end
   end
 end
