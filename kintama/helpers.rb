@@ -4,6 +4,25 @@ require_relative '../lib/payload/lib/payload'
 
 $for_a_moment = 0.1
 
+@threads = []
+def spawn(path)
+  @threads << Thread.new { `#{path}` }
+end
+
+Kintama.on_start do
+  @threads = []
+  spawn "#{__dir__}/../lib/queue/broadcaster.rb"
+  spawn "#{__dir__}/../lib/queue/handler.rb"
+  spawn "#{__dir__}/../lib/payload/parser.rb"
+  sleep $for_a_moment
+end
+
+Kintama.on_finish do
+  @threads.each do |thread|
+    Thread.kill thread
+  end
+end
+
 module QueueHelper
   def clear_all_queues
     FileQueue.clear_all
