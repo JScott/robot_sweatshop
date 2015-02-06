@@ -4,7 +4,7 @@ require 'ezmq'
 
 publisher = EZMQ::Publisher.new port: 5557
 queues = {}
-%w(raw-payload parsed-payload jobs testing).each do |queue|
+FileQueue.watched_queues.each do |queue|
   queues[queue] = FileQueue.new queue
 end
 

@@ -3,10 +3,8 @@ require_relative '../lib/queue/lib/file-queue'
 require_relative '../lib/payload/lib/payload'
 
 module QueueHelper
-  def clear_queue(queue_name)
-    queue = FileQueue.new queue_name
-    queue.clear
-    assert_equal queue.size, 0
+  def clear_all_queues
+    FileQueue.clear_all
   end
   def enqueue(queue_name, item)
     queue = FileQueue.new queue_name

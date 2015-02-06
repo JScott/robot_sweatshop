@@ -13,9 +13,8 @@ describe 'the Job Assembler' do
     @client = EZMQ::Client.new port: 5556
     @parsed_payloads_queue = 'parsed-payload'
     @jobs_queue = 'jobs'
-    clear_queue @parsed_payloads_queue
-    clear_queue @jobs_queue
     @job_config = example_job_config
+    clear_all_queues
   end
 
   given "valid parsed payload data in 'parsed-payload'" do

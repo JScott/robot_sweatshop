@@ -10,7 +10,7 @@ given 'the Queue Broadcaster' do
     @subscriber = EZMQ::Subscriber.new port: 5557, topic: 'busy-queues'
     @item = 'item'
     @queue = 'testing'
-    clear_queue @queue
+    clear_all_queues
   end
   
   context 'a non-empty queue' do

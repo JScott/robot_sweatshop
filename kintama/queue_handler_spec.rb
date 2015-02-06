@@ -9,7 +9,7 @@ given 'the Queue Handler' do
     @client = EZMQ::Client.new port: 5556
     @item = 'item'
     @queue = 'testing'
-    clear_queue @queue
+    clear_all_queues
   end
   
   context 'dequeuing' do

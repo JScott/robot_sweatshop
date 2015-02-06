@@ -13,8 +13,7 @@ describe 'the Payload Parser' do
     @client = EZMQ::Client.new port: 5556
     @raw_queue = 'raw-payload'
     @parsed_queue = 'parsed-payload'
-    clear_queue @raw_queue
-    clear_queue @parsed_queue
+    clear_all_queues
   end
 
   # TODO: refactor and add github
