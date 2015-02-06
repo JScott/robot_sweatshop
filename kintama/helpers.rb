@@ -6,16 +6,16 @@ $for_a_moment = 0.1
 
 def spawn(lib_path)
   puts "Starting #{lib_path}..."
-  null_io = File.open(File::NULL, 'w')
+  null_io = File.open File::NULL, 'w'
   @pids << Process.spawn("#{__dir__}/../lib/#{lib_path}", out: null_io, err: null_io)
+  sleep 0.5
 end
 
 Kintama.on_start do
   @pids = []
-  spawn 'queue/broadcaster.rb'
   spawn 'queue/handler.rb'
+  spawn 'queue/broadcaster.rb'
   spawn 'payload/parser.rb'
-  sleep 1
 end
 
 Kintama.on_finish do
