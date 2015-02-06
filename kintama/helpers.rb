@@ -4,22 +4,24 @@ require_relative '../lib/payload/lib/payload'
 
 $for_a_moment = 0.1
 
-@threads = []
-def spawn(path)
-  @threads << Thread.new { `#{path}` }
+def spawn(lib_path)
+  puts "Starting #{lib_path}..."
+  null_io = File.open(File::NULL, 'w')
+  @pids << Process.spawn("#{__dir__}/../lib/#{lib_path}", out: null_io, err: null_io)
 end
 
 Kintama.on_start do
-  @threads = []
-  spawn "#{__dir__}/../lib/queue/broadcaster.rb"
-  spawn "#{__dir__}/../lib/queue/handler.rb"
-  spawn "#{__dir__}/../lib/payload/parser.rb"
-  sleep $for_a_moment
+  @pids = []
+  spawn 'queue/broadcaster.rb'
+  spawn 'queue/handler.rb'
+  spawn 'payload/parser.rb'
+  sleep 1
 end
 
 Kintama.on_finish do
-  @threads.each do |thread|
-    Thread.kill thread
+  @pids.each do |pid|
+    Process.kill :TERM, pid
+    Process.wait pid
   end
 end
 
