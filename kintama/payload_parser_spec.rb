@@ -22,7 +22,7 @@ describe 'the Payload Parser' do
       setup do
         payload = example_raw_payload(with_format: format)
         @client.request "#{@raw_queue} #{payload}"
-        sleep 1
+        sleep $for_a_moment
       end
 
       should 'remove it from \'raw-payload\'' do
@@ -52,7 +52,7 @@ describe 'the Payload Parser' do
       [ malformed_payload, not_json, unsupported_format ].each do |bad_payload|
         @client.request "#{@raw_queue} #{bad_payload}"
       end
-      sleep 1
+      sleep $for_a_moment
       # TODO: should not crash the payload parser
     end
 

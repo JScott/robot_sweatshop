@@ -29,13 +29,13 @@ class FileQueue
   def self.clear_all
     watched_queues.each do |queue|
       @@store[queue] = []
-      @@store["#{mirror}-queue"] = [] if @@store[MIRRORING_ENABLED]
+      @@store["mirror-#{queue}"] = [] if @@store[MIRRORING_ENABLED]
     end
   end
 
   def enqueue(item)
-    @@store[@mirror_name] = @@store[@mirror_name].push item if @@store[MIRRORING_ENABLED]
     @@store[@name] = @@store[@name].push item
+    @@store[@mirror_name] = @@store[@mirror_name].push item if @@store[MIRRORING_ENABLED]
   end
   
   def dequeue

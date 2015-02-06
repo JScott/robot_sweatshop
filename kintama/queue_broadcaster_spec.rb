@@ -17,7 +17,7 @@ given 'the Queue Broadcaster' do
     setup { enqueue @queue, @item }
 
     should 'have their named published to \'busy-queues\'' do
-      Timeout.timeout(1) do
+      Timeout.timeout($for_a_moment) do
         @subscriber.listen do |message, topic|
           assert_equal @queue, message
           break
@@ -29,7 +29,7 @@ given 'the Queue Broadcaster' do
   context 'an empty queue' do
     should 'not have their name published' do
       assert_raises Timeout::Error do
-        Timeout.timeout(1) do
+        Timeout.timeout($for_a_moment) do
           @subscriber.listen { |m| }
         end
       end

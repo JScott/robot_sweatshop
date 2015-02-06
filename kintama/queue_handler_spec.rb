@@ -47,7 +47,7 @@ given 'the Queue Handler' do
 
     should 'mirror queue clearing' do
       enqueue @queue, @item
-      clear_queue @queue
+      clear_all_queues
       response = @client.request "mirror-#{@queue}"
       assert_equal '', response
     end

@@ -2,6 +2,8 @@ require 'yaml'
 require_relative '../lib/queue/lib/file-queue'
 require_relative '../lib/payload/lib/payload'
 
+$for_a_moment = 0.1
+
 module QueueHelper
   def clear_all_queues
     FileQueue.clear_all
