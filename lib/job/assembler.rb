@@ -8,31 +8,33 @@ require 'json'
 JOB_DIR = "#{__dir__}/../../jobs"
 
 @client = EZMQ::Client.new port: 5556
+@input_queue = 'parsed-payload'
+@output_queue = 'jobs'
 
 def assemble(payload, of_format:)
-  lib_file = "#{__dir__}/lib/#{of_format.downcase}.rb"
-     puts "#{lib_file} - #{File.file? lib_file}"
-  if File.file? lib_file
-    require_relative lib_file
-    Object.const_get("#{of_format.capitalize}Payload").new payload
-  else
-    nil
-  end	
+  #lib_file = "#{__dir__}/lib/#{of_format.downcase}.rb"
+  #puts "Loading: #{lib_file} - #{File.file? lib_file}"
+  #if File.file? lib_file
+  #  require_relative lib_file
+  #  Object.const_get("#{of_format.capitalize}Payload").new payload
+  #else
+  #  nil
+  #end 
 end
 
-def queue(payload)
-  hash = payload.to_hash
-  @client.request "parsed-payload #{JSON.generate hash}"
+def queue(payload, for_job:)
+  hash = { payload: payload.to_hash, job_name: for_job }
+  @client.request "#{@output_queue} #{JSON.generate hash}"
 end
 
 def dequeue
-  @client.request 'raw-payload'
+  @client.request @input_queue
 end
 
 def wait_for_raw_payload
   subscriber = EZMQ::Subscriber.new port: 5557, topic: 'busy-queues'
   subscriber.listen do |message|
-    if message == 'raw-payload'
+    if message == @input_queue
       data = dequeue
       yield data unless data.empty?
     end
@@ -40,9 +42,14 @@ def wait_for_raw_payload
 end
 
 wait_for_raw_payload do |data|
-     puts "Heard: #{data.inspect}"
-  data = JSON.parse data
-  payload = parse data['payload'], of_format: data['format']
-     puts payload.inspect
-  queue payload if payload
+  begin
+    data = JSON.parse data
+  rescue JSON::ParserError => e
+    data = nil
+  end
+  unless data.nil?
+    puts "Parsing: #{data}"
+    payload = parse data['payload'], of_format: data['format']
+    queue payload, for_job: data['job_name'] if payload
+  end
 end

@@ -3,6 +3,8 @@ require 'ezmq'
 require 'json'
 
 @client = EZMQ::Client.new port: 5556
+@input_queue = 'raw-payload'
+@output_queue = 'parsed-payload'
 
 def parse(payload, of_format:)
   lib_file = "#{__dir__}/lib/#{of_format.downcase}.rb"
@@ -17,17 +19,17 @@ end
 
 def queue(payload, for_job:)
   hash = { payload: payload.to_hash, job_name: for_job }
-  @client.request "parsed-payload #{JSON.generate hash}"
+  @client.request "#{@output_queue} #{JSON.generate hash}"
 end
 
 def dequeue
-  @client.request 'raw-payload'
+  @client.request @input_queue
 end
 
 def wait_for_raw_payload
   subscriber = EZMQ::Subscriber.new port: 5557, topic: 'busy-queues'
   subscriber.listen do |message|
-    if message == 'raw-payload'
+    if message == @input_queue
       data = dequeue
       yield data unless data.empty?
     end
