@@ -9,12 +9,16 @@ JOB_DIR = "#{__dir__}/../../jobs"
 @input_queue = 'parsed-payload'
 @output_queue = 'jobs'
 
-def assemble_job(from_payload: data)
-  job_config = YAML.load_file "#{JOB_DIR}/#{data['job_name']}"
-  if job_config['branch_whitelist'].include? data['payload']['branch']
+def assemble_job(parsed)
+  job_config_path = "#{JOB_DIR}/#{parsed['job_name']}"
+  return nil unless File.file? job_config_path
+  job_config = YAML.load_file job_config_path
+  branch_whitelisted = job_config['branch_whitelist'].include? parsed['payload']['branch']
+  valid_payload = parsed['payload'].class == Hash
+  if branch_whitelisted && valid_payload
     {
       commands: job_config['commands'],
-      context: job_config['environment'].merge data['payload']
+      context: job_config['environment'].merge(parsed['payload'])
     }
   else
     nil
@@ -47,7 +51,7 @@ wait_for_parsed_payload do |data|
   end
   unless data.nil?
     puts "Assembling: #{data}"
-    assembled_job = assemble_job from_payload: data
+    assembled_job = assemble_job data
     queue assembled_job if assembled_job
   end
 end

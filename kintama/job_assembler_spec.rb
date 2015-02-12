@@ -30,9 +30,7 @@ describe 'the Job Assembler' do
     end
 
     should 'enqueue commands and context to \'jobs\'' do
-      p @jobs_queue
       response = @client.request @jobs_queue
-      p response
       response = JSON.parse response
       assert_equal Hash, response['context'].class
       assert_equal Array, response['commands'].class
