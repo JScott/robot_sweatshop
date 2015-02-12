@@ -1,9 +1,7 @@
 #!/usr/bin/env ruby
-
-# Still busy ripping apart payload/parser and stealing the general architecture
-
 require 'ezmq'
 require 'json'
+require 'yaml'
 
 JOB_DIR = "#{__dir__}/../../jobs"
 
@@ -11,27 +9,27 @@ JOB_DIR = "#{__dir__}/../../jobs"
 @input_queue = 'parsed-payload'
 @output_queue = 'jobs'
 
-def assemble(payload, of_format:)
-  #lib_file = "#{__dir__}/lib/#{of_format.downcase}.rb"
-  #puts "Loading: #{lib_file} - #{File.file? lib_file}"
-  #if File.file? lib_file
-  #  require_relative lib_file
-  #  Object.const_get("#{of_format.capitalize}Payload").new payload
-  #else
-  #  nil
-  #end 
+def assemble_job(from_payload: data)
+  job_config = YAML.load_file "#{JOB_DIR}/#{data['job_name']}"
+  if job_config['branch_whitelist'].include? data['payload']['branch']
+    {
+      commands: job_config['commands'],
+      context: job_config['environment'].merge data['payload']
+    }
+  else
+    nil
+  end
 end
 
-def queue(payload, for_job:)
-  hash = { payload: payload.to_hash, job_name: for_job }
-  @client.request "#{@output_queue} #{JSON.generate hash}"
+def queue(assembled_job)
+  @client.request "#{@output_queue} #{JSON.generate assembled_job}"
 end
 
 def dequeue
   @client.request @input_queue
 end
 
-def wait_for_raw_payload
+def wait_for_parsed_payload
   subscriber = EZMQ::Subscriber.new port: 5557, topic: 'busy-queues'
   subscriber.listen do |message|
     if message == @input_queue
@@ -41,15 +39,15 @@ def wait_for_raw_payload
   end
 end
 
-wait_for_raw_payload do |data|
+wait_for_parsed_payload do |data|
   begin
     data = JSON.parse data
   rescue JSON::ParserError => e
     data = nil
   end
   unless data.nil?
-    puts "Parsing: #{data}"
-    payload = parse data['payload'], of_format: data['format']
-    queue payload, for_job: data['job_name'] if payload
+    puts "Assembling: #{data}"
+    assembled_job = assemble_job from_payload: data
+    queue assembled_job if assembled_job
   end
 end

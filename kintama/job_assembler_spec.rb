@@ -17,7 +17,7 @@ describe 'the Job Assembler' do
     clear_all_queues
   end
 
-  given "valid parsed payload data in 'parsed-payload'" do
+  given 'valid parsed payload data in \'parsed-payload\'' do
     setup do
       payload = example_parsed_payload(for_branch: 'develop')
       @client.request "#{@parsed_payloads_queue} #{payload}"
@@ -29,15 +29,17 @@ describe 'the Job Assembler' do
       assert_equal '', response
     end
 
-    should 'enqueue job data and job name to \'jobs\'' do
+    should 'enqueue commands and context to \'jobs\'' do
+      p @jobs_queue
       response = @client.request @jobs_queue
+      p response
       response = JSON.parse response
       assert_equal Hash, response['context'].class
       assert_equal Array, response['commands'].class
     end
   end
 
-  given 'finds invalid job data in \'parsed-payload\'' do
+  given 'invalid job data in \'parsed-payload\'' do
     setup do
       bad_payload = JSON.generate payload: 'not hash', job_name: 'asdf'
       not_json = 'not_json'
