@@ -17,7 +17,7 @@ given 'the Queue Broadcaster' do
     setup { enqueue @queue, @item }
 
     should 'have their named published to \'busy-queues\'' do
-      Timeout.timeout($for_a_moment) do
+      Timeout.timeout($for_a_while) do
         @subscriber.listen do |message, topic|
           assert_equal @queue, message
           break
