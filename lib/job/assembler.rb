@@ -10,7 +10,7 @@ JOB_DIR = "#{__dir__}/../../jobs"
 @output_queue = 'jobs'
 
 def assemble_job(parsed)
-  job_config_path = "#{JOB_DIR}/#{parsed['job_name']}"
+  job_config_path = "#{JOB_DIR}/#{parsed['job_name']}.yaml"
   return nil unless File.file? job_config_path
   job_config = YAML.load_file job_config_path
   branch_whitelisted = job_config['branch_whitelist'].include? parsed['payload']['branch']
