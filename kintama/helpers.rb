@@ -15,7 +15,7 @@ Kintama.on_start do
   spawn 'queue/handler.rb'
   spawn 'queue/broadcaster.rb'
   spawn 'payload/parser.rb'
-  #spawn 'job/assembler.rb'
+  spawn 'job/assembler.rb'
   sleep $for_a_moment
 end
 
