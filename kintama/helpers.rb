@@ -2,13 +2,12 @@ require 'yaml'
 require_relative '../lib/queue/lib/file-queue'
 require_relative '../lib/payload/lib/payload'
 
-$for_a_moment = 0.1
+$for_a_moment = 0.25
 
 def spawn(lib_path)
   puts "Starting #{lib_path}..."
   null_io = File.open File::NULL, 'w'
   @pids << Process.spawn("#{__dir__}/../lib/#{lib_path}", out: null_io, err: null_io)
-  sleep 0.5
 end
 
 Kintama.on_start do
@@ -17,6 +16,7 @@ Kintama.on_start do
   spawn 'queue/broadcaster.rb'
   spawn 'payload/parser.rb'
   spawn 'job/assembler.rb'
+  sleep $for_a_moment
 end
 
 Kintama.on_finish do
