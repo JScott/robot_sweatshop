@@ -11,22 +11,41 @@ def spawn(lib_path)
   @pids << Process.spawn("#{__dir__}/../lib/#{lib_path}", out: null_io, err: null_io)
 end
 
-Kintama.on_start do
+def spawn_all_processes
   @pids = []
   spawn 'queue/handler.rb'
   spawn 'queue/broadcaster.rb'
   spawn 'payload/parser.rb'
   spawn 'job/assembler.rb'
   sleep $for_a_moment
-  # TODO: use a testing moneta store instead of the prod one or else you'll have sad customers
-  FileUtils.rm_rf "#{__dir__}/../lib/queue/lib/moneta"
 end
 
-Kintama.on_finish do
+def kill_all_processes
   @pids.each do |pid|
     Process.kill :TERM, pid
     Process.wait pid
   end
+end
+
+def backup_moneta
+  @moneta_dir = "#{__dir__}/../lib/queue/lib/moneta"
+  @backup_moneta_dir = "#{__dir__}/../lib/queue/lib/moneta.backup"
+  FileUtils.mv @moneta_dir, @backup_moneta_dir
+end
+
+def restore_moneta
+  FileUtils.rm_rf @moneta_dir
+  FileUtils.mv @backup_moneta_dir, @moneta_dir
+end
+
+Kintama.on_start do
+  spawn_all_processes
+  backup_moneta
+end
+
+Kintama.on_finish do
+  kill_all_processes
+  restore_moneta
 end
 
 module QueueHelper
