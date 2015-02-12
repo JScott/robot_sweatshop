@@ -11,7 +11,8 @@ class FileQueue
   def initialize(name)
     @name = name
     @mirror_name = "mirror-#{name}"
-    @@store[name] ||= []
+    @@store[@name] ||= []
+    @@store[@mirror_name] ||= []
   end
 
   def self.watched_queues
