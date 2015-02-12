@@ -31,7 +31,7 @@ describe 'the Payload Parser' do
       end
 
       should 'enqueue parsed payload data and job name to \'parsed-payload\'' do
-        response = @client.request @parsed_queue
+        response = @client.request "mirror-#{@parsed_queue}"
         response = JSON.parse response
 
         assert_equal Hash, response['payload'].class
