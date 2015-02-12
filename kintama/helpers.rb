@@ -18,6 +18,8 @@ Kintama.on_start do
   spawn 'payload/parser.rb'
   spawn 'job/assembler.rb'
   sleep $for_a_moment
+  # TODO: use a testing moneta store instead of the prod one or else you'll have sad customers
+  FileUtils.rm_rf "#{__dir__}/../lib/queue/lib/moneta"
 end
 
 Kintama.on_finish do
