@@ -53,4 +53,8 @@ class FileQueue
     @@store[@mirror_name] = []
     @@store[@name] = []
   end
+
+  def inspect
+    @@store[@name].inspect
+  end
 end

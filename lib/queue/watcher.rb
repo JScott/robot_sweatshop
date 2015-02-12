@@ -14,7 +14,7 @@ loop do
   @queues.each do |q|
     puts "Queue: #{q[:name]}"
     puts "Size: #{q[:queue].size}", "#{'|'*q[:queue].size}"
-    puts q[:queue].store[q[:name]].inspect
+    puts q[:queue].inspect
     puts
   end
   sleep 1
