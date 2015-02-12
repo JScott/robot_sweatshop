@@ -2,7 +2,7 @@ require 'yaml'
 require_relative '../lib/queue/lib/file-queue'
 require_relative '../lib/payload/lib/payload'
 
-$for_a_moment = 0.25
+$for_a_moment = 0.5
 
 def spawn(lib_path)
   puts "Starting #{lib_path}..."
