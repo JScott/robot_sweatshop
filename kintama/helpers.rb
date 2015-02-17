@@ -30,7 +30,7 @@ end
 def backup_moneta
   @moneta_dir = "#{__dir__}/../lib/queue/lib/moneta"
   @backup_moneta_dir = "#{__dir__}/../lib/queue/lib/moneta.backup"
-  FileUtils.mv @moneta_dir, @backup_moneta_dir
+  FileUtils.mv @moneta_dir, @backup_moneta_dir, force: true
 end
 
 def restore_moneta
