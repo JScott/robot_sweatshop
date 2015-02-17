@@ -5,3 +5,4 @@ gem 'ezmq'
 gem 'bluepill'
 
 gem 'kintama'
+gem 'http'

@@ -21,7 +21,7 @@ def spawn_all_processes
 end
 
 def kill_all_processes
-  sleep $for_a_moment
+  sleep $for_a_while
   @pids.each do |pid|
     Process.kill :TERM, pid
     Process.wait pid
