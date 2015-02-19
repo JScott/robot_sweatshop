@@ -32,8 +32,8 @@ describe 'the Job Assembler' do
     should 'enqueue commands and context to \'jobs\'' do
       response = @client.request "mirror-#{@jobs_queue}"
       response = JSON.parse response
-      assert_equal Hash, response['context'].class
-      assert_equal Array, response['commands'].class
+      assert_kind_of Hash, response['context']
+      assert_kind_of Array, response['commands']
     end
   end
 
