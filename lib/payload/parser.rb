@@ -13,7 +13,7 @@ def parse(payload, of_format:)
     Object.const_get("#{of_format.capitalize}Payload").new payload
   else
     nil
-  end	
+  end
 end
 
 def queue(payload, for_job:)
