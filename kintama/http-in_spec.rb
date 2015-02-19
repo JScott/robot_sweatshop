@@ -15,11 +15,11 @@ given 'the HTTP Input' do
     clear_all_queues
   end
   
-  ['bitbucket'].each do |git_host|
+  ['Bitbucket'].each do |git_host|
     context "POST data from #{git_host}" do
       setup do
-        http_in = "http://localhost:8081/#{git_host}/payload-for/#{@job_name}"
-        HTTP.post http_in, body: load_payload(git_host)
+        url = "http://localhost/#{git_host}/payload-for/#{@job_name}"
+        HTTP.post url, body: load_payload(git_host)
       end
 
       should 'publish to \'raw-payload\'' do
@@ -30,6 +30,8 @@ given 'the HTTP Input' do
           end
         end
       end
+
+      # TODO: the right data is published
     end
   end
 end
