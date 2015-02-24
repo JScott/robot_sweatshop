@@ -19,8 +19,9 @@ def spawn_all_processes
   spawn 'queue/broadcaster.rb'
   spawn 'payload/parser.rb'
   spawn 'job/assembler.rb'
-  #spawn 'in/http/sinatra.rb' Sinatra and port 80 causes a ton of problems
+  #spawn 'in/http/sinatra.rb' #Sinatra and port 80 causes a ton of problems
   sleep $for_a_moment
+  #sleep 5
 end
 
 def kill_all_processes
