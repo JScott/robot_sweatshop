@@ -27,15 +27,13 @@ given 'the HTTP Input' do
       should 'enqueue to \'raw-payload\'' do
         Timeout.timeout($for_a_moment) do
           @subscriber.listen do |message, topic|
-            assert_equal @raw_payload_queue, message
-            break
+            break if message == @raw_payload_queue
           end
         end
       end
 
       should 'enqueue payload details' do
         response = @client.request "mirror-#{@raw_payload_queue}"
-        p response
         data = JSON.parse response
         %w(payload format job_name).each do |type|
           assert_kind_of String, data[type]

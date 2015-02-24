@@ -22,7 +22,6 @@ class FileQueue
     watched_queues.each do |queue|
       @@store[queue] = []
       @@store["mirror-#{queue}"] = []
-      p @@store[queue], @@store["mirror-#{queue}"]
     end
   end
 
