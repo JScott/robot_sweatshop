@@ -9,7 +9,6 @@ describe 'the Job Assembler' do
   include JobHelper
 
   setup do
-    FileQueue.mirroring = true
     @client = EZMQ::Client.new port: 5556
     @parsed_payloads_queue = 'parsed-payload'
     @jobs_queue = 'jobs'

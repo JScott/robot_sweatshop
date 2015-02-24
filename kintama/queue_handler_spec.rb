@@ -37,8 +37,6 @@ given 'the Queue Handler' do
   end
 
   context 'queue mirroring' do
-    setup { FileQueue.mirroring = true }
-
     should 'mirror queue enqueuing' do
       enqueue @queue, @item
       response = @client.request "mirror-#{@queue}"

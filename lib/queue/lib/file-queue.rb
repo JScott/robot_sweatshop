@@ -5,7 +5,6 @@ class FileQueue
   attr_reader :watched_queues
 
   MONETA_DIR = File.expand_path "#{__dir__}/moneta"
-  MIRRORING_ENABLED = 'enable-mirroring'
   @@store = Moneta.new :File, dir: MONETA_DIR
 
   def initialize(name)
@@ -18,25 +17,18 @@ class FileQueue
   def self.watched_queues
     %w(raw-payload parsed-payload jobs testing)
   end
-  
-  def self.mirroring=(boolean)
-    @@store[MIRRORING_ENABLED] = boolean
-  end
-
-  def self.mirroring
-    @@store[MIRRORING_ENABLED]
-  end
 
   def self.clear_all
     watched_queues.each do |queue|
       @@store[queue] = []
-      @@store["mirror-#{queue}"] = [] if @@store[MIRRORING_ENABLED]
+      @@store["mirror-#{queue}"] = []
+      p @@store[queue], @@store["mirror-#{queue}"]
     end
   end
 
   def enqueue(item)
     @@store[@name] = @@store[@name].push item
-    @@store[@mirror_name] = @@store[@mirror_name].push item if @@store[MIRRORING_ENABLED]
+    @@store[@mirror_name] = @@store[@mirror_name].push item
   end
   
   def dequeue

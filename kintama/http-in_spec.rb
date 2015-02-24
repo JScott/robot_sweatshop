@@ -1,5 +1,6 @@
 require 'kintama'
 require 'ezmq'
+require 'json'
 require 'timeout'
 require 'http'
 require_relative 'helpers'
@@ -10,20 +11,21 @@ given 'the HTTP Input' do
 
   setup do
     @subscriber = EZMQ::Subscriber.new port: 5557, topic: 'busy-queues'
+    @client = EZMQ::Client.new port: 5556
     @job_name = 'example'
     @raw_payload_queue = 'raw-payload'
     clear_all_queues
   end
   
-  ['Bitbucket'].each do |git_host|
+  %w(Bitbucket).each do |git_host|
     context "POST data from #{git_host}" do
       setup do
         url = "http://localhost/#{git_host}/payload-for/#{@job_name}"
         HTTP.post url, body: load_payload(git_host)
       end
 
-      should 'publish to \'raw-payload\'' do
-        Timeout.timeout($for_a_while) do
+      should 'enqueue to \'raw-payload\'' do
+        Timeout.timeout($for_a_moment) do
           @subscriber.listen do |message, topic|
             assert_equal @raw_payload_queue, message
             break
@@ -31,7 +33,14 @@ given 'the HTTP Input' do
         end
       end
 
-      # TODO: the right data is published
+      should 'enqueue payload details' do
+        response = @client.request "mirror-#{@raw_payload_queue}"
+        p response
+        data = JSON.parse response
+        %w(payload format job_name).each do |type|
+          assert_kind_of String, data[type]
+        end
+      end
     end
   end
 end

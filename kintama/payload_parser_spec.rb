@@ -9,7 +9,6 @@ describe 'the Payload Parser' do
   include PayloadHelper
 
   setup do
-    FileQueue.mirroring = true
     @client = EZMQ::Client.new port: 5556
     @raw_queue = 'raw-payload'
     @parsed_queue = 'parsed-payload'

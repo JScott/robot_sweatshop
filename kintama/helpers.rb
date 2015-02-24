@@ -2,8 +2,10 @@ require 'yaml'
 require_relative '../lib/queue/lib/file-queue'
 require_relative '../lib/payload/lib/payload'
 
-$for_a_moment = 0.25
-$for_a_while = 0.5
+raise 'Please run with sudo for the sake of process running' unless Process.euid == 0
+
+$for_a_moment = 0.5
+$for_a_while = 1.0
 
 def spawn(lib_path)
   puts "Starting #{lib_path}..."
@@ -17,6 +19,7 @@ def spawn_all_processes
   spawn 'queue/broadcaster.rb'
   spawn 'payload/parser.rb'
   spawn 'job/assembler.rb'
+  #spawn 'in/http/sinatra.rb' Sinatra and port 80 causes a ton of problems
   sleep $for_a_moment
 end
 
@@ -62,7 +65,7 @@ end
 module InHelper
   def load_payload(of_format)
     payload_strings = YAML.load_file "#{__dir__}/data/payload_data.yaml"
-    payload_strings[of_format]
+    payload_strings[of_format.downcase]
   end
 
   def example_raw_payload(with_format:)
