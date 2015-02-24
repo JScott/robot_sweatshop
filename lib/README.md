@@ -1,7 +1,7 @@
 Job lifecycle:
 
 ```
-*-in -> raw-payloads { payload:, format:, job_name: } ->
+in-* -> raw-payloads { payload:, format:, job_name: } ->
 payload-parser -> parsed-payloads { payload:, job_name: } ->
 job-assembler -> jobs { context:, commands: } ->
 job-worker
