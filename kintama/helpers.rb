@@ -1,4 +1,5 @@
 require 'yaml'
+require 'fileutils'
 require_relative '../lib/queue/lib/file-queue'
 require_relative '../lib/payload/lib/payload'
 
@@ -19,7 +20,8 @@ def spawn_all_processes
   spawn 'queue/broadcaster.rb'
   spawn 'payload/parser.rb'
   spawn 'job/assembler.rb'
-  #spawn 'in/http/sinatra.rb' #Sinatra and port 80 causes a ton of problems
+  #spawn 'in/http.rb' #Sinatra and port 80 causes a ton of problems
+  #spawn 'job/worker.rb testingid'
   sleep $for_a_moment
   #sleep 5
 end
@@ -84,5 +86,11 @@ end
 module JobHelper
   def example_job_config
     YAML.load_file "#{__dir__}/data/job.yaml"
+  end
+
+  def reset_test_File
+    test_file = "#{__dir__}/lib/job/workspaces/testingid/test.txt"
+    FileUtils.rm_rf test_file
+    test_file
   end
 end

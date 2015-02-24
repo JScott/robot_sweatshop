@@ -3,7 +3,7 @@ branch_whitelist:
 
 commands:
   - echo 1
-  - echo $EXAMPLE_ENV_VAR
+  - echo $EXAMPLE_ENV_VAR > test.txt
 
 environment:
   EXAMPLE_ENV_VAR: Hello world!
