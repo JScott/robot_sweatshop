@@ -17,8 +17,8 @@ end
 def spawn_all_processes
   @pids = []
   spawn 'queue/handler.rb'
-  #spawn 'queue/broadcaster.rb'
-  spawn 'payload/parser.rb'
+  spawn 'queue/broadcaster.rb'
+  #spawn 'payload/parser.rb'
   spawn 'job/assembler.rb'
   #spawn 'in/http.rb' #Sinatra and port 80 causes a ton of problems
   #spawn 'job/worker.rb testingid'
