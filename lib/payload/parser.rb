@@ -15,11 +15,6 @@ def parse(payload = '', of_format:)
 end
 
 QueueHelper.wait_for_queue('raw-payload') do |data|
-  begin
-    data = JSON.parse data
-  rescue JSON::ParserError => e
-    data = nil
-  end
   unless data.nil?
     puts "Parsing: #{data}"
     payload = parse data['payload'], of_format: data['format']

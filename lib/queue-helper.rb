@@ -1,10 +1,16 @@
 require 'ezmq'
+require 'json'
 
 module QueueHelper
   @@client = EZMQ::Client.new port: 5556
   
   def self.dequeue(queue_name = 'default')
-    @@client.request queue_name
+    data = @@client.request queue_name
+    begin
+      JSON.parse data
+    rescue JSON::ParserError => e
+      nil
+    end
   end
 
   def self.enqueue(object = {}, to: 'default')
@@ -17,7 +23,7 @@ module QueueHelper
     subscriber.listen do |message|
       if message == queue_name
         data = self.dequeue queue_name
-        yield data unless data.empty?
+        yield data unless data.nil?
       end
     end
   end
