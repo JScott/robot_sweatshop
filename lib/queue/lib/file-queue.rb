@@ -31,8 +31,11 @@ class FileQueue
   end
 
   def size
-    #p "#{@name} - #{@@store[@name]}"
-    @@store[@name].size
+    begin # Moneta can return nil sometimes
+          # so we give it time to catch up
+      queue = @@store[@name]
+    end while queue.nil?
+    queue.size
   end
 
   def clear
