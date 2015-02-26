@@ -1,6 +1,4 @@
 #!/usr/bin/env ruby
-require 'ezmq'
-require 'json'
 require_relative '../queue-helper'
 
 def parse(payload = '', of_format:)
@@ -10,17 +8,16 @@ def parse(payload = '', of_format:)
     require_relative lib_file
     Object.const_get("#{of_format.capitalize}Payload").new payload
   else
+    puts "Dropping bad format: #{of_format}"
     nil
   end
 end
 
 QueueHelper.wait_for_queue('raw-payload') do |data|
-  unless data.nil?
-    puts "Parsing: #{data}"
-    payload = parse data['payload'], of_format: data['format']
-    if payload
-      hash = { payload: payload.to_hash, job_name: data['job_name'] }
-      QueueHelper.enqueue hash, to: 'parsed-payload'
-    end
+  puts "Parsing: #{data}"
+  payload = parse data['payload'], of_format: data['format']
+  if payload
+    hash = { payload: payload.to_hash, job_name: data['job_name'] }
+    QueueHelper.enqueue hash, to: 'parsed-payload'
   end
 end
