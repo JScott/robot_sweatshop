@@ -13,7 +13,7 @@ def from_workspace(named:)
 end
 
 def execute(command)
-  log.info "Executing '#{command}'..."
+  puts "Executing '#{command}'..."
   # TODO: path.split(' ') to bypass the shell when we're not using env vars
   IO.popen(command) do |io|
     while line = io.gets do

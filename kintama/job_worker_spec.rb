@@ -17,7 +17,7 @@ describe 'the Worker' do
   given 'valid job data in \'jobs\'' do
     setup do
       job = example_job
-      @client.request "#{@parsed_payloads_queue} #{payload}"
+      @client.request "#{@jobs_queue} #{job}"
       sleep $for_a_moment
     end
 
@@ -47,7 +47,7 @@ describe 'the Worker' do
     end
 
     should 'remove it from \'jobs\'' do
-      response = @client.request @parsed_payloads_queue
+      response = @client.request @jobs_queue
       assert_equal '', response
     end
 
