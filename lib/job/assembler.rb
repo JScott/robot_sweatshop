@@ -13,8 +13,10 @@ def issues_with(job_config = {}, data = {})
   payload = data['payload']
   issues = []
   missing_job_name = data['job_name'].nil?
-  missing_config = job_config.nil?
   invalid_payload = payload.class != Hash
+  unless missing_job_name
+    missing_config = job_config.nil?
+  end
   unless missing_config || invalid_payload
     ignored_branch = !job_config['branch_whitelist'].include?(payload['branch'])
   end
