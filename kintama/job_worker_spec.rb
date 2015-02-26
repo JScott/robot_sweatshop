@@ -16,7 +16,7 @@ describe 'the Worker' do
 
   given 'valid job data in \'jobs\'' do
     setup do
-      payload = example_parsed_payload(for_branch: 'develop')
+      job = example_job
       @client.request "#{@parsed_payloads_queue} #{payload}"
       sleep $for_a_moment
     end
