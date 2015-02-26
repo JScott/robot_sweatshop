@@ -2,10 +2,9 @@
 require 'yaml'
 require_relative '../queue-helper'
 
-JOB_DIR = "#{__dir__}/../../jobs"
-
 def get_config(for_job_name:)
-  job_config_path = "#{JOB_DIR}/#{for_job_name}.yaml"
+  job_dir = "#{__dir__}/../../jobs"
+  job_config_path = "#{job_dir}/#{for_job_name}.yaml"
   return nil unless File.file? job_config_path
   job_config = YAML.load_file job_config_path
 end 
@@ -26,7 +25,8 @@ def assemble_job(parsed)
   if issues.empty?
     {
       commands: job_config['commands'],
-      context: job_config['environment'].merge(parsed['payload'])
+      context: job_config['environment'].merge(parsed['payload']),
+      job_name: parsed['job_name']
     }
   else
     puts "Dropping job:"
@@ -35,7 +35,7 @@ def assemble_job(parsed)
   end
 end
 
-QueueHelper.wait_for_queue('parsed-payload') do |data|
+QueueHelper.wait_for('parsed-payload') do |data|
   puts "Assembling: #{data}"
   assembled_job = assemble_job data
   QueueHelper.enqueue assembled_job, to: 'jobs' if assembled_job
