@@ -90,10 +90,6 @@ module PayloadHelper
 end
 
 module JobHelper
-  def example_job_config
-    YAML.load_file "#{__dir__}/data/job.yaml"
-  end
-
   def example_job
     JSON.generate context: { job_name: '', branch: 'develop', custom: 'Hello world!' },
                   commands: [ 'echo $custom > test.txt' ],

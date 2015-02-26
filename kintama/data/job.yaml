@@ -1,9 +1,0 @@
-branch_whitelist:
-  - develop
-
-commands:
-  - echo 1
-  - echo $EXAMPLE_ENV_VAR > test.txt
-
-environment:
-  EXAMPLE_ENV_VAR: Hello world!

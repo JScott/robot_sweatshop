@@ -6,27 +6,33 @@ def get_config(for_job_name:)
   job_dir = "#{__dir__}/../../jobs"
   job_config_path = "#{job_dir}/#{for_job_name}.yaml"
   return nil unless File.file? job_config_path
-  job_config = YAML.load_file job_config_path
-end 
+  YAML.load_file job_config_path
+end
 
-def issues_with(job_config = {}, for_payload: {})
+def issues_with(job_config = {}, data = {})
+  payload = data['payload']
   issues = []
-  if for_payload.class != Hash
-    issues.push "Invalid payload"
-  elsif not job_config['branch_whitelist'].include? for_payload['branch']
-    issues.push "Branch '#{for_payload['branch']}' not whitelisted"
+  missing_job_name = data['job_name'].nil?
+  missing_config = job_config.nil?
+  invalid_payload = payload.class != Hash
+  unless missing_config || invalid_payload
+    ignored_branch = !job_config['branch_whitelist'].include?(payload['branch'])
   end
+  issues.push "Could not find the job configuration" if missing_config
+  issues.push "Invalid payload" if invalid_payload
+  issues.push "Branch '#{payload['branch']}' is not whitelisted" if ignored_branch
+  issues.push "The job name is missing" if missing_job_name
   issues
 end
 
-def assemble_job(parsed)
-  job_config = get_config for_job_name: parsed['job_name']
-  issues = issues_with job_config, for_payload: parsed['payload']
+def assemble_job(data)
+  job_config = get_config for_job_name: data['job_name']
+  issues = issues_with job_config, data
   if issues.empty?
     {
       commands: job_config['commands'],
-      context: job_config['environment'].merge(parsed['payload']),
-      job_name: parsed['job_name']
+      context: job_config['environment'].merge(data['payload']),
+      job_name: data['job_name']
     }
   else
     puts "Dropping job:"
