@@ -4,18 +4,25 @@ require_relative '../queue-helper'
 
 JOB_DIR = "#{__dir__}/../../jobs"
 
-def assemble_job(parsed)
-  job_config_path = "#{JOB_DIR}/#{parsed['job_name']}.yaml"
+def get_config(for_job_name:)
+  job_config_path = "#{JOB_DIR}/#{for_job_name}.yaml"
   return nil unless File.file? job_config_path
   job_config = YAML.load_file job_config_path
+end 
 
+def issues_with(job_config = {}, for_payload: {})
   issues = []
-  if not job_config['branch_whitelist'].include? parsed['payload']['branch']
-    issues.push "Branch '#{parsed['payload']['branch']}' not whitelisted"
-  elsif parsed['payload'].class != Hash
+  if for_payload.class != Hash
     issues.push "Invalid payload"
+  elsif not job_config['branch_whitelist'].include? for_payload['branch']
+    issues.push "Branch '#{for_payload['branch']}' not whitelisted"
   end
+  issues
+end
 
+def assemble_job(parsed)
+  job_config = get_config for_job_name: parsed['job_name']
+  issues = issues_with job_config, for_payload: parsed['payload']
   if issues.empty?
     {
       commands: job_config['commands'],
