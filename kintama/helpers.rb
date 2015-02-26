@@ -101,7 +101,7 @@ module JobHelper
   end
 
   def reset_test_file
-    test_file = "#{__dir__}/../lib/job/workspaces/testingid/example/test.txt"
+    test_file = "#{__dir__}/../lib/job/workspaces/example-testingid/test.txt"
     FileUtils.rm_rf test_file
     test_file
   end
