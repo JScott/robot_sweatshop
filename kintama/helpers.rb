@@ -17,7 +17,7 @@ end
 def spawn_all_processes
   @pids = []
   spawn 'queue/handler.rb'
-  spawn 'queue/broadcaster.rb'
+  #spawn 'queue/broadcaster.rb'
   spawn 'payload/parser.rb'
   spawn 'job/assembler.rb'
   #spawn 'in/http.rb' #Sinatra and port 80 causes a ton of problems
@@ -57,7 +57,10 @@ end
 
 module QueueHelper
   def clear_all_queues
-    FileQueue.clear_all
+    FileQueue.watched_queues.each do |queue|
+      queue = FileQueue.new queue
+      queue.clear
+    end
   end
   def enqueue(queue_name, item)
     queue = FileQueue.new queue_name

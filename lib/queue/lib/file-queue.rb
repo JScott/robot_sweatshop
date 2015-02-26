@@ -18,13 +18,6 @@ class FileQueue
     %w(raw-payload parsed-payload jobs testing)
   end
 
-  def self.clear_all
-    watched_queues.each do |queue|
-      @@store[queue] = []
-      @@store["mirror-#{queue}"] = []
-    end
-  end
-
   def enqueue(item)
     @@store[@name] = @@store[@name].push item
     @@store[@mirror_name] = @@store[@mirror_name].push item
@@ -38,6 +31,7 @@ class FileQueue
   end
 
   def size
+    #p "#{@name} - #{@@store[@name]}"
     @@store[@name].size
   end
 
