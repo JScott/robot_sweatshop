@@ -43,7 +43,7 @@ describe 'the Job Assembler' do
       invalid_data = {
         ignored_branch: example_parsed_payload(for_branch: 'not_on_whitelist'),
         bad_payload:    example_parsed_payload(with_payload: 'not hash'),
-        bad_payload:    example_parsed_payload(for_job: 'asdf'),
+        bad_job:        example_parsed_payload(for_job: 'asdf'),
         not_json:       'not_json'
       }
       invalid_data.each do |_type, datum|

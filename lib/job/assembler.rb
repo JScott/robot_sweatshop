@@ -5,41 +5,24 @@ require_relative '../queue-helper'
 def get_config(for_job_name:)
   job_dir = "#{__dir__}/../../jobs"
   job_config_path = "#{job_dir}/#{for_job_name}.yaml"
-  return nil unless File.file? job_config_path
+  unless File.file? job_config_path
+    puts "No config found for job '#{for_job_name}'"
+    return nil 
+  end
   YAML.load_file job_config_path
 end
 
-
-# nix this. too much code for stuff I control. have faith in your devs.
-def issues_with(job_config = {}, data = {})
-  payload = data['payload']
-  issues = []
-  missing_job_name = data['job_name'].nil?
-  invalid_payload = payload.class != Hash
-  unless missing_job_name
-    missing_config = job_config.nil?
-  end
-  unless missing_config || invalid_payload
-    ignored_branch = !job_config['branch_whitelist'].include?(payload['branch'])
-  end
-  issues.push "Could not find the job configuration" if missing_config
-  issues.push "Invalid payload" if invalid_payload
-  issues.push "Branch '#{payload['branch']}' is not whitelisted" if ignored_branch
-  issues.push "The job name is missing" if missing_job_name
-  issues
-end
 def assemble_job(data)
   job_config = get_config for_job_name: data['job_name']
-  issues = issues_with job_config, data
-  if issues.empty?
+  return nil unless job_config
+  if job_config['branch_whitelist'].include? data['payload']['branch']
     {
       commands: job_config['commands'],
       context: job_config['environment'].merge(data['payload']),
       job_name: data['job_name']
     }
   else
-    puts "Dropping job:"
-    issues.each { |issue| puts "  #{issue}" }
+    puts "Branch '#{data['payload']['branch']}' is not whitelisted"
     nil
   end
 end
