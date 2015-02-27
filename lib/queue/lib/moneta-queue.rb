@@ -2,7 +2,7 @@
 require 'moneta'
 
 # A class to handle queueing through Moneta's key-value storage
-class FileQueue
+class MonetaQueue
   attr_reader :watched_queues
 
   MONETA_DIR = File.expand_path "#{__dir__}/moneta"

@@ -1,11 +1,11 @@
 #!/usr/bin/env ruby
-require_relative 'lib/file-queue'
+require_relative 'lib/moneta-queue'
 require 'ezmq'
 
 publisher = EZMQ::Publisher.new port: 5557
 queues = {}
-FileQueue.watched_queues.each do |queue|
-  queues[queue] = FileQueue.new queue
+MonetaQueue.watched_queues.each do |queue|
+  queues[queue] = MonetaQueue.new queue
 end
 
 loop do

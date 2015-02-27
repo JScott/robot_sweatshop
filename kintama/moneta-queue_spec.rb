@@ -1,9 +1,9 @@
 require 'kintama'
 require_relative 'shared/moneta_backup'
 require_relative 'shared/helpers'
-require_relative '../lib/queue/lib/file-queue'
+require_relative '../lib/queue/lib/moneta-queue'
 
-given 'the File Queue class' do
+given 'the Moneta Queue class' do
   include QueueHelper
 
   setup do
@@ -11,12 +11,12 @@ given 'the File Queue class' do
   end
 
   should 'return a list of actively watched queues' do
-    assert_kind_of Array, FileQueue.watched_queues
+    assert_kind_of Array, MonetaQueue.watched_queues
   end
 
   context 'an instance' do
     setup do
-      @file_queue = FileQueue.new 'testing'
+      @file_queue = MonetaQueue.new 'testing'
       @file_queue.clear
     end
 

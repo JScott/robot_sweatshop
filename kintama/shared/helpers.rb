@@ -1,16 +1,16 @@
 require 'yaml'
-require_relative '../../lib/queue/lib/file-queue'
+require_relative '../../lib/queue/lib/moneta-queue'
 require_relative '../../lib/payload/lib/payload'
 
 module QueueHelper
   def clear_all_queues
-    FileQueue.watched_queues.each do |queue|
-      queue = FileQueue.new queue
+    MonetaQueue.watched_queues.each do |queue|
+      queue = MonetaQueue.new queue
       queue.clear
     end
   end
   def enqueue(queue_name, item)
-    queue = FileQueue.new queue_name
+    queue = MonetaQueue.new queue_name
     queue.enqueue item
   end
 end

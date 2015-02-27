@@ -1,17 +1,17 @@
 #!/usr/bin/env ruby
-require_relative 'lib/file-queue'
+require_relative 'lib/moneta-queue'
 require 'ezmq'
 
 def enqueue(name, item)
   puts "enqueue #{name} #{item}"
-  queue = FileQueue.new name
+  queue = MonetaQueue.new name
   queue.enqueue item
   queue.size.to_s
 end
 
 def dequeue(name)
   puts "dequeue #{name}"
-  queue = FileQueue.new name
+  queue = MonetaQueue.new name
   queue.dequeue
 end
 
