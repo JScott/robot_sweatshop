@@ -7,17 +7,20 @@ require_relative '../queue-helper'
 @worker_id = ARGV[0] || "#{Faker::Name.first_name}"
 
 def from_workspace(named:)
-  path = "#{__dir__}/workspaces/#{named}-#{@worker_id}"
+  workspace = "#{named}-#{@worker_id}"
+  puts "Workspace: #{workspace}"
+  path = "#{__dir__}/workspaces/#{workspace}"
   FileUtils.mkpath path
   Dir.chdir(path) { yield if block_given? }
 end
 
-def execute(command)
+def execute(context = {}, command)
   puts "Executing '#{command}'..."
   # TODO: path.split(' ') to bypass the shell when we're not using env vars
-  IO.popen(command) do |io|
-    while line = io.gets # do
-      log.info line
+  IO.popen(context, command) do |io|
+    context.each { |key, value| ENV[key.to_s] = value.to_s }
+    while line = io.gets
+      puts line
     end
   end
   puts "Execution complete with exit status: #{$?.exitstatus}"
@@ -25,13 +28,11 @@ end
 
 QueueHelper.wait_for('jobs') do |data|
   puts "Running: #{data}"
-  puts "Worker ID: #{@worker_id}"
-  if data['context'].is_a? Hash
-    data['context'].each { |key, value| ENV[key.to_s] = value.to_s }
-  end
   if data['commands'].is_a? Array
     from_workspace(named: data['job_name']) do
-      data['commands'].each { |command| execute command }
+      context = data['context'] || {}
+      data['commands'].each { |command| execute context, command }
     end
   end
+  puts "Job finished.\n\n"
 end

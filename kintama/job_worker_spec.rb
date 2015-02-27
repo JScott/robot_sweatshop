@@ -29,11 +29,11 @@ describe 'the Worker' do
     end
 
     should 'run the dequeued job' do
-      assert_equal File.file?(@test_file), true
+      assert_equal true, File.file?(@test_file)
     end
 
     should 'run jobs with the context as environment variables' do
-      assert_equal File.read(@test_file), 'Hello world!'
+      assert_equal "Hello world!\n", File.read(@test_file)
     end
   end
 
@@ -57,7 +57,7 @@ describe 'the Worker' do
 
     should 'not run anything' do
       response = @client.request @jobs_queue
-      assert_equal File.file?(@test_file), false
+      assert_equal false, File.file?(@test_file)
     end
   end
 end
