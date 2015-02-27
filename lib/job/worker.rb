@@ -1,10 +1,9 @@
 #!/usr/bin/env ruby
-#require 'securerandom'
 require 'faker'
 require 'fileutils'
 require_relative '../queue-helper'
 
-@worker_id = ARGV[0] || "#{Faker::Name.first_name}"#-#{SecureRandom.hex(1)}"
+@worker_id = ARGV[0] || "#{Faker::Name.first_name}"
 
 def from_workspace(named:)
   path = "#{__dir__}/workspaces/#{named}-#{@worker_id}"
