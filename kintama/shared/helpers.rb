@@ -37,8 +37,10 @@ end
 
 module JobHelper
   def example_job
-    JSON.generate context: { job_name: '', branch: 'develop', custom: 'Hello world!' },
-                  commands: [ 'echo $custom > test.txt' ],
+    JSON.generate context: {  job_name: '',
+                              branch: 'develop', 
+                              custom: 'Hello world!' },
+                  commands: ['echo $custom > test.txt'],
                   job_name: 'example'
   end
   def reset_test_file

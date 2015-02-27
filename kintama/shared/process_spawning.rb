@@ -1,4 +1,4 @@
-raise 'Please run with sudo for the sake of process running' unless Process.euid == 0
+fail 'Please run with sudo for the sake of process running' unless Process.euid == 0
 
 $for_a_moment = 0.5
 $for_a_while = 1.0
@@ -15,10 +15,10 @@ Kintama.on_start do
   spawn 'queue/broadcaster.rb'
   spawn 'payload/parser.rb'
   spawn 'job/assembler.rb'
-  #spawn 'in/http.rb' #Sinatra and port 80 causes a ton of problems
-  #spawn 'job/worker.rb testingid'
+  # spawn 'in/http.rb' #Sinatra and port 80 causes a ton of problems
+  # spawn 'job/worker.rb testingid'
   sleep $for_a_moment
-  #sleep 5
+  # sleep 5
 end
 
 Kintama.on_finish do

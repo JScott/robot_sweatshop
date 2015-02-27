@@ -32,7 +32,7 @@ given 'the Queue Broadcaster' do
     should 'not have their name published' do
       assert_raises Timeout::Error do
         Timeout.timeout($for_a_moment) do
-          @subscriber.listen { }
+          @subscriber.listen {}
         end
       end
     end

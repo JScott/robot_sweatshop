@@ -1,0 +1,12 @@
+AllCops:
+  Exclude:
+    - kintama/**/*
+
+Style/Encoding:
+  Enabled: false
+
+Metrics/LineLength:
+  Max: 80
+
+Style/FileName:
+  Enabled: false

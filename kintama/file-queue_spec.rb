@@ -19,7 +19,7 @@ given 'the File Queue class' do
       @file_queue = FileQueue.new 'testing'
       @file_queue.clear
     end
-  
+
     should 'return size' do
       assert_equal @file_queue.size, 0
     end

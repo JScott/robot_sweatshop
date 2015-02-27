@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 unless ARGV[0]
-  puts "robot-sweatshop.rb [init|start|stop|status]"
+  puts 'robot-sweatshop.rb [init|start|stop|status]'
   exit
 end
 

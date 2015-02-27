@@ -47,17 +47,19 @@ describe 'the Payload Parser' do
 
   given 'invalid payload data in \'raw-payload\'' do
     setup do
-      malformed_payload = JSON.generate payload: load_payload('malformed'), format: 'asdf'
-      not_json = 'not_json'
-      unsupported_format = example_raw_payload with_format: 'asdf'
-      [ malformed_payload, not_json, unsupported_format ].each do |bad_payload|
-        @client.request "#{@raw_queue} #{bad_payload}"
+      invalid_data = {
+        malformed_payload:  JSON.generate(payload: load_payload('malformed'), format: 'asdf'),
+        not_json:           'not_json',
+        unsupported_format: example_raw_payload(with_format: 'asdf')
+      }
+      invalid_data.each do |_type, datum|
+        @client.request "#{@raw_queue} #{datum}"
       end
       sleep $for_a_moment
       # TODO: should not crash the payload parser
     end
 
-    should 'remove it from \'raw-payload\'' do
+    should 'remove all of it from \'raw-payload\'' do
       response = @client.request @raw_queue
       assert_equal '', response
     end
