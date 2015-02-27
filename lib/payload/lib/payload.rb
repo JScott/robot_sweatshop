@@ -1,3 +1,4 @@
+# The base interface that the payload parser will be expecting
 class Payload
   def self.hash_keys
     %w(author hash branch message repo_slug source_url clone_url)

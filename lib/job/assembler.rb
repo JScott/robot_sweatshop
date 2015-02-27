@@ -7,7 +7,7 @@ def get_config(for_job_name:)
   job_config_path = "#{job_dir}/#{for_job_name}.yaml"
   unless File.file? job_config_path
     puts "No config found for job '#{for_job_name}'"
-    return nil 
+    return nil
   end
   YAML.load_file job_config_path
 end

@@ -1,6 +1,7 @@
 require 'json'
 require_relative 'payload'
 
+# A parser for Github payload data
 class GithubPayload < Payload
   def initialize(payload)
     @payload = JSON.parse payload || {}
@@ -40,13 +41,5 @@ class GithubPayload < Payload
 
   def source_url
     head_commit['url'] || ''
-  end
-
-  def git_commit_data
-    data = {}
-    %w(author hash branch message repo_slug source_url clone_url).each do |property|
-      data[property] = method(property.to_sym).call
-    end
-    data
   end
 end

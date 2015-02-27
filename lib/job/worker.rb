@@ -15,7 +15,7 @@ def execute(command)
   puts "Executing '#{command}'..."
   # TODO: path.split(' ') to bypass the shell when we're not using env vars
   IO.popen(command) do |io|
-    while line = io.gets do
+    while line = io.gets # do
       log.info line
     end
   end

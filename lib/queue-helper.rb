@@ -1,14 +1,15 @@
 require 'ezmq'
 require 'json'
 
+# A collection of common methods for queue interactions with EZMQ
 module QueueHelper
   @@client = EZMQ::Client.new port: 5556
-  
+
   def self.dequeue(queue_name = 'default')
     data = @@client.request queue_name
     begin
       JSON.parse data
-    rescue JSON::ParserError => e
+    rescue JSON::ParserError
       nil
     end
   end
@@ -22,7 +23,7 @@ module QueueHelper
     subscriber = EZMQ::Subscriber.new port: 5557, topic: 'busy-queues'
     subscriber.listen do |message|
       if message == queue_name
-        data = self.dequeue queue_name
+        data = dequeue queue_name
         yield data unless data.nil?
       end
     end

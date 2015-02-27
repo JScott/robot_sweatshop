@@ -2,6 +2,7 @@ require 'uri'
 require 'json'
 require_relative 'payload'
 
+# A parser for Bitbucket payload data
 class BitbucketPayload < Payload
   def initialize(data)
     data = URI.decode_www_form(data)[0][1]
@@ -51,7 +52,9 @@ class BitbucketPayload < Payload
   end
 
   def source_url
-    return '' if @data['canon_url'].nil? || repository.empty? || latest_commit.empty?
+    return '' if  @data['canon_url'].nil? ||
+                  repository.empty? ||
+                  latest_commit.empty?
     base_url = @data['canon_url']
     "#{base_url}/#{repo_slug}/commits/#{hash}/?at=#{branch}"
   end

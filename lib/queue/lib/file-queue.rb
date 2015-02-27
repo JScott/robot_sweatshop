@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 require 'moneta'
 
+# A class to handle queueing through Moneta's key-value storage
 class FileQueue
   attr_reader :watched_queues
 
@@ -22,7 +23,7 @@ class FileQueue
     @@store[@name] = @@store[@name].push item
     @@store[@mirror_name] = @@store[@mirror_name].push item
   end
-  
+
   def dequeue
     return '' if @@store[@name].empty?
     item = @@store[@name].first
@@ -31,11 +32,10 @@ class FileQueue
   end
 
   def size
-    begin # Moneta can return nil sometimes
-          # so we give it time to catch up
+    loop do # Moneta can return nil sometimes, so we give it time to catch up
       queue = @@store[@name]
-    end while queue.nil?
-    queue.size
+      return queue.size unless queue.nil?
+    end
   end
 
   def clear

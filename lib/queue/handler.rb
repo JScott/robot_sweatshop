@@ -11,7 +11,7 @@ end
 
 def dequeue(name)
   puts "dequeue #{name}"
-  queue = FileQueue.new name  
+  queue = FileQueue.new name
   queue.dequeue
 end
 
