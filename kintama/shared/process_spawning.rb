@@ -1,5 +1,3 @@
-require 'fileutils'
-
 raise 'Please run with sudo for the sake of process running' unless Process.euid == 0
 
 $for_a_moment = 0.5
