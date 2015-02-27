@@ -29,9 +29,9 @@ module InHelper
 end
 
 module PayloadHelper
-  def example_parsed_payload(for_branch:)
-    JSON.generate payload: { branch: for_branch },
-                  job_name: 'example'
+  def example_parsed_payload(with_payload: nil, for_branch: 'develop', for_job: 'example')
+    JSON.generate payload: (with_payload || { branch: for_branch }),
+                  job_name: for_job
   end
 end
 

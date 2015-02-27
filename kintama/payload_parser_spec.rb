@@ -48,9 +48,9 @@ describe 'the Payload Parser' do
   given 'invalid payload data in \'raw-payload\'' do
     setup do
       invalid_data = {
-        malformed_payload:  JSON.generate(payload: load_payload('malformed'), format: 'asdf'),
-        not_json:           'not_json',
-        unsupported_format: example_raw_payload(with_format: 'asdf')
+        malformed_payload:  example_raw_payload(with_format: 'malformed'),
+        unsupported_format: example_raw_payload(with_format: 'asdf'),
+        not_json:           'not_json'
       }
       invalid_data.each do |_type, datum|
         @client.request "#{@raw_queue} #{datum}"

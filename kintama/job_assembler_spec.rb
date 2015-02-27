@@ -41,11 +41,10 @@ describe 'the Job Assembler' do
   given 'invalid job data in \'parsed-payload\'' do
     setup do
       invalid_data = {
-        bad_payload:    JSON.generate(payload: 'not hash', job_name: 'example'),
-        bad_job_name:   JSON.generate(payload: 'not hash', job_name: 'asdf'),
-        no_job_name:    JSON.generate(payload: 'not hash'),
-        not_json:       'not_json',
-        ignored_branch: example_parsed_payload(for_branch: 'not_on_whitelist')
+        ignored_branch: example_parsed_payload(for_branch: 'not_on_whitelist'),
+        bad_payload:    example_parsed_payload(with_payload: 'not hash'),
+        bad_payload:    example_parsed_payload(for_job: 'asdf'),
+        not_json:       'not_json'
       }
       invalid_data.each do |_type, datum|
         @client.request "#{@parsed_payloads_queue} #{datum}"

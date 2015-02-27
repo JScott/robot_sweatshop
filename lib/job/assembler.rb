@@ -9,6 +9,8 @@ def get_config(for_job_name:)
   YAML.load_file job_config_path
 end
 
+
+# nix this. too much code for stuff I control. have faith in your devs.
 def issues_with(job_config = {}, data = {})
   payload = data['payload']
   issues = []
@@ -26,7 +28,6 @@ def issues_with(job_config = {}, data = {})
   issues.push "The job name is missing" if missing_job_name
   issues
 end
-
 def assemble_job(data)
   job_config = get_config for_job_name: data['job_name']
   issues = issues_with job_config, data
