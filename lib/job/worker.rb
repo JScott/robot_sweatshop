@@ -20,7 +20,7 @@ def execute(command)
       log.info line
     end
   end
-  puts "Execution complete with exit status: #{$CHILD_STATUS.exitstatus}"
+  puts "Execution complete with exit status: #{$?.exitstatus}"
 end
 
 QueueHelper.wait_for('jobs') do |data|
