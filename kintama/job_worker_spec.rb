@@ -39,16 +39,18 @@ describe 'the Worker' do
 
   given 'invalid job data in \'jobs\'' do
     setup do
-      bad_context = JSON.generate context: 'not hash', commands: []
-      bad_commands = JSON.generate context: [], commands: 'echo 1'
-      not_json = 'not_json'
-      [ bad_context, bad_commands, not_json ].each do |bad_job|
-        @client.request "#{@jobs_queue} #{bad_job}"
+      invalid_data = {
+        bad_context:  JSON.generate(context: 'not hash', commands: []),
+        bad_commands: JSON.generate(context: [], commands: 'echo 1'),
+        not_json:     'not_json'
+      }
+      invalid_data.each do |_type, datum|
+        @client.request "#{@jobs_queue} #{datum}"
       end
       sleep $for_a_moment
     end
 
-    should 'remove it from \'jobs\'' do
+    should 'remove all of it from \'jobs\'' do
       response = @client.request @jobs_queue
       assert_equal '', response
     end

@@ -20,7 +20,7 @@ given 'the Queue Broadcaster' do
 
     should 'have their named published to \'busy-queues\'' do
       Timeout.timeout($for_a_while) do
-        @subscriber.listen do |message, topic|
+        @subscriber.listen do |message|
           assert_equal @queue, message
           break
         end
@@ -32,7 +32,7 @@ given 'the Queue Broadcaster' do
     should 'not have their name published' do
       assert_raises Timeout::Error do
         Timeout.timeout($for_a_moment) do
-          @subscriber.listen { |m| }
+          @subscriber.listen { }
         end
       end
     end

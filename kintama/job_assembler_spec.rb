@@ -40,18 +40,20 @@ describe 'the Job Assembler' do
 
   given 'invalid job data in \'parsed-payload\'' do
     setup do
-      bad_payload = JSON.generate payload: 'not hash', job_name: 'example'
-      bad_job_name = JSON.generate payload: 'not hash', job_name: 'asdf'
-      no_job_name = JSON.generate payload: 'not hash'
-      not_json = 'not_json'
-      ignored_branch = example_parsed_payload(for_branch: 'not_on_whitelist')
-      [ bad_payload, bad_job_name, no_job_name, not_json, ignored_branch ].each do |bad_payload|
-        @client.request "#{@parsed_payloads_queue} #{bad_payload}"
+      invalid_data = {
+        bad_payload:    JSON.generate(payload: 'not hash', job_name: 'example'),
+        bad_job_name:   JSON.generate(payload: 'not hash', job_name: 'asdf'),
+        no_job_name:    JSON.generate(payload: 'not hash'),
+        not_json:       'not_json',
+        ignored_branch: example_parsed_payload(for_branch: 'not_on_whitelist')
+      }
+      invalid_data.each do |_type, datum|
+        @client.request "#{@parsed_payloads_queue} #{datum}"
       end
       sleep $for_a_moment
     end
 
-    should 'remove it from \'parsed-payload\'' do
+    should 'remove all of it from \'parsed-payload\'' do
       response = @client.request @parsed_payloads_queue
       assert_equal '', response
     end
