@@ -1,5 +1,5 @@
 require 'kintama'
-require_relative 'helpers'
+require_relative 'shared/helpers'
 require_relative '../lib/queue/lib/file-queue'
 
 given 'the File Queue class' do

@@ -1,7 +1,8 @@
 require 'kintama'
 require 'ezmq'
 require 'timeout'
-require_relative 'helpers'
+require_relative 'shared/system'
+require_relative 'shared/helpers'
 
 given 'the Queue Broadcaster' do
   include QueueHelper

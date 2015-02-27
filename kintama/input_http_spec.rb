@@ -3,7 +3,8 @@ require 'ezmq'
 require 'json'
 require 'timeout'
 require 'http'
-require_relative 'helpers'
+require_relative 'shared/system'
+require_relative 'shared/helpers'
 
 given 'the HTTP Input' do
   include QueueHelper

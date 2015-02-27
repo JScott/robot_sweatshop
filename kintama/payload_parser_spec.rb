@@ -1,7 +1,8 @@
 require 'kintama'
 require 'ezmq'
 require 'json'
-require_relative 'helpers'
+require_relative 'shared/system'
+require_relative 'shared/helpers'
 
 describe 'the Payload Parser' do
   include QueueHelper
