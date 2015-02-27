@@ -11,14 +11,13 @@ end
 
 Kintama.on_start do
   @pids = []
+  spawn 'input/http.rb' # Make sure the Sinatra port is available!
   spawn 'queue/handler.rb'
   spawn 'queue/broadcaster.rb'
   spawn 'payload/parser.rb'
   spawn 'job/assembler.rb'
-  # spawn 'in/http.rb' #Sinatra and port 80 causes a ton of problems
   # spawn 'job/worker.rb testingid'
-  sleep $for_a_moment
-  # sleep 5
+  sleep 2
 end
 
 Kintama.on_finish do
