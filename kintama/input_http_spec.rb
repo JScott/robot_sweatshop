@@ -3,7 +3,8 @@ require 'ezmq'
 require 'json'
 require 'timeout'
 require 'http'
-require_relative 'shared/system'
+require_relative 'shared/moneta_backup'
+require_relative 'shared/process_spawning'
 require_relative 'shared/helpers'
 
 given 'the HTTP Input' do

@@ -1,7 +1,8 @@
 require 'kintama'
 require 'ezmq'
 require 'timeout'
-require_relative 'shared/system'
+require_relative 'shared/moneta_backup'
+require_relative 'shared/process_spawning'
 require_relative 'shared/helpers'
 
 given 'the Queue Broadcaster' do

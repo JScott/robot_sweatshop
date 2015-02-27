@@ -20,7 +20,6 @@ module InHelper
     payload_strings = YAML.load_file "#{__dir__}/../data/payload_data.yaml"
     payload_strings[of_format.downcase]
   end
-
   def example_raw_payload(with_format:)
     payload = load_payload with_format
     JSON.generate payload: payload,
@@ -42,7 +41,6 @@ module JobHelper
                   commands: [ 'echo $custom > test.txt' ],
                   job_name: 'example'
   end
-
   def reset_test_file
     test_file = "#{__dir__}/../../lib/job/workspaces/example-testingid/test.txt"
     FileUtils.rm_rf test_file

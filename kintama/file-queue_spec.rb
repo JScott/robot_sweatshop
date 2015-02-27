@@ -1,4 +1,5 @@
 require 'kintama'
+require_relative 'shared/moneta_backup'
 require_relative 'shared/helpers'
 require_relative '../lib/queue/lib/file-queue'
 
