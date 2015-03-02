@@ -30,17 +30,16 @@ end
 
 module PayloadHelper
   def example_parsed_payload(with_payload: nil, for_branch: 'develop', for_job: 'example')
-    JSON.generate payload: (with_payload || { branch: for_branch }),
+    payload = with_payload || { branch: for_branch }
+    JSON.generate payload: payload,
                   job_name: for_job
   end
 end
 
 module JobHelper
-  def example_job
-    JSON.generate context: {  job_name: '',
-                              branch: 'develop', 
-                              custom: 'Hello world!' },
-                  commands: ['echo $branch','echo $custom > test.txt'],
+  def example_job(in_context: {}, with_commands: [])
+    JSON.generate context: in_context,
+                  commands: with_commands,
                   job_name: 'example'
   end
   def reset_test_file

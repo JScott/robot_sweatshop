@@ -18,7 +18,8 @@ describe 'the Worker' do
 
   given 'valid job data in \'jobs\'' do
     setup do
-      job = example_job
+      job = example_job in_context: {custom: 'Hello world!'},
+                        with_commands: ['echo $custom','echo $custom > test.txt']
       @client.request "#{@jobs_queue} #{job}"
       sleep $for_a_moment
     end
@@ -40,8 +41,8 @@ describe 'the Worker' do
   given 'invalid job data in \'jobs\'' do
     setup do
       invalid_data = {
-        bad_context:  JSON.generate(context: 'not hash', commands: []),
-        bad_commands: JSON.generate(context: [], commands: 'echo 1'),
+        bad_context:  example_job(in_context: 'not hash'),
+        bad_commands: example_job(with_commands: 'echo 1'),
         not_json:     'not_json'
       }
       invalid_data.each do |_type, datum|

@@ -6,7 +6,7 @@ require_relative '../queue-helper'
 # TODO: check existing worker ids. it'd be disastrous to have two sharing a workspace
 @worker_id = ARGV[0] || "#{Faker::Name.first_name}"
 
-def from_workspace(named:)
+def from_workspace(named: 'no_job_name')
   workspace = "#{named}-#{@worker_id}"
   puts "Workspace: #{workspace}"
   path = "#{__dir__}/workspaces/#{workspace}"

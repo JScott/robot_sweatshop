@@ -16,7 +16,7 @@ Kintama.on_start do
   spawn 'queue/broadcaster.rb'
   spawn 'payload/parser.rb'
   spawn 'job/assembler.rb'
-  # spawn 'job/worker.rb testingid'
+  spawn 'job/worker.rb testingid'
   sleep 2
 end
 
