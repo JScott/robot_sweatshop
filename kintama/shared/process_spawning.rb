@@ -13,11 +13,7 @@ Kintama.on_start do
   @pids = []
   `eye load #{__dir__}/../../robot_sweatshop.eye`
   `eye start robot_sweatshop`
-  #spawn 'input/http.rb' # Make sure the Sinatra port is available!
-  #spawn 'queue/handler.rb'
-  spawn 'queue/broadcaster.rb'
-  spawn 'payload/parser.rb'
-  spawn 'job/assembler.rb'
+  `eye stop worker`
   spawn 'job/worker.rb testingid'
   sleep 2
 end
