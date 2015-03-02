@@ -5,7 +5,7 @@ gem 'faker'
 
 # not yet...
 gem 'commander'
-gem 'bluepill'
+gem 'eye'
 
 # testing
 gem 'kintama'
