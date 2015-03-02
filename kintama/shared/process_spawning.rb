@@ -11,13 +11,13 @@ end
 
 Kintama.on_start do
   @pids = []
-  spawn 'input/http.rb' # Make sure the Sinatra port is available!
-  spawn 'queue/handler.rb'
-  spawn 'queue/broadcaster.rb'
-  spawn 'payload/parser.rb'
-  spawn 'job/assembler.rb'
-  spawn 'job/worker.rb testingid'
-  sleep 2
+  #spawn 'input/http.rb' # Make sure the Sinatra port is available!
+  #spawn 'queue/handler.rb'
+  #spawn 'queue/broadcaster.rb'
+  #spawn 'payload/parser.rb'
+  #spawn 'job/assembler.rb'
+  #spawn 'job/worker.rb testingid'
+  #sleep 2
 end
 
 Kintama.on_finish do

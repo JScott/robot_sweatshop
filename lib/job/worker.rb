@@ -16,6 +16,7 @@ end
 
 def execute(context = {}, command)
   puts "Executing '#{command}'..."
+  p context, command
   # TODO: path.split(' ') to bypass the shell when we're not using env vars
   IO.popen(context, command) do |io|
     context.each { |key, value| ENV[key.to_s] = value.to_s }
