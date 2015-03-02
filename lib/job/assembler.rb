@@ -16,9 +16,11 @@ def assemble_job(data)
   job_config = get_config for_job_name: data['job_name']
   return nil unless job_config
   if job_config['branch_whitelist'].include? data['payload']['branch']
+    context = job_config['environment'].merge(data['payload'])
+    context.each { |key, value| context[key] = value.to_s }
     {
       commands: job_config['commands'],
-      context: job_config['environment'].merge(data['payload']),
+      context: context,
       job_name: data['job_name']
     }
   else
