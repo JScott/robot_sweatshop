@@ -18,7 +18,7 @@ Eye.application 'robot_sweatshop' do
     process :input_http do
       pid_file "#{pid_path}/input-http.pid"
       stdall "#{log_path}/input-http.log"
-      start_command "sudo ruby input/http.rb"
+      start_command "ruby input/http.rb"
       daemonize true
     end
     process :queue_handler do
