@@ -3,9 +3,10 @@ gem 'sinatra'
 gem 'ezmq'
 gem 'faker'
 
-# not yet...
+# framework
 gem 'commander'
 gem 'eye'
+gem 'colorize'
 
 # testing
 gem 'kintama'

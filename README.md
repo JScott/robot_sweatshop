@@ -16,9 +16,11 @@ Robot Sweatshop uses Eye to handle its services. To just get things running, `bu
 
 # Configuration
 
-The server isn't much help without a job to run.
+The server isn't much help without a job to run. Run `sweatshop job <name>` to create a new job or edit an existing one.
 
 _TODO_
+
+Job structure is...
 
 Then hook into `url.com/:tool/payload-for/:job`. For example, `url.com/bitbucket/payload-for/selenium-tests`.
 
@@ -36,8 +38,7 @@ Run as another user (uid/gid in eye)
 # Roadmap
 
 - Proper gem distribution
-- CLI scaffolding
-- CLI input
+- CLI job running
 - Common scrips such as git repo syncing
 - Support multiple workers
 - Better logging for the processes
