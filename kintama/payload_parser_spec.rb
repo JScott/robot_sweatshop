@@ -23,7 +23,7 @@ describe 'the Payload Parser' do
       setup do
         payload = example_raw_payload(with_format: format)
         @client.request "#{@raw_queue} #{payload}"
-        sleep $for_a_moment
+        sleep $for_a_while
       end
 
       should 'remove it from \'raw-payload\'' do
@@ -55,7 +55,7 @@ describe 'the Payload Parser' do
       invalid_data.each do |_type, datum|
         @client.request "#{@raw_queue} #{datum}"
       end
-      sleep $for_a_moment
+      sleep $for_a_while
       # TODO: should not crash the payload parser
     end
 

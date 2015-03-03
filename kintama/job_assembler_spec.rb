@@ -21,7 +21,7 @@ describe 'the Job Assembler' do
     setup do
       payload = example_parsed_payload(for_branch: 'develop')
       @client.request "#{@parsed_payloads_queue} #{payload}"
-      sleep $for_a_moment
+      sleep $for_a_while
     end
 
     should 'remove it from \'parsed-payload\'' do
@@ -57,7 +57,7 @@ describe 'the Job Assembler' do
       invalid_data.each do |_type, datum|
         @client.request "#{@parsed_payloads_queue} #{datum}"
       end
-      sleep $for_a_moment
+      sleep $for_a_while
     end
 
     should 'remove all of it from \'parsed-payload\'' do

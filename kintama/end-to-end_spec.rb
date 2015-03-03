@@ -21,7 +21,7 @@ describe 'Robot Sweatshop' do
     setup do
       url = "http://localhost/bitbucket/payload-for/#{@job_name}"
       HTTP.post url, body: load_payload('bitbucket')
-      sleep $for_a_while
+      sleep $for_everything
     end
 
     should 'run jobs with the context as environment variables' do
