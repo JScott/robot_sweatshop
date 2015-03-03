@@ -33,7 +33,7 @@ Eye.application 'robot_sweatshop' do
     process :broadcaster do
       pid_file "#{pid_path}/queue-broadcaster.pid"
       stdall "#{log_path}/queue-broadcaster.log"
-      start_command "ruby queue/broadcaster.rb"
+      start_command "ruby queue/broadcaster.rb 0.0"
       daemonize true
     end
   end
