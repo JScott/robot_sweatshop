@@ -1,0 +1,6 @@
+---
+branch_whitelist:
+
+environment:
+  WORLD: { oh: hi }
+  temp: [1,2]
