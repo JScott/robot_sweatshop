@@ -1,9 +1,6 @@
-Note: the Cucumber tests will use the appropriate queues to store and run tests data.
-Be sure to test on a staging instance of Robot Sweatshop or backup `queue/lib/moneta`.
+# Robot Sweatshop
 
----
-
-# mci
+_TODO_
 
 I was using Jenkins as a glorified script runner, as I'm sure a lot of people are.
 I just want to run scripts on code that I push.
@@ -13,36 +10,34 @@ I certainly don't need it to run on a JVM, have a messy plugin system, or run wi
 MCI is just a barebones, script-based CI server that runs from configuration files.
 It works exceptionally well in conjunction with other single-purpose tools.
 
-# use
+# Usage
 
-Setup:
- - Configure your server by creating jobs and modifying config.yaml to your preference
- - Run the worker script via `./worker.rb`
- - Run the publisher via `./server.rb`
+Robot Sweatshop uses Eye to handle its services. To just get things running, `bundle install` and run `eye load robot_sweatshop.production.eye`.
+
+# Configuration
+
+The server isn't much help without a job to run.
+
+_TODO_
 
 Then hook into `url.com/:tool/payload-for/:job`. For example, `url.com/bitbucket/payload-for/selenium-tests`.
+
+Also configuration of server variables such as port.
 
 Currently supported tools:
 - bitbucket
 
-See ansible-role for an in-depth set up through ansible scripts.
+# Security
 
-# security
+_TODO_
 
-Sandbox your process.
+Run as another user (uid/gid in eye)
 
-```
-useradd --home /opt/minimal-ci ci-bot
-su ci-bot -c "./worker.rb"
-su ci-bot -c "./server.rb"
-```
+# Roadmap
 
-Add SSH keys as appropriate.
-
-# roadmap
-
-- Use Logger instead of whatever crazy thing I'm trying to do
-- 'empty' tool for manual kick off with no payload
-- Replace Sidekiq with rabbitmq and either the rcelery or amqp gems
-- Enhance support for slaving off script running
-- Reload scripts without restarting the server
+- Proper gem distribution
+- CLI scaffolding
+- CLI input
+- Common scrips such as git repo syncing
+- Support multiple workers
+- Better logging for the processes

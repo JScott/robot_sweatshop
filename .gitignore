@@ -1,4 +1,4 @@
-lib/queue/lib/moneta
+lib/queue/lib/moneta*
 lib/job/workspaces/**/*
 !worker/workspaces/.keep
 Gemfile.lock
