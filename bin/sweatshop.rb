@@ -6,7 +6,7 @@ require 'colorize'
 # :name is optional, otherwise uses the basename of this executable
 program :name, 'Robot Sweatshop'
 program :version, '0.1.0'
-program :description, 'Pure script running'
+program :description, 'A lightweight, unopinionated CI server'
 program :help, 'Author', 'Justin Scott <jvscott@gmail.com>'
 
 # default_command :bootstrap
