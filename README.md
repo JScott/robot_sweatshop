@@ -39,6 +39,7 @@ Run as another user (uid/gid in eye)
 
 - Proper gem distribution
 - CLI job running
+- Set up the Payload Parser as an independent service to streamline data flow
 - Common scrips such as git repo syncing
 - Support multiple workers
 - Better logging for the processes
