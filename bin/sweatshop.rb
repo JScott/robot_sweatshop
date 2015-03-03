@@ -16,51 +16,102 @@ def empty_job
 end
 
 def notify(type = :success, string)
-  tag = case type
+  color = case type
   when :success
-    "[#{'Success'.colorize :green}] "
+    :green
   when :failure
-    "[#{'Failure'.colorize :red}] "
-  when :editor
-    "[#{'Editor'.colorize :yellow}] "
+    :red
+  when :warning
+    :yellow
+  when :info
+    :light_blue
   else
     ''
   end
-  puts "#{tag}#{string}"
+  puts "[#{type.to_s.capitalize.colorize(color)}] #{string}"
+end
+
+def create_and_edit(job_file:)
+  name = File.basename job_file
+  unless File.file?(job_file)
+    File.write job_file, empty_job
+    notify :success, "Created new job file '#{name}'"
+  end
+  notify :info, "Manually editing job file '#{name}'"
+  system ENV['EDITOR'], job_file
+end
+
+def valid_lists?(job)
+  errors = false
+  %w(branch_whitelist commands).each do |list|
+    if job[list].nil? || job[list].empty?
+      notify :failure, "#{list} empty or not found"
+      errors = true
+    end
+  end
+  errors
+end
+
+def valid_environment?(job)
+  errors = false
+  job['environment'].each do |key, value|
+    unless value.is_a? String
+      notify :warning, "Non-string value for '#{key}'"
+      errors = true
+    end
+  end
+  errors
+end
+
+def valid_yaml?(job)
+  if job
+    true
+  else
+    notify :failure, "Invalid YAML"
+    false
+  end
+end
+
+def validate(job_file:)
+  name = File.basename job_file
+  unless File.file?(job_file)
+    notify :failure, 'Job not found. Create it with \'workshop job\''
+  else
+    job = YAML.load_file job_file
+    return unless valid_yaml?(job)
+    errors = valid_lists?(job) ||
+             valid_environment?(job)
+    notify :success, 'Valid job configuration' unless errors
+  end
+end
+
+def with_job_file(for_job:)
+  if for_job.nil?
+    notify :failure, 'Please specify the job to create or edit. See --help for details'
+  else
+    yield "#{__dir__}/../jobs/#{for_job}.yaml"
+  end
 end
 
 command :job do |c|
   c.syntax = 'sweatshop job <name>'
   c.description = 'Creates and edits jobs'
   c.action do |args|
-    if args.first.nil?
-      notify :failure, 'Please specify the job to create or edit'
-      puts "Usage: #{c.syntax}"
-    else
-      job_file = "#{__dir__}/../jobs/#{args.first}.yaml"
-      unless File.file?(job_file)
-        File.write job_file, empty_job
-        notify :success, "Created new job file '#{args.first}.yaml'"
-      end
-      notify :editor, "Manually editing job file '#{args.first}.yaml'"
-      system ENV['EDITOR'], job_file
+    with_job_file for_job: args.first do |file|
+      create_and_edit job_file: file
     end
   end
 end
 
-# command :job do |c|
-#   c.syntax = 'sweatshop.rb verify <name>'
-#   c.description = 'Verify the structure of a job'
-#   c.action do |args|
-#     job_file = "#{__dir__}/../jobs/#{args.first}.yaml"
-#     if args.first.nil? && File.file?(job_file)
-#       puts "Usage: #{c.syntax}"
-#       puts 'Please specify the existing job to create or edit'
-#     else
-#       puts "File is good!"
-#     end
-#   end
-# end
+command :inspect do |c|
+  c.syntax = 'sweatshop.rb inspect <name>'
+  c.description = 'Verify the structure of a job'
+  c.action do |args|
+    with_job_file for_job: args.first do |file|
+      validate job_file: file
+    end
+  end
+end
 
 
 # command :bar do |c|
