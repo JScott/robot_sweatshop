@@ -42,3 +42,4 @@ Run as another user (uid/gid in eye)
 - Common scrips such as git repo syncing
 - Support multiple workers
 - Better logging for the processes
+- CLI job linting
