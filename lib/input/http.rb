@@ -2,10 +2,11 @@
 require 'sinatra'
 require 'ezmq'
 require 'json'
+require_relative '../../config'
 
 configure do
-  set :port, 8080
-  set :bind, '0.0.0.0'
+  set :port, configatron.input.http.port
+  set :bind, configatron.input.http.bind
   set :output_queue, 'raw-payload'
 end
 

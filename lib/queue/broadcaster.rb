@@ -8,7 +8,7 @@ MonetaQueue.watched_queues.each do |queue|
   queues[queue] = MonetaQueue.new queue
 end
 
-@wait_time = ARGV[0].to_f || 0.1
+@wait_time = ARGV[0].to_f || 0.5
 
 loop do
   queues.each do |queue_name, queue|

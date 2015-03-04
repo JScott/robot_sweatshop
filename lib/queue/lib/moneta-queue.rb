@@ -5,8 +5,7 @@ require 'moneta'
 class MonetaQueue
   attr_reader :watched_queues
 
-  MONETA_DIR = File.expand_path "#{__dir__}/moneta"
-  @@store = Moneta.new :File, dir: MONETA_DIR
+  @@store = Moneta.new :File, dir: configatron.queue.moneta_directory
 
   def initialize(name)
     @name = name
