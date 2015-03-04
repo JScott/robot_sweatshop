@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
 require 'moneta'
+require_relative '../../../config'
 
 # A class to handle queueing through Moneta's key-value storage
 class MonetaQueue
