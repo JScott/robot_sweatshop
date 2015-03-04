@@ -1,5 +1,4 @@
 #!/usr/bin/env ruby
-require 'configatron'
 require 'yaml'
 require 'commander/import'
 require 'colorize'
@@ -40,12 +39,9 @@ command :start do |c|
   c.syntax = 'sweatshop start [options]'
   c.description = 'Start the Sweatshop'
   c.option '--testing', 'Load the testing Eye configuration.'
-  #c.option '--config STRING', String, 'Specify a custom Robot Sweatshop configuration.'
   c.action do |args, options|
     options.default :testing => false
-    #options.default :config => ''
     environment = options.testing ? 'testing' : 'production'
-    #load_custom_config options.config unless options.config.empty?
     start_sweatshop for_environment: environment
   end
 end

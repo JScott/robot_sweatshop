@@ -9,13 +9,3 @@ def start_sweatshop(for_environment:)
     puts 'Check \'eye --help\' for more info on managing the processes'
   end
 end
-
-# def load_custom_config(path)
-#   path = File.expand_path path
-#   if File.file? path
-#     notify :success, 'Custom configuration loaded'
-#     configatron.user_defined_config = path
-#   else
-#     notify :failure, 'Custom configuration could not be found'
-#   end
-# end
