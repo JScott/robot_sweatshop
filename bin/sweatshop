@@ -25,7 +25,7 @@ command :job do |c|
 end
 
 command :inspect do |c|
-  c.syntax = 'sweatshop.rb inspect <name>'
+  c.syntax = 'sweatshop inspect <name>'
   c.description = 'Verify the structure of a job'
   c.action do |args|
     with_job_file for_job: args.first do |file|
@@ -34,6 +34,30 @@ command :inspect do |c|
   end
 end
 
+command :start do |c|
+  c.syntax = 'sweatshop start'
+  c.description = 'Start the Sweatshop'
+  c.action do
+    puts `eye load #{__dir__}/../robot_sweatshop.staging.eye`
+    puts `eye restart robot_sweatshop`
+  end
+end
+
+command :status do |c|
+  c.syntax = 'sweatshop status'
+  c.description = 'Check how the Sweatshop is doing'
+  c.action do
+    puts `eye info`
+  end
+end
+
+command :stop do |c|
+  c.syntax = 'sweatshop stop'
+  c.description = 'Stop the Sweatshop'
+  c.action do
+    puts `eye stop robot_sweatshop`
+  end
+end
 
 # command :bar do |c|
 #   c.syntax = 'foobar bar [options]'
