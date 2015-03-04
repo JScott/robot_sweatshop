@@ -1,11 +1,12 @@
 #!/usr/bin/env ruby
+require 'configatron'
 require 'yaml'
 require 'commander/import'
 require 'colorize'
 require_relative 'lib/common'
 require_relative 'lib/job'
 require_relative 'lib/inspect'
-require_relative '../config'
+require_relative 'lib/start'
 
 # :name is optional, otherwise uses the basename of this executable
 program :name, 'Robot Sweatshop'
@@ -39,18 +40,13 @@ command :start do |c|
   c.syntax = 'sweatshop start [options]'
   c.description = 'Start the Sweatshop'
   c.option '--testing', 'Load the testing Eye configuration.'
+  #c.option '--config STRING', String, 'Specify a custom Robot Sweatshop configuration.'
   c.action do |args, options|
     options.default :testing => false
+    #options.default :config => ''
     environment = options.testing ? 'testing' : 'production'
-    eye_config = "#{__dir__}/../robot_sweatshop.#{environment}.eye"
-    output = `eye load #{eye_config}`
-    if $?.exitstatus != 0
-      notify :failure, output
-    else
-      notify :success, output
-      notify :info, `eye restart robot_sweatshop`
-      puts 'Check \'eye --help\' for more info on managing the processes'
-    end
+    #load_custom_config options.config unless options.config.empty?
+    start_sweatshop for_environment: environment
   end
 end
 
