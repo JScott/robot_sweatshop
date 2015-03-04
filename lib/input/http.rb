@@ -4,7 +4,7 @@ require 'ezmq'
 require 'json'
 
 configure do
-  set :port, 80
+  set :port, 8080
   set :bind, '0.0.0.0'
   set :output_queue, 'raw-payload'
 end

@@ -1,3 +1,4 @@
+*.gem
 jobs/*.yaml
 lib/queue/lib/moneta*
 lib/job/workspaces/**/*
