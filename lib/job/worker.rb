@@ -16,11 +16,12 @@ end
 
 def execute(context = {}, command)
   puts "Executing '#{command}'..."
-  p context, command
   # TODO: path.split(' ') to bypass the shell when we're not using env vars
-  IO.popen(context, command) do |io|
-    context.each { |key, value| ENV[key.to_s] = value.to_s }
-    while line = io.gets
+  
+  # Run the command with the context in environment,
+  # printing the output as it's generated
+  IO.popen(context, command) do |io_stream|
+    while line = io_stream.gets
       puts line
     end
   end

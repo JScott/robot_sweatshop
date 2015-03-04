@@ -3,8 +3,8 @@ require 'yaml'
 require_relative '../queue-helper'
 
 def get_config(for_job_name:)
-  job_dir = "#{__dir__}/../../jobs"
-  job_config_path = "#{job_dir}/#{for_job_name}.yaml"
+  job_directory = "#{__dir__}/../../jobs"
+  job_config_path = "#{job_directory}/#{for_job_name}.yaml"
   unless File.file? job_config_path
     puts "No config found for job '#{for_job_name}'"
     return nil
