@@ -3,6 +3,7 @@ require 'configatron'
 configatron.common do |common|
   common.pidfile_directory = '/var/run/robot_sweatshop'
   common.logfile_directory = '/var/log/robot_sweatshop'
+  common.eye_config_file = 'robot_sweatshop.production.eye'
   # TODO: ports
 end
 

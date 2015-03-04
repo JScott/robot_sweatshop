@@ -5,6 +5,7 @@ require 'colorize'
 require_relative 'lib/common'
 require_relative 'lib/job'
 require_relative 'lib/inspect'
+require_relative '../config'
 
 # :name is optional, otherwise uses the basename of this executable
 program :name, 'Robot Sweatshop'
@@ -38,16 +39,15 @@ command :start do |c|
   c.syntax = 'sweatshop start'
   c.description = 'Start the Sweatshop'
   c.action do
-    puts `eye load #{__dir__}/../robot_sweatshop.staging.eye`
-    puts `eye restart robot_sweatshop`
-  end
-end
-
-command :status do |c|
-  c.syntax = 'sweatshop status'
-  c.description = 'Check how the Sweatshop is doing'
-  c.action do
-    puts `eye info`
+    eye_config = "#{__dir__}/../#{configatron.common.eye_config_file}"
+    puts `eye load #{eye_config}`
+    if $?.exitstatus != 0
+      notify :failure, 'Couldn\'t load Robot Sweatshop'
+    else
+      puts `eye restart robot_sweatshop`
+      notify :success, 'Eye is running Robot Sweatshop'
+      puts 'Check \'eye --help\' for more info on managing the processes'
+    end
   end
 end
 
@@ -55,7 +55,14 @@ command :stop do |c|
   c.syntax = 'sweatshop stop'
   c.description = 'Stop the Sweatshop'
   c.action do
-    puts `eye stop robot_sweatshop`
+    puts `eye stop`
+    if $?.exitstatus != 0
+      notify :failure, 'Couldn\'t load Robot Sweatshop'
+    else
+      puts `eye restart robot_sweatshop`
+      notify :success, 'Eye is running Robot Sweatshop'
+      puts 'You can use Eye commands like \'eye info\' to check the status'
+    end
   end
 end
 
