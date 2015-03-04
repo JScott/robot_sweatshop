@@ -1,14 +1,14 @@
 #!/usr/bin/env ruby
 require 'fileutils'
+require_relative 'config'
 
-base_log_path = '/var/log'
-log_path = "#{base_log_path}/robot_sweatshop"
-pid_path = '/var/run/robot_sweatshop'
+log_path = configatron.common.logfile_directory
+pid_path = configatron.common.pidfile_directory
 FileUtils.mkdir_p log_path
 FileUtils.mkdir_p pid_path
 
 Eye.config do
-  logger "#{base_log_path}/eye.log"
+  logger "#{log_path}/eye.log"
 end
 
 Eye.application 'robot_sweatshop' do

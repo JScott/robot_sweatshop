@@ -14,8 +14,7 @@ end
 Kintama.on_start do
   @pids = []
   puts "(Re)loading Robot Sweatshop processes..."
-  `eye load #{__dir__}/../../robot_sweatshop.staging.eye`
-  `eye restart robot_sweatshop`
+  `#{__dir__}/../../bin/sweatshop start --testing`
   sleep 3
 end
 

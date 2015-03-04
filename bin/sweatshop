@@ -36,10 +36,13 @@ command :inspect do |c|
 end
 
 command :start do |c|
-  c.syntax = 'sweatshop start'
+  c.syntax = 'sweatshop start [options]'
   c.description = 'Start the Sweatshop'
-  c.action do
-    eye_config = "#{__dir__}/../#{configatron.common.eye_config_file}"
+  c.option '--testing', 'Load the testing Eye configuration.'
+  c.action do |args, options|
+    options.default :testing => false
+    environment = options.testing ? 'testing' : 'production'
+    eye_config = "#{__dir__}/../robot_sweatshop.#{environment}.eye"
     output = `eye load #{eye_config}`
     if $?.exitstatus != 0
       notify :failure, output
