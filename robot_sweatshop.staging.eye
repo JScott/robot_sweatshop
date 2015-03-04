@@ -1,3 +1,4 @@
+#!/usr/bin/env ruby
 require 'fileutils'
 
 base_log_path = '/var/log'
