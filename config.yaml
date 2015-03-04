@@ -1,0 +1,11 @@
+common:
+  pidfile_directory: /var/run/robot_sweatshop
+  logfile_directory: /var/log/robot_sweatshop
+
+input:
+  http:
+    port: 8080
+    bind: 0.0.0.0
+
+queue:
+  moneta_directory: /var/db/robot_sweatshop
