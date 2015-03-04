@@ -6,6 +6,7 @@ require_relative 'lib/common'
 require_relative 'lib/job'
 require_relative 'lib/inspect'
 require_relative 'lib/start'
+require_relative 'lib/generate_config'
 
 # :name is optional, otherwise uses the basename of this executable
 program :name, 'Robot Sweatshop'
@@ -17,7 +18,7 @@ program :help, 'Author', 'Justin Scott <jvscott@gmail.com>'
 
 command :job do |c|
   c.syntax = 'sweatshop job <name>'
-  c.description = 'Creates and edits jobs'
+  c.description = 'Creates and edits jobs.'
   c.action do |args|
     with_job_file for_job: args.first do |file|
       create_and_edit job_file: file
@@ -27,7 +28,7 @@ end
 
 command :inspect do |c|
   c.syntax = 'sweatshop inspect <name>'
-  c.description = 'Verify the structure of a job'
+  c.description = 'Verify the structure of a job.'
   c.action do |args|
     with_job_file for_job: args.first do |file|
       validate job_file: file
@@ -37,7 +38,7 @@ end
 
 command :start do |c|
   c.syntax = 'sweatshop start [options]'
-  c.description = 'Start the Sweatshop'
+  c.description = 'Start the Sweatshop.'
   c.option '--testing', 'Load the testing Eye configuration.'
   c.action do |args, options|
     options.default :testing => false
@@ -48,9 +49,17 @@ end
 
 command :stop do |c|
   c.syntax = 'sweatshop stop'
-  c.description = 'Stop the Sweatshop'
+  c.description = 'Stop the Sweatshop.'
   c.action do
     notify :info, `eye stop robot_sweatshop`
+  end
+end
+
+command :generate_config do |c|
+  c.syntax = 'sweatshop generate_config'
+  c.description = 'Create a default configuration file to be edited.'
+  c.action do
+    generate_default_config in_directory: '~'
   end
 end
 
