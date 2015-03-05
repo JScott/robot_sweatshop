@@ -2,14 +2,12 @@ require 'fileutils'
 require 'configatron'
 require 'yaml'
 
-configurations = ["#{__dir__}/config.yaml"]
-
-user_defined_config = File.expand_path '/etc/robot_sweatshop/config.yaml'
-configurations.push user_defined_config if File.file? user_defined_config
-
+configurations = ["#{__dir__}/config.yaml", "#{__dir__}/config.user.yaml"]
 configurations.each do |config_path|
-  hash = YAML.load_file config_path
-  configatron.configure_from_hash hash
+   if File.file? config_path
+    hash = YAML.load_file config_path
+    configatron.configure_from_hash hash
+  end
 end
 
 FileUtils.mkdir_p configatron.common.logfile_directory
