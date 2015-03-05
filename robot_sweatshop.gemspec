@@ -18,7 +18,7 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency 'commander'
   gem.add_runtime_dependency 'eye'
   gem.add_runtime_dependency 'colorize'
-  gem.add_runtime_dependency 'configurator'
+  gem.add_runtime_dependency 'configatron'
 
   gem.add_development_dependency 'rake'
   gem.add_development_dependency 'kintama'
