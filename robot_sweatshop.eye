@@ -1,4 +1,6 @@
 #!/usr/bin/env ruby
+require_relative 'config'
+
 log_path = configatron.common.logfile_directory
 pid_path = configatron.common.pidfile_directory
 
