@@ -4,8 +4,6 @@ require_relative 'config'
 
 log_path = configatron.common.logfile_directory
 pid_path = configatron.common.pidfile_directory
-FileUtils.mkdir_p log_path
-FileUtils.mkdir_p pid_path
 
 Eye.config do
   logger "#{log_path}/eye.log"

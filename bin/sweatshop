@@ -59,7 +59,7 @@ command :generate_config do |c|
   c.syntax = 'sweatshop generate_config'
   c.description = 'Create a default configuration file to be edited.'
   c.action do
-    generate_default_config in_directory: '~'
+    generate_default_config in_directory: '/etc/robot_sweatshop'
   end
 end
 
