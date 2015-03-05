@@ -1,4 +1,5 @@
 require 'yaml'
+require 'json'
 require_relative '../../lib/queue/lib/moneta-queue'
 require_relative '../../lib/payload/lib/payload'
 require_relative '../../config'
