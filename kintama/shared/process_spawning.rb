@@ -4,11 +4,10 @@ $for_io_calls = 1
 $for_everything = 3
 
 Kintama.on_start do
-  puts "(Re)loading Robot Sweatshop processes..."
-  `#{__dir__}/../../bin/sweatshop start --testing`
+  puts `#{__dir__}/../../bin/sweatshop start --testing`
   sleep $for_everything
 end
 
 Kintama.on_finish do
-  `sudo #{__dir__}/../../bin/sweatshop stop`
+  puts `sudo #{__dir__}/../../bin/sweatshop stop`
 end
