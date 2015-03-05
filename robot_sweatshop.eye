@@ -1,9 +1,5 @@
 #!/usr/bin/env ruby
-require 'fileutils'
-require_relative 'config'
-
 log_path = configatron.common.logfile_directory
-p log_path
 pid_path = configatron.common.pidfile_directory
 
 Eye.config do
