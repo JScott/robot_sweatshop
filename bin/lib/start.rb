@@ -6,6 +6,6 @@ def start_sweatshop(for_environment:)
   else
     notify :success, "Robot Sweatshop loaded with a #{for_environment} configuration"
     notify :info, `eye restart robot_sweatshop`
-    puts 'Check \'eye --help\' for more info on managing the processes'
+    puts 'Check \'eye --help\' for more info on debugging'
   end
 end

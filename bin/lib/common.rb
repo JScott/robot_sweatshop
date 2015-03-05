@@ -14,10 +14,22 @@ def notify(type = :success, string)
   puts "[#{type.to_s.capitalize.colorize(color)}] #{string}"
 end
 
-def with_job_file(for_job:)
+def get_job_file(for_job:)
+  for_job = "#{__dir__}/../../jobs/#{for_job}.yaml"
   if for_job.nil?
     notify :failure, 'Please specify the job to create or edit. See --help for details'
+    nil
   else
-    yield "#{__dir__}/../../jobs/#{for_job}.yaml"
+    File.expand_path for_job
   end
+end
+
+def create_and_edit(file, with_default: '')
+  file = File.expand_path file
+  unless File.file?(file)
+    File.write file, with_default
+    notify :success, "Created new file '#{file}'"
+  end
+  notify :info, "Manually editing file '#{file}'"
+  system ENV['EDITOR'], file
 end

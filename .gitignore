@@ -1,3 +1,4 @@
+config.user.yaml
 *.gem
 jobs/*.yaml
 lib/queue/lib/moneta*

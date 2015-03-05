@@ -29,7 +29,7 @@ def valid_yaml?(job)
   end
 end
 
-def validate(job_file:)
+def validate(job_file)
   unless File.file?(job_file)
     notify :failure, 'Job not found. Create it with \'workshop job\''
   else

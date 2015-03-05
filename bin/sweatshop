@@ -6,33 +6,39 @@ require_relative 'lib/common'
 require_relative 'lib/job'
 require_relative 'lib/inspect'
 require_relative 'lib/start'
-require_relative 'lib/generate_config'
+require_relative 'lib/config'
 
-# :name is optional, otherwise uses the basename of this executable
 program :name, 'Robot Sweatshop'
 program :version, '0.1.1'
 program :description, 'A lightweight, unopinionated CI server'
 program :help, 'Author', 'Justin Scott <jvscott@gmail.com>'
 
-# default_command :bootstrap
-
 command :job do |c|
   c.syntax = 'sweatshop job <name>'
   c.description = 'Creates and edits jobs.'
   c.action do |args|
-    with_job_file for_job: args.first do |file|
-      create_and_edit job_file: file
-    end
+    job_file = get_job_file for_job: args.first
+    create_and_edit_job job_file unless job_file.nil?
   end
 end
 
-command :inspect do |c|
-  c.syntax = 'sweatshop inspect <name>'
-  c.description = 'Verify the structure of a job.'
-  c.action do |args|
-    with_job_file for_job: args.first do |file|
-      validate job_file: file
-    end
+# command :inspect do |c|
+#   c.syntax = 'sweatshop inspect <name>'
+#   c.description = 'Verify the structure of a job.'
+#   c.action do |args|
+#     job_file = get_job_file for_job: args.first
+#     validate job_file unless job_file.nil?
+#   end
+# end
+
+command :config do |c|
+  c.syntax = 'sweatshop configuration'
+  c.description = 'Creates and edits the user configuration file.'
+  c.option '--reset', 'Reset to factory defaults before editing.'
+  c.action do |args, options|
+    options.default :reset => false
+    remove_user_config if options.reset
+    create_and_edit_user_config
   end
 end
 
@@ -55,21 +61,10 @@ command :stop do |c|
   end
 end
 
-command :generate_config do |c|
-  c.syntax = 'sweatshop generate_config'
-  c.description = 'Create a default configuration file to be edited.'
+command :directory do |c|
+  c.syntax = 'sweatshop directory'
+  c.description = 'Return the path where Robot Sweatshop runs from.'
   c.action do
-    generate_default_config in_directory: '/etc/robot_sweatshop'
+    puts File.expand_path("#{__dir__}/..")
   end
 end
-
-# command :bar do |c|
-#   c.syntax = 'foobar bar [options]'
-#   c.description = 'Display bar with optional prefix and suffix'
-#   c.option '--prefix STRING', String, 'Adds a prefix to bar'
-#   c.option '--suffix STRING', String, 'Adds a suffix to bar'
-#   c.action do |args, options|
-#     options.default :prefix => '(', :suffix => ')'
-#     say "#{options.prefix}bar#{options.suffix}"
-#   end
-# end
