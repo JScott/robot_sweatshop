@@ -24,12 +24,23 @@ def get_job_file(for_job:)
   end
 end
 
+def edit(file)
+  edit = ENV['EDITOR']
+  if edit
+    notify :info, "Manually editing file '#{file}'"
+    system edit, file
+  else
+    notify :failure, "No editor specified in $EDITOR environment variable"
+    notify :info, "Displaying file contents instead"
+    system 'cat', file
+  end
+end
+
 def create_and_edit(file, with_default: '')
   file = File.expand_path file
   unless File.file?(file)
     File.write file, with_default
     notify :success, "Created new file '#{file}'"
   end
-  notify :info, "Manually editing file '#{file}'"
-  system ENV['EDITOR'], file
+  edit file
 end
