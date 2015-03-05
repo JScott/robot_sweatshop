@@ -10,6 +10,11 @@ configurations.each do |config_path|
   end
 end
 
-FileUtils.mkdir_p configatron.common.logfile_directory
-FileUtils.mkdir_p configatron.common.pidfile_directory
-FileUtils.mkdir_p configatron.queue.moneta_directory
+config_directories = [
+  configatron.common.logfile_directory,
+  configatron.common.pidfile_directory,
+  configatron.queue.moneta_directory
+]
+config_directories.each do |directory|
+  FileUtils.mkdir_p directory unless Dir.exists? directory
+end

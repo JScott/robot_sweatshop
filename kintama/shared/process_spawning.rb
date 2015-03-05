@@ -9,5 +9,5 @@ Kintama.on_start do
 end
 
 Kintama.on_finish do
-  puts `sudo #{__dir__}/../../bin/sweatshop stop`
+  puts `#{__dir__}/../../bin/sweatshop stop`
 end

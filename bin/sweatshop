@@ -32,7 +32,7 @@ end
 # end
 
 command :config do |c|
-  c.syntax = 'sweatshop configuration'
+  c.syntax = 'sweatshop config [options]'
   c.description = 'Creates and edits the user configuration file.'
   c.option '--reset', 'Reset to factory defaults before editing.'
   c.action do |args, options|
@@ -63,7 +63,7 @@ end
 
 command :directory do |c|
   c.syntax = 'sweatshop directory'
-  c.description = 'Return the path where Robot Sweatshop runs from.'
+  c.description = 'Return the path that Robot Sweatshop runs from.'
   c.action do
     puts File.expand_path("#{__dir__}/..")
   end

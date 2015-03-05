@@ -9,7 +9,7 @@ require_relative '../queue-helper'
 def from_workspace(named: 'no_job_name')
   workspace = "#{named}-#{@worker_id}"
   puts "Workspace: #{workspace}"
-  path = "#{__dir__}/workspaces/#{workspace}"
+  path = File.expand_path "#{__dir__}/../../workspaces/#{workspace}"
   FileUtils.mkpath path
   Dir.chdir(path) { yield if block_given? }
 end
