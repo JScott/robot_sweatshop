@@ -14,5 +14,5 @@ loop do
     puts q[:queue].inspect
     puts
   end
-  sleep 0.5
+  sleep 0.1
 end

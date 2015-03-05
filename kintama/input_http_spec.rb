@@ -3,7 +3,6 @@ require 'ezmq'
 require 'json'
 require 'timeout'
 require 'http'
-require_relative 'shared/moneta_backup'
 require_relative 'shared/process_spawning'
 require_relative 'shared/helpers'
 
@@ -22,7 +21,7 @@ given 'the HTTP Input' do
   %w(Bitbucket).each do |git_host|
     context "POST data from #{git_host}" do
       setup do
-        url = "http://localhost/#{git_host}/payload-for/#{@job_name}"
+        url = input_http_url for_job: @job_name, in_format: git_host
         HTTP.post url, body: load_payload(git_host)
       end
 

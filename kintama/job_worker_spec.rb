@@ -1,6 +1,5 @@
 require 'kintama'
 require 'ezmq'
-require_relative 'shared/moneta_backup'
 require_relative 'shared/process_spawning'
 require_relative 'shared/helpers'
 

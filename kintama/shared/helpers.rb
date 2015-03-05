@@ -1,6 +1,7 @@
 require 'yaml'
 require_relative '../../lib/queue/lib/moneta-queue'
 require_relative '../../lib/payload/lib/payload'
+require_relative '../../config'
 
 module QueueHelper
   def clear_all_queues
@@ -25,6 +26,9 @@ module InHelper
     JSON.generate payload: payload,
                   format: with_format,
                   job_name: 'example'
+  end
+  def input_http_url(for_job: 'example', in_format: 'bitbucket')
+    "http://localhost:#{configatron.input.http.port}/#{in_format}/payload-for/#{for_job}"
   end
 end
 

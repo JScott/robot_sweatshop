@@ -1,7 +1,6 @@
 require 'kintama'
 require 'ezmq'
 require 'http'
-require_relative 'shared/moneta_backup'
 require_relative 'shared/process_spawning'
 require_relative 'shared/helpers'
 
@@ -19,7 +18,7 @@ describe 'Robot Sweatshop' do
 
   context "POST git data to the HTTP Input" do
     setup do
-      url = "http://localhost/bitbucket/payload-for/#{@job_name}"
+      url = input_http_url for_job: @job_name
       HTTP.post url, body: load_payload('bitbucket')
       sleep $for_everything
     end

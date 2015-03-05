@@ -1,3 +1,4 @@
+require 'fileutils'
 require 'configatron'
 require 'yaml'
 
