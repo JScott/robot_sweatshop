@@ -8,7 +8,7 @@ Eye.config do
   logger "#{log_path}/eye.log"
 end
 
-Eye.application 'robot_sweatshop' do
+Eye.application :robot_sweatshop do
   trigger :flapping, times: 10, within: 1.minute, retry_in: 10.minutes
   check :cpu, every: 10.seconds, below: 100, times: 3
   working_dir "#{__dir__}/lib"

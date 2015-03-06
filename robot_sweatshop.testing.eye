@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
-require 'configatron'
+Eye.load('./config.rb')
+
 configatron.temp do
   configatron.eye.broadcaster_interval = 0.0
   configatron.eye.worker_id = 'testingid'
