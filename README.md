@@ -1,6 +1,6 @@
 # Robot Sweatshop
 
-[Jenkins](http://jenkins-ci.org/) doesn't work when you have to sanely automate server installation and configuration. [Drone](https://drone.io/) doesn't work if you don't use Docker. [Travis-CI](https://travis-ci.org/recent) is difficult to self-host. All of these frameworks are highly opinionated to some extent.
+[Jenkins](http://jenkins-ci.org/) is horrible to maintain and is problematic when automating installation and configuration. [Drone](https://drone.io/) assumes that you use Docker. [Travis-CI](https://travis-ci.org/recent) is difficult to self-host. All of these frameworks are highly opinionated in one way or another, forcing you to do things _their_ way.
 
 Robot Sweatshop is a single-purpose CI server that runs collections of arbitrary scripts when it needs to, usually when new code is pushed. There's no assumptions about what you want to report, what front-end you need, or even what repositories you want to clone because you can do that better than I can. It's just you, your code, and the scripts that test and deploy it.
 
@@ -11,7 +11,7 @@ gem install robot_sweatshop
 sweatshop start
 ```
 
-Robot Sweatshop uses Eye to handle its services and that will set up and configure everything appropriately.
+Robot Sweatshop uses Eye to handle its services and will set up and configure everything for you.
 
 After configuring a job, POST a payload to `localhost:8080/:format/payload-for/:job`. For example, triggering a Bitbucket Git POST hook on `localhost:8080/bitbucket/payload-for/example` will parse the payload and run the 'example' job with the payload data in the environment.
 
