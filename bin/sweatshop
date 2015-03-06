@@ -61,11 +61,11 @@ command :config do |c|
   end
 end
 
-# command :inspect do |c|
-#   c.syntax = 'sweatshop inspect <name>'
-#   c.description = 'Verify the structure of a job.'
-#   c.action do |args|
-#     job_file = get_job_file for_job: args.first
-#     validate job_file unless job_file.nil?
-#   end
-# end
+command :inspect do |c|
+  c.syntax = 'sweatshop inspect <name>'
+  c.description = 'Verify the structure of a job.'
+  c.action do |args|
+    job_file = get_job_file for_job: args.first
+    validate job_file unless job_file.nil?
+  end
+end
