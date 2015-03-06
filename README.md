@@ -15,6 +15,8 @@ Robot Sweatshop uses Eye to handle its services and that will set up and configu
 
 After configuring a job, POST a payload to `localhost:8080/:format/payload-for/:job`. For example, triggering a Bitbucket Git POST hook on `localhost:8080/bitbucket/payload-for/example` will parse the payload and run the 'example' job with the payload data in the environment.
 
+You can see what jobs are available with `sweatshop job --list`.
+
 Currently supported formats:
 
 - bitbucket
@@ -24,6 +26,8 @@ Currently supported formats:
 The server isn't much help without a job to run. Run `sudo -E sweatshop job <name>` to create a new job or edit an existing one.
 
 You can also use `sudo -E sweatshop config` to create and edit a user configuration at `/etc/robot_sweatshop/config.yaml`.
+
+Not sure if your job is valid? Run `sweatshop job --inspection <name>` to see if there's something you overlooked.
 
 # Security
 
