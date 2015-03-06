@@ -4,7 +4,7 @@ Gem::Specification.new do |gem|
   gem.licenses    = 'MIT'
   gem.authors     = ['Justin Scott']
   gem.email       = 'jvscott@gmail.com'
-  gem.homepage    = 'http://jscott.github.io/robot_sweatshop/'
+  gem.homepage    = 'http://www.github.com/jscott/robot_sweatshop/'
   gem.summary     = 'Robot Sweatshop'
   gem.description = 'A lightweight, unopinionated CI server.'
 
