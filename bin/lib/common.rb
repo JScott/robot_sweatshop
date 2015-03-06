@@ -1,3 +1,5 @@
+require 'fileutils'
+
 def notify(type = :success, string)
   color = case type
   when :success
@@ -38,6 +40,7 @@ end
 
 def create_and_edit(file, with_default: '')
   file = File.expand_path file
+  FileUtils.mkdir_p File.dirname(file)
   unless File.file?(file)
     File.write file, with_default
     notify :success, "Created new file '#{file}'"

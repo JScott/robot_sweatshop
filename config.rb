@@ -5,7 +5,7 @@ require 'yaml'
 configurations = [
   "#{__dir__}/config.yaml",
   "#{__dir__}/config.user.yaml",
-  "/etc/robot_sweatshop/config.user.yaml"
+  "/etc/robot_sweatshop/config.yaml"
 ]
 configurations.each do |config_path|
   if File.file? config_path

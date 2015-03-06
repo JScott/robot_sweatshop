@@ -7,6 +7,7 @@ require_relative 'lib/job'
 require_relative 'lib/inspect'
 require_relative 'lib/start'
 require_relative 'lib/config'
+require_relative '../config'
 
 program :name, 'Robot Sweatshop'
 program :version, '0.1.1'
@@ -19,26 +20,6 @@ command :job do |c|
   c.action do |args|
     job_file = get_job_file for_job: args.first
     create_and_edit_job job_file unless job_file.nil?
-  end
-end
-
-# command :inspect do |c|
-#   c.syntax = 'sweatshop inspect <name>'
-#   c.description = 'Verify the structure of a job.'
-#   c.action do |args|
-#     job_file = get_job_file for_job: args.first
-#     validate job_file unless job_file.nil?
-#   end
-# end
-
-command :config do |c|
-  c.syntax = 'sweatshop config [options]'
-  c.description = 'Creates and edits the user configuration file.'
-  c.option '--reset', 'Reset to factory defaults before editing.'
-  c.action do |args, options|
-    options.default :reset => false
-    remove_user_config if options.reset
-    create_and_edit_user_config
   end
 end
 
@@ -68,3 +49,23 @@ command :directory do |c|
     puts File.expand_path("#{__dir__}/..")
   end
 end
+
+command :config do |c|
+  c.syntax = 'sweatshop config [options]'
+  c.description = 'Creates and edits the user configuration file.'
+  c.option '--reset', 'Reset to factory defaults before editing.'
+  c.action do |args, options|
+    options.default :reset => false
+    remove_user_config if options.reset
+    create_and_edit_user_config
+  end
+end
+
+# command :inspect do |c|
+#   c.syntax = 'sweatshop inspect <name>'
+#   c.description = 'Verify the structure of a job.'
+#   c.action do |args|
+#     job_file = get_job_file for_job: args.first
+#     validate job_file unless job_file.nil?
+#   end
+# end
