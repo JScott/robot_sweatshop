@@ -7,3 +7,7 @@ end
 def create_and_edit_job(job_path)
   create_and_edit job_path, with_default: empty_job
 end
+
+def list_jobs
+  puts Dir.glob("#{__dir__}/../../jobs/*").map { |file| File.basename(file, '.yaml') }
+end
