@@ -16,8 +16,7 @@ describe 'the Payload Parser' do
     clear_all_queues
   end
 
-  # TODO: refactor and add github
-  ['Bitbucket'].each do |format|
+  %w(Bitbucket Github).each do |format|
     given "valid #{format} data in 'raw-payload'" do
       setup do
         payload = example_raw_payload(with_format: format)

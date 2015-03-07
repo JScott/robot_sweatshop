@@ -19,7 +19,8 @@ You can see what jobs are available with `sweatshop job --list`.
 
 Currently supported formats:
 
-- bitbucket
+- Github (application/json format only)
+- Bitbucket
 
 # Configuration
 
@@ -35,7 +36,6 @@ _TODO: Support for running as a custom user via eye uid/gid_
 
 # Roadmap
 
-- Enable Github support
 - CLI job running
 - Common scrips such as git repo syncing
 - Support for multiple workers

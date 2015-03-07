@@ -40,6 +40,6 @@ class GithubPayload < Payload
   end
 
   def source_url
-    head_commit['url'] || ''
+    commit['url'] || ''
   end
 end
