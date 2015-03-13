@@ -10,3 +10,9 @@ input:
 
 queue:
   moneta_directory: /var/db/robot_sweatshop
+
+assembler:
+  job_directory: /etc/robot_sweatshop/jobs
+
+worker:
+  workspace_directory: /etc/robot_sweatshop/workspaces

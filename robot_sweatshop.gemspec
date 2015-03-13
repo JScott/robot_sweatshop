@@ -1,6 +1,6 @@
 Gem::Specification.new do |gem|
   gem.name        = 'robot_sweatshop'
-  gem.version     = '0.1.1'
+  gem.version     = '0.1.2'
   gem.licenses    = 'MIT'
   gem.authors     = ['Justin Scott']
   gem.email       = 'jvscott@gmail.com'

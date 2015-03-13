@@ -1,11 +1,24 @@
 #!/usr/bin/env ruby
 require 'yaml'
 require_relative '../queue-helper'
+require_relative '../../config'
 
-def get_config(for_job_name:)
-  job_directory = "#{__dir__}/../../jobs"
-  job_config_path = "#{job_directory}/#{for_job_name}.yaml"
-  unless File.file? job_config_path
+def find_job_config_file(job_name)
+  configurations = [
+    "#{__dir__}/../../jobs",
+    configatron.assembler.job_directory
+  ]
+  configurations.each do |config_path|
+    file_path = "#{config_path}/#{job_name}.yaml"
+    puts file_path
+    return file_path if File.file? file_path
+  end
+  nil
+end
+
+def load_config(for_job_name:)
+  job_config_path = find_job_config_file for_job_name
+  if job_config_path.nil?
     puts "No config found for job '#{for_job_name}'"
     return nil
   end
@@ -13,7 +26,7 @@ def get_config(for_job_name:)
 end
 
 def assemble_job(data)
-  job_config = get_config for_job_name: data['job_name']
+  job_config = load_config for_job_name: data['job_name']
   return nil unless job_config
   if job_config['branch_whitelist'].include? data['payload']['branch']
     context = job_config['environment'].merge(data['payload'])

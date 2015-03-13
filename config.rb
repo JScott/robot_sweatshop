@@ -2,6 +2,8 @@ require 'fileutils'
 require 'configatron'
 require 'yaml'
 
+# TODO: namespace to avoid collisions?
+
 configurations = [
   "#{__dir__}/config.yaml",
   "#{__dir__}/config.user.yaml",
@@ -17,8 +19,11 @@ end
 config_directories = [
   configatron.common.logfile_directory,
   configatron.common.pidfile_directory,
-  configatron.queue.moneta_directory
+  configatron.queue.moneta_directory,
+  configatron.worker.job_directory,
+  configatron.worker.workspace_directory
 ]
 config_directories.each do |directory|
   FileUtils.mkdir_p directory unless Dir.exists? directory
+  # TODO: set chmod to appropriate user
 end

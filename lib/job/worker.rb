@@ -2,6 +2,7 @@
 require 'faker'
 require 'fileutils'
 require_relative '../queue-helper'
+require_relative '../../config'
 
 # TODO: check existing worker ids. it'd be disastrous to have two sharing a workspace
 @worker_id = ARGV[0] || "#{Faker::Name.first_name}"
@@ -9,7 +10,7 @@ require_relative '../queue-helper'
 def from_workspace(named: 'no_job_name')
   workspace = "#{named}-#{@worker_id}"
   puts "Workspace: #{workspace}"
-  path = File.expand_path "#{__dir__}/../../workspaces/#{workspace}"
+  path = "#{configatron.worker.workspace_directory}/#{workspace}"
   FileUtils.mkpath path
   Dir.chdir(path) { yield if block_given? }
 end
