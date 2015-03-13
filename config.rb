@@ -19,6 +19,7 @@ end
 config_directories = [
   configatron.common.logfile_directory,
   configatron.common.pidfile_directory,
+  configatron.common.user_config_directory,
   configatron.queue.moneta_directory,
   configatron.worker.job_directory,
   configatron.worker.workspace_directory
