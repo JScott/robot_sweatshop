@@ -21,7 +21,7 @@ config_directories = [
   configatron.common.pidfile_directory,
   configatron.common.user_config_directory,
   configatron.queue.moneta_directory,
-  configatron.worker.job_directory,
+  configatron.assembler.job_directory,
   configatron.worker.workspace_directory
 ]
 config_directories.each do |directory|

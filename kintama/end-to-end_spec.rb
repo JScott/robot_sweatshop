@@ -19,17 +19,14 @@ describe 'Robot Sweatshop' do
   context "POST git data to the HTTP Input" do
     setup do
       url = input_http_url for_job: @job_name
-puts "post"
+puts "posting..."
       HTTP.post url, body: load_payload('bitbucket')
-puts "sleep!1"
+puts "post successful"
       sleep $for_everything
-puts "sleep!2"
     end
 
     should 'run jobs with the context as environment variables' do
-puts 'assert!1'
-assert_equal "success\n", File.read(@test_file)
-puts 'assert!2' 
+      assert_equal "success\n", File.read(@test_file)
     end
   end
 end
