@@ -25,12 +25,16 @@ def load_config(for_job_name:)
   YAML.load_file job_config_path
 end
 
+def serialize(value)
+  value.is_a?(Hash) ? JSON.generate(value) : value.to_s
+end
+
 def assemble_job(data)
   job_config = load_config for_job_name: data['job_name']
   return nil unless job_config
   if job_config['branch_whitelist'].include? data['payload']['branch']
     context = job_config['environment'].merge(data['payload'])
-    context.each { |key, value| context[key] = value.to_s }
+    context.each { |key, value| context[key] = serialize value }
     {
       commands: job_config['commands'],
       context: context,

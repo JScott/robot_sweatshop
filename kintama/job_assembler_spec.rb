@@ -39,7 +39,7 @@ describe 'the Job Assembler' do
     should 'convert objects into JSON strings' do
       response = @client.request "mirror-#{@jobs_queue}"
       response = JSON.parse response
-      assert_kind_of Hash, response['context']['converts_to_string']
+      assert_kind_of Hash, JSON.parse(response['context']['converts_to_string'])
     end
 
     should 'only enqueue string objects to context' do
