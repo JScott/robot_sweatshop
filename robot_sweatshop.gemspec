@@ -1,6 +1,6 @@
 Gem::Specification.new do |gem|
   gem.name        = 'robot_sweatshop'
-  gem.version     = '0.1.3'
+  gem.version     = '0.1.4'
   gem.licenses    = 'MIT'
   gem.authors     = ['Justin Scott']
   gem.email       = 'jvscott@gmail.com'
@@ -19,6 +19,7 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency 'eye'
   gem.add_runtime_dependency 'colorize'
   gem.add_runtime_dependency 'configatron'
+  gem.add_runtime_dependency 'moneta'
 
   gem.add_development_dependency 'rake'
   gem.add_development_dependency 'kintama'
