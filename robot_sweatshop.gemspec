@@ -12,6 +12,8 @@ Gem::Specification.new do |gem|
   gem.test_files    = `git ls-files -- kintama/**/*`.split("\n")
   gem.executables   = `git ls-files -- bin/sweatshop`.split("\n").map { |f| File.basename(f) }
 
+  gem.required_ruby_version = '~> 2.1'
+
   gem.add_runtime_dependency 'sinatra'
   gem.add_runtime_dependency 'ezmq'
   gem.add_runtime_dependency 'faker'
