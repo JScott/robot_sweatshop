@@ -12,6 +12,8 @@ Eye.application :robot_sweatshop do
   trigger :flapping, times: 10, within: 1.minute, retry_in: 10.minutes
   check :cpu, every: 10.seconds, below: 100, times: 3
   working_dir "#{__dir__}/lib"
+  uid "#{configatron.common.user}"
+  gid "#{configatron.common.group}"
 
   group 'input' do
     process :http do
