@@ -10,7 +10,7 @@ require_relative 'lib/config'
 require_relative '../config'
 
 program :name, 'Robot Sweatshop'
-program :version, '0.1.1'
+program :version, '0.1.2'
 program :description, 'A lightweight, unopinionated CI server'
 program :help, 'Author', 'Justin Scott <jvscott@gmail.com>'
 
@@ -50,6 +50,14 @@ command :stop do |c|
   c.description = 'Stop the Sweatshop.'
   c.action do
     notify :info, `eye stop robot_sweatshop`
+  end
+end
+
+command :setup do |c|
+  c.syntax = 'sweatshop setup'
+  c.description = 'Create the directories and set permissions as specified in the config.'
+  c.action do
+    require_relative 'lib/setup'
   end
 end
 

@@ -6,14 +6,11 @@ Robot Sweatshop is a single-purpose CI server that runs collections of arbitrary
 
 # Usage
 
-First install [ZMQ as described in the EZMQ gem](https://github.com/colstrom/ezmq). Then:
+First install [ZMQ as described in the EZMQ gem](https://github.com/colstrom/ezmq). Then `gem install robot_sweatshop`.
 
-```
-gem install robot_sweatshop
-sweatshop start
-```
+You can now use `sweatshop config` to configure the processes, `sweatshop setup` to ensure the directories you defined exist, and `sweatshop start` to run the processes.
 
-Robot Sweatshop uses Eye to handle its services and will set up and configure everything for you.
+Robot Sweatshop uses [Eye](https://github.com/kostya/eye) to handle its processes so you can use its commandline tool to monitor their status.
 
 After configuring a job, POST a payload to `localhost:8080/:format/payload-for/:job`. For example, triggering a Bitbucket Git POST hook on `localhost:8080/bitbucket/payload-for/example` will parse the payload and run the 'example' job with the payload data in the environment.
 
@@ -26,20 +23,19 @@ Currently supported formats:
 
 # Configuration
 
-The server isn't much help without a job to run. Run `sudo -E sweatshop job <name>` to create a new job or edit an existing one.
-
-You can also use `sudo -E sweatshop config` to create and edit a user configuration at `/etc/robot_sweatshop/config.yaml`.
+The server isn't much help without a job to run. Run `sweatshop job <name>` to create a new job or edit an existing one.
 
 Not sure if your job is valid? Run `sweatshop job --inspection <name>` to see if there's something you overlooked.
 
 # Security
 
-_TODO: Support for running as a custom user via eye uid/gid_
+You probably don't want to run Robot Sweatshop as a sudo user. Create a testing user and group and point to them in the configuration file to run Robot Sweatshop processes with those permissions.
 
 # Roadmap
 
 - CLI job running
-- Common scrips such as git repo syncing
+- custom/empty payloads
+- Common scrips such as git repo syncing and creating a job run ID
 - Support for multiple workers
 - Better logging for the processes
 - Improved architecture:
