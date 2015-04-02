@@ -4,3 +4,5 @@ jobs/*.yaml
 workspaces/**/*
 !workspaces/.keep
 Gemfile.lock
+.bundle
+vendor
