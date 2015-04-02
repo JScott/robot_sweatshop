@@ -14,16 +14,16 @@ Gem::Specification.new do |gem|
 
   gem.required_ruby_version = '>= 2.1'
 
-  gem.add_runtime_dependency 'sinatra', '~> 1'
-  gem.add_runtime_dependency 'ezmq', '~> 0.4'
-  gem.add_runtime_dependency 'faker', '~> 1'
-  gem.add_runtime_dependency 'commander', '~> 4'
-  gem.add_runtime_dependency 'eye', '~> 0.6'
-  gem.add_runtime_dependency 'colorize', '~> 0.7'
-  gem.add_runtime_dependency 'configatron', '~> 4'
-  gem.add_runtime_dependency 'moneta', '~> 0.8'
+  gem.add_runtime_dependency 'sinatra'
+  gem.add_runtime_dependency 'ezmq'
+  gem.add_runtime_dependency 'faker'
+  gem.add_runtime_dependency 'commander'
+  gem.add_runtime_dependency 'eye'
+  gem.add_runtime_dependency 'colorize'
+  gem.add_runtime_dependency 'configatron'
+  gem.add_runtime_dependency 'moneta'
 
-  gem.add_development_dependency 'rake', '~> 10'
-  gem.add_development_dependency 'kintama', '~> 0.1'
-  gem.add_development_dependency 'http', '~> 0.7'
+  gem.add_development_dependency 'rake'
+  gem.add_development_dependency 'kintama'
+  gem.add_development_dependency 'http'
 end
