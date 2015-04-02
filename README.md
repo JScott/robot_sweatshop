@@ -8,7 +8,7 @@ Robot Sweatshop is a single-purpose CI server that runs collections of arbitrary
 
 First install [ZMQ as described in the EZMQ gem](https://github.com/colstrom/ezmq). Then `gem install robot_sweatshop`.
 
-You can now use `sweatshop config` to configure the processes, `sweatshop setup` to ensure the directories you defined exist, and `sweatshop start` to run the processes.
+You can now use `sweatshop config` to configure the processes, `sweatshop setup` to ensure the directories in your config exist, and `sweatshop start` to run everything.
 
 Robot Sweatshop uses [Eye](https://github.com/kostya/eye) to handle its processes so you can use its commandline tool to monitor their status.
 
