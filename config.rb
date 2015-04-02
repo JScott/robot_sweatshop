@@ -26,5 +26,5 @@ config_directories = [
 ]
 config_directories.each do |directory|
   FileUtils.mkdir_p directory unless Dir.exists? directory
-  # TODO: set chmod to appropriate user
+  FileUtils.chown_R configatron.common.user, configatron.common.group, directory
 end

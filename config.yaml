@@ -2,6 +2,8 @@ common:
   pidfile_directory: /var/run/robot_sweatshop
   logfile_directory: /var/log/robot_sweatshop
   user_config_directory: /etc/robot_sweatshop
+  user: ci-bot
+  group: nogroup
 
 input:
   http:
