@@ -1,5 +1,4 @@
 #!/usr/bin/env ruby
-require 'bundler/setup'
 require 'yaml'
 require 'commander/import'
 require 'colorize'
@@ -59,7 +58,7 @@ command :stop do |c|
   c.action do
     notify :info, `eye stop robot_sweatshop`
   end
-end
+endg
 
 command :config do |c|
   c.syntax = 'sweatshop config [options]'
