@@ -1,4 +1,5 @@
 require_relative 'common'
+require_relative '../config'
 
 def empty_job
   "---\nbranch_whitelist:\n- master\n\ncommands:\n- echo 'Hello $WORLD!'\n\nenvironment:\n  WORLD: Earth\n"
@@ -9,5 +10,6 @@ def create_and_edit_job(job_path)
 end
 
 def list_jobs
-  puts Dir.glob("#{__dir__}/../../jobs/*").map { |file| File.basename(file, '.yaml') }
+  job_directory = File.expand_path configatron.assembler.job_directory
+  puts Dir.glob("#{job_directory}/*.yaml").map { |file| File.basename(file, '.yaml') }
 end

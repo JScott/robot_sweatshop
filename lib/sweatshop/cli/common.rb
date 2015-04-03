@@ -1,4 +1,5 @@
 require 'fileutils'
+require_relative '../config'
 
 def notify(type = :success, string)
   color = case type
@@ -17,13 +18,11 @@ def notify(type = :success, string)
 end
 
 def get_job_file(for_job:)
-  for_job = "#{__dir__}/../../jobs/#{for_job}.yaml"
-  if for_job.nil?
-    notify :failure, 'Please specify the job to create or edit. See --help for details'
-    nil
-  else
-    File.expand_path for_job
+  job_file = File.expand_path "#{configatron.assembler.job_directory}/#{for_job}.yaml"
+  unless File.file?(job_file)
+    create job_file, with_contents: empty_job
   end
+  job_file
 end
 
 def edit(file)
@@ -38,12 +37,9 @@ def edit(file)
   end
 end
 
-def create_and_edit(file, with_default: '')
+def create(file, with_contents: '')
   file = File.expand_path file
   FileUtils.mkdir_p File.dirname(file)
-  unless File.file?(file)
-    File.write file, with_default
-    notify :success, "Created new file '#{file}'"
-  end
-  edit file
+  File.write file, with_contents
+  notify :success, "Created new file '#{file}'"
 end

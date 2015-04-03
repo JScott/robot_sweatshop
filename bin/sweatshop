@@ -18,19 +18,26 @@ program :help, 'Author', 'Justin Scott <jvscott@gmail.com>'
 command :job do |c|
   c.syntax = 'sweatshop job <name>'
   c.description = 'Creates and edits jobs.'
-  c.option '--list', 'List all available jobs.'
-  c.option '--inspection', 'Inspect the given job.'
+  c.option '--edit', 'Manually edit the file.'
+  c.option '--reset', 'Reset to factory defaults before editing.'
   c.action do |args, options|
-    options.default :list => false
-    options.default :inspect => false
-    
+    options.default :edit => false
+    options.default :reset => false
     job_file = get_job_file for_job: args.first
-    if options.list
+    create job_file, with_contents: empty_job if options.reset
+    edit job_file if options.edit
+  end
+end
+
+command :audit do |c|
+  c.syntax = 'sweatshop audit [job-name]'
+  c.description = 'Audit job information.'
+  c.action do |args|
+    if args.first.nil?
       list_jobs
-    elsif options.inspection
-      validate job_file unless job_file.nil?
     else
-      create_and_edit_job job_file unless job_file.nil?
+      job_file = get_job_file for_job: args.first
+      validate job_file unless job_file.nil?
     end
   end
 end
@@ -39,7 +46,7 @@ command :start do |c|
   c.syntax = 'sweatshop start [options]'
   c.description = 'Start the Sweatshop.'
   c.option '--testing', 'Load the testing Eye configuration.'
-  c.action do |args, options|
+  c.action do |_args, options|
     options.default :testing => false
     environment = options.testing ? 'testing' : 'production'
     start_sweatshop for_environment: environment
@@ -66,7 +73,7 @@ command :config do |c|
   c.syntax = 'sweatshop config [options]'
   c.description = 'Creates and edits the user configuration file.'
   c.option '--reset', 'Reset to factory defaults before editing.'
-  c.action do |args, options|
+  c.action do |_args, options|
     options.default :reset => false
     remove_user_config if options.reset
     create_and_edit_user_config
