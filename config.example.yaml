@@ -1,0 +1,20 @@
+---
+common:
+  pidfile_directory: /var/run/robot_sweatshop
+  logfile_directory: /var/log/robot_sweatshop
+  user: ci-bot
+  group: nogroup
+
+input:
+  http:
+    port: 8080
+    bind: 0.0.0.0
+
+queue:
+  moneta_directory: /var/db/robot_sweatshop
+
+assembler:
+  job_directory: /etc/robot_sweatshop/jobs
+
+worker:
+  workspace_directory: /etc/robot_sweatshop/workspaces

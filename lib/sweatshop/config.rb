@@ -1,8 +1,9 @@
 require 'configatron'
 require 'yaml'
 
+configatron.reset!
 configurations = [
-  "#{__dir__}/../../config.yaml",
+  "#{__dir__}/../../config.defaults.yaml",
   "/etc/robot_sweatshop/config.yaml",
   "~/.robot_sweatshop/config.yaml",
   ".robot_sweatshop/config.yaml",
