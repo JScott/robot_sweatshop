@@ -1,9 +1,6 @@
 #!/usr/bin/env ruby
-require 'etc'
-require_relative 'lib/sweatshop/config'
-
-log_path = configatron.common.logfile_directory
-pid_path = configatron.common.pidfile_directory
+pid_path = File.expand_path configatron.common.pidfile_directory
+log_path = File.expand_path configatron.common.logfile_directory
 
 Eye.config do
   logger "#{log_path}/eye.log"
@@ -12,10 +9,9 @@ end
 Eye.application :robot_sweatshop do
   trigger :flapping, times: 10, within: 1.minute, retry_in: 10.minutes
   check :cpu, every: 10.seconds, below: 100, times: 3
-  working_dir File.expand_path('.')
+  working_dir '.'
   uid "#{configatron.common.user}" if configatron.common.has_key? :user
   gid "#{configatron.common.group}" if configatron.common.has_key? :group
-  #|| Etc.getpwuid(Process.uid).name
 
   group 'input' do
     process :http do

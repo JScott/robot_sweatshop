@@ -1,8 +1,7 @@
-config.user.yaml
 *.gem
 jobs/*.yaml
-workspaces/**/*
-!workspaces/.keep
+.robot_sweatshop
+
 Gemfile.lock
 .bundle
 vendor

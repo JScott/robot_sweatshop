@@ -15,3 +15,5 @@ configurations.each do |config_path|
     configatron.configure_from_hash hash
   end
 end
+
+require_relative 'create-config-directories'

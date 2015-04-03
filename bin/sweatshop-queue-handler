@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-require_relative 'lib/moneta-queue'
+require_relative '../lib/sweatshop/moneta-queue'
 require 'ezmq'
 
 def enqueue(name, item)

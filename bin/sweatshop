@@ -54,14 +54,6 @@ command :stop do |c|
   end
 end
 
-command :setup do |c|
-  c.syntax = 'sweatshop setup'
-  c.description = 'Create the directories and set permissions as specified in the config.'
-  c.action do
-    require_relative 'lib/setup'
-  end
-end
-
 command :directory do |c|
   c.syntax = 'sweatshop directory'
   c.description = 'Return the path that Robot Sweatshop runs from.'

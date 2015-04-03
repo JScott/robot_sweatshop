@@ -1,7 +1,7 @@
 ---
 common:
-  pidfile_directory: .robot_sweatshop/pid
-  logfile_directory: .robot_sweatshop/run
+  pidfile_directory: ~/.robot_sweatshop/run
+  logfile_directory: ~/.robot_sweatshop/log
 
 input:
   http:
@@ -9,10 +9,10 @@ input:
     bind: 0.0.0.0
 
 queue:
-  moneta_directory: .robot_sweatshop/db
+  moneta_directory: ~/.robot_sweatshop/db
 
 assembler:
-  job_directory: .robot_sweatshop/jobs
+  job_directory: ~/.robot_sweatshop/jobs
 
 worker:
-  workspace_directory: .robot_sweatshop/workspaces
+  workspace_directory: ~/.robot_sweatshop/workspaces
