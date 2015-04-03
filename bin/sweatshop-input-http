@@ -2,7 +2,7 @@
 require 'sinatra'
 require 'ezmq'
 require 'json'
-require_relative '../../config'
+require_relative '../lib/sweatshop/config'
 
 configure do
   set :port, configatron.input.http.port

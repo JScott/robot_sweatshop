@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 require 'yaml'
-require_relative '../queue-helper'
-require_relative '../../config'
+require_relative '../lib/sweatshop/queue-helper'
+require_relative '../lib/sweatshop/config'
 
 def find_job_config_file(job_name)
   configurations = [

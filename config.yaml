@@ -1,3 +1,4 @@
+---
 common:
   pidfile_directory: .robot_sweatshop/pid
   logfile_directory: .robot_sweatshop/run

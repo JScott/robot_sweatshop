@@ -1,7 +1,7 @@
 require 'fileutils'
 require 'configatron'
 require_relative 'common'
-require_relative '../../config'
+require_relative '../config'
 
 config_directories = [
   configatron.common.logfile_directory,

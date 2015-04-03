@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-require_relative '../queue-helper'
+require_relative '../lib/sweatshop/queue-helper'
 
 def parse(payload = '', of_format:)
   of_format = of_format.downcase

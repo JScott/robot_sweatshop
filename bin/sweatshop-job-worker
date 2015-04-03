@@ -1,8 +1,8 @@
 #!/usr/bin/env ruby
 require 'faker'
 require 'fileutils'
-require_relative '../queue-helper'
-require_relative '../../config'
+require_relative '../lib/sweatshop/queue-helper'
+require_relative '../lib/sweatshop/config'
 
 # TODO: check existing worker ids. it'd be disastrous to have two sharing a workspace
 @worker_id = ARGV[0] || "#{Faker::Name.first_name}"

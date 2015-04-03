@@ -2,7 +2,7 @@ require 'configatron'
 require 'yaml'
 
 configurations = [
-  "#{__dir__}/config.yaml",
+  "#{__dir__}/../../config.yaml",
   "/etc/robot_sweatshop/config.yaml",
   "~/.robot_sweatshop/config.yaml",
   ".robot_sweatshop/config.yaml",

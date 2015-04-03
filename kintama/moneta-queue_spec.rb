@@ -1,6 +1,6 @@
 require 'kintama'
 require_relative 'shared/helpers'
-require_relative '../lib/queue/lib/moneta-queue'
+require_relative '../lib/sweatshop/moneta-queue'
 
 given 'the Moneta Queue class' do
   include QueueHelper

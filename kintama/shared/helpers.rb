@@ -1,8 +1,8 @@
 require 'yaml'
 require 'json'
-require_relative '../../lib/queue/lib/moneta-queue'
-require_relative '../../lib/payload/lib/payload'
-require_relative '../../config'
+require_relative '../../lib/sweatshop/moneta-queue'
+require_relative '../../lib/sweatshop/payload/payload'
+require_relative '../../lib/sweatshop/config'
 
 module QueueHelper
   def clear_all_queues
