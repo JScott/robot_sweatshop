@@ -61,14 +61,6 @@ command :stop do |c|
   end
 end
 
-command :directory do |c|
-  c.syntax = 'sweatshop directory'
-  c.description = 'Return the path that Robot Sweatshop runs from.'
-  c.action do
-    puts File.expand_path("#{__dir__}/..")
-  end
-end
-
 command :config do |c|
   c.syntax = 'sweatshop config [options]'
   c.description = 'Creates and edits the user configuration file.'
