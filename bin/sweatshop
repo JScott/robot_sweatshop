@@ -8,6 +8,7 @@ require_relative '../lib/sweatshop/cli/inspect'
 require_relative '../lib/sweatshop/cli/start'
 require_relative '../lib/sweatshop/cli/config'
 require_relative '../lib/sweatshop/config'
+require_relative '../lib/sweatshop/create-config-directories'
 
 program :name, 'Robot Sweatshop'
 program :version, '0.1.2'
@@ -58,7 +59,7 @@ command :stop do |c|
   c.action do
     notify :info, `eye stop robot_sweatshop`
   end
-endg
+end
 
 command :config do |c|
   c.syntax = 'sweatshop config [options]'

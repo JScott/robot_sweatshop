@@ -18,7 +18,7 @@ def notify(type = :success, string)
 end
 
 def get_job_file(for_job:)
-  job_file = File.expand_path "#{configatron.assembler.job_directory}/#{for_job}.yaml"
+  job_file = File.expand_path "#{configatron.job_directory}/#{for_job}.yaml"
   unless File.file?(job_file)
     create job_file, with_contents: empty_job
   end

@@ -10,7 +10,7 @@ require_relative '../lib/sweatshop/config'
 def from_workspace(named: 'no_job_name')
   workspace = "#{named}-#{@worker_id}"
   puts "Workspace: #{workspace}"
-  path = "#{configatron.worker.workspace_directory}/#{workspace}"
+  path = "#{configatron.workspace_directory}/#{workspace}"
   FileUtils.mkpath path
   Dir.chdir(path) { yield if block_given? }
 end

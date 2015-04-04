@@ -1,18 +1,7 @@
 ---
-common:
-  pidfile_directory: ~/.robot_sweatshop/run
-  logfile_directory: ~/.robot_sweatshop/log
-
-input:
-  http:
-    port: 8080
-    bind: 0.0.0.0
-
-queue:
-  moneta_directory: ~/.robot_sweatshop/db
-
-assembler:
-  job_directory: ~/.robot_sweatshop/jobs
-
-worker:
-  workspace_directory: ~/.robot_sweatshop/workspaces
+pidfile_directory: .robot_sweatshop/run
+logfile_directory: .robot_sweatshop/log
+job_directory: .robot_sweatshop/jobs
+workspace_directory: .robot_sweatshop/workspaces
+http_port: 8080
+http_bind: 0.0.0.0

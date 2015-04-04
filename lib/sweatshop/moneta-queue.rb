@@ -6,7 +6,7 @@ require_relative 'config'
 class MonetaQueue
   attr_reader :watched_queues
 
-  @@store = Moneta.new :File, dir: File.expand_path(configatron.queue.moneta_directory)
+  @@store = Moneta.new :File, dir: File.expand_path(configatron.moneta_directory)
 
   def initialize(name)
     @name = name

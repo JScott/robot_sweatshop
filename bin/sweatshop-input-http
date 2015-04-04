@@ -5,8 +5,8 @@ require 'json'
 require_relative '../lib/sweatshop/config'
 
 configure do
-  set :port, configatron.input.http.port
-  set :bind, configatron.input.http.bind
+  set :port, configatron.http_port
+  set :bind, configatron.http_bind
   set :output_queue, 'raw-payload'
   set :run, true
 end

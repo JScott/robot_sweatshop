@@ -6,7 +6,7 @@ require_relative '../lib/sweatshop/config'
 def find_job_config_file(job_name)
   configurations = [
     "#{__dir__}/../../jobs",
-    configatron.assembler.job_directory
+    configatron.job_directory
   ]
   configurations.each do |config_path|
     file_path = "#{config_path}/#{job_name}.yaml"

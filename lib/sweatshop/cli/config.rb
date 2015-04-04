@@ -1,6 +1,6 @@
 require 'yaml'
 require 'fileutils'
-require_relative '../config'
+#require_relative '../config'
 
 def default_config
   File.read "#{__dir__}/../../config.yaml"

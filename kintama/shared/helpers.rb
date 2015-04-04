@@ -29,7 +29,7 @@ module InHelper
                   job_name: 'example'
   end
   def input_http_url(for_job: 'example', in_format: 'bitbucket')
-    "http://localhost:#{configatron.input.http.port}/#{in_format}/payload-for/#{for_job}"
+    "http://localhost:#{configatron.http_port}/#{in_format}/payload-for/#{for_job}"
   end
 end
 
@@ -48,7 +48,7 @@ module JobHelper
                   job_name: 'example'
   end
   def reset_test_file
-    test_file = File.expand_path "#{configatron.worker.workspace_directory}/example-testingid/test.txt"
+    test_file = File.expand_path "#{configatron.workspace_directory}/example-testingid/test.txt"
     FileUtils.rm_rf test_file
     test_file
   end
