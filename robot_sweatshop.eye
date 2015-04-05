@@ -1,20 +1,21 @@
 #!/usr/bin/env ruby
 require 'bundler/setup'
 require 'yaml'
-CONFIG = YAML.load_file '/tmp/.robot_sweatshop.eye-config.yaml'
-PID_PATH = CONFIG[:pidfile_directory]
-LOG_PATH = CONFIG[:logfile_directory]
+
+#EYE_CONFIG = YAML.load_file '.robot_sweatshop.eye-config.yaml'
+PID_PATH = configatron.pidfile_directory
+LOG_PATH = configatron.logfile_directory
 
 Eye.config do
-  logger "#{LOG_PATH}/eye.log"
+  logger configatron.eye.log_file # "#{EYE_CONFIG[:eye_log_path]}/eye.log"
 end
 
 Eye.application :robot_sweatshop do
   trigger :flapping, times: 10, within: 1.minute, retry_in: 10.minutes
   check :cpu, every: 10.seconds, below: 100, times: 3
-  working_dir '.'
-  uid "#{CONFIG[:user]}" if CONFIG.has_key? :user
-  gid "#{CONFIG[:group]}" if CONFIG.has_key? :group
+  working_dir configatron.eye.working_directory
+  uid "#{configatron.user}" if configatron.has_key? :user
+  gid "#{configatron.group}" if configatron.has_key? :group
 
   group 'input' do
     process :http do
@@ -34,7 +35,7 @@ Eye.application :robot_sweatshop do
     process :broadcaster do
       pid_file "#{PID_PATH}/queue-broadcaster.pid"
       stdall "#{LOG_PATH}/queue-broadcaster.log"
-      start_command "sweatshop-queue-broadcaster #{CONFIG[:broadcaster_interval]}"
+      start_command "sweatshop-queue-broadcaster #{configatron.eye.broadcaster_interval}"
       daemonize true
     end
   end
@@ -48,7 +49,7 @@ Eye.application :robot_sweatshop do
     process :worker do
       pid_file "#{PID_PATH}/job-worker.pid"
       stdall "#{LOG_PATH}/job-worker.log"
-      start_command "sweatshop-job-worker #{CONFIG[:worker_id]}"
+      start_command "sweatshop-job-worker #{configatron.eye.worker_id}"
       daemonize true
     end
   end

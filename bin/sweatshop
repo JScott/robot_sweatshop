@@ -9,6 +9,7 @@ require_relative '../lib/sweatshop/cli/start'
 require_relative '../lib/sweatshop/cli/config'
 require_relative '../lib/sweatshop/config'
 require_relative '../lib/sweatshop/create-config-directories'
+require_relative '../lib/sweatshop/prepare-config-for-eye'
 
 program :name, 'Robot Sweatshop'
 program :version, '0.1.2'
