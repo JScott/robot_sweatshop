@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-require 'configatron'
+# require 'configatron'
 Eye.load('lib/sweatshop/config.rb')
 
 configatron.temp do
