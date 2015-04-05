@@ -13,8 +13,8 @@ Eye.application :robot_sweatshop do
   trigger :flapping, times: 10, within: 1.minute, retry_in: 10.minutes
   check :cpu, every: 10.seconds, below: 100, times: 3
   working_dir '.'
-  uid "#{CONFIG[:user]}" if configatron.has_key? :user
-  gid "#{CONFIG[:group]}" if configatron.has_key? :group
+  uid "#{CONFIG[:user]}" if CONFIG.has_key? :user
+  gid "#{CONFIG[:group]}" if CONFIG.has_key? :group
 
   group 'input' do
     process :http do

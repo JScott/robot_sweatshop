@@ -22,12 +22,9 @@ end
 CONFIG_DIRECTORIES.each do |directory|
   # We need a full paths before we get to Eye
   # because Eye's server chdir's to '/'
-  p configatron[directory]
   configatron[directory] = File.expand_path configatron[directory]
 
-  p configatron[directory]
   FileUtils.mkdir_p configatron[directory]
-  p Dir.exists?(configatron[directory])
   set_permissions for_directory: configatron[directory]
 end
 
