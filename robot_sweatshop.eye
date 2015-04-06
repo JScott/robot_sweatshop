@@ -1,5 +1,3 @@
-#!/usr/bin/env ruby
-require 'bundler/setup'
 require 'yaml'
 
 CONFIG = YAML.load_file '/tmp/.robot_sweatshop-eye-config.yaml'
