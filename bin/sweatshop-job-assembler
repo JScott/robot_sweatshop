@@ -3,26 +3,16 @@ require 'yaml'
 require_relative '../lib/sweatshop/queue-helper'
 require_relative '../lib/sweatshop/config'
 
-def find_job_config_file(job_name)
-  configurations = [
-    "#{__dir__}/../../jobs",
-    configatron.job_directory
-  ]
-  configurations.each do |config_path|
-    file_path = "#{config_path}/#{job_name}.yaml"
-    puts file_path
-    return file_path if File.file? file_path
-  end
-  nil
-end
-
 def load_config(for_job_name:)
-  job_config_path = find_job_config_file for_job_name
-  if job_config_path.nil?
+  job_directory = File.expand_path configatron.job_directory
+  file_path = "#{job_directory}/#{job_name}.yaml"
+  puts file_path
+  if File.file?(file_path)
+    YAML.load_file file_path
+  else
     puts "No config found for job '#{for_job_name}'"
-    return nil
+    nil
   end
-  YAML.load_file job_config_path
 end
 
 def serialize(value)
@@ -31,7 +21,7 @@ end
 
 def assemble_job(data)
   job_config = load_config for_job_name: data['job_name']
-  return nil unless job_config
+  return nil if job_config.nil?
   if job_config['branch_whitelist'].include? data['payload']['branch']
     context = job_config['environment'].merge(data['payload'])
     context.each { |key, value| context[key] = serialize value }
