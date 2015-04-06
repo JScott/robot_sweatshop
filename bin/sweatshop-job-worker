@@ -4,6 +4,9 @@ require 'fileutils'
 require_relative '../lib/sweatshop/queue-helper'
 require_relative '../lib/sweatshop/config'
 
+$stdout.sync = true
+$stderr.sync = true
+
 # TODO: check existing worker ids. it'd be disastrous to have two sharing a workspace
 @worker_id = ARGV[0] || "#{Faker::Name.first_name}"
 

@@ -50,4 +50,6 @@ QueueHelper.wait_for('parsed-payload') do |data|
   puts "Assembling: #{data}"
   assembled_job = assemble_job data
   QueueHelper.enqueue assembled_job, to: 'jobs' if assembled_job
+  $stdout.flush
+  $stderr.flush
 end
