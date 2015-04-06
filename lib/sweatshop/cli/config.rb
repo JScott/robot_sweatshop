@@ -9,7 +9,7 @@ def get_config_path(for_scope: 'local')
   when 'system'
     "/etc/robot_sweatshop/config.yaml"
   when 'user'
-    "~/robot_sweatshop/config.yaml"
+    "~/.robot_sweatshop/config.yaml"
   else
     ".robot_sweatshop/config.yaml"
   end
