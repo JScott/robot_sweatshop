@@ -5,3 +5,4 @@ jobs/*.yaml
 Gemfile.lock
 .bundle
 vendor
+coverage
