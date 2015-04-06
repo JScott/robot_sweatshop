@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 require 'bundler/setup'
 require 'yaml'
+require_relative 'lib/sweatshop/config'
 
 PATH_FOR = YAML.load_file '/tmp/.robot_sweatshop-eye-config.yaml'
 PID_PATH = configatron.pidfile_directory

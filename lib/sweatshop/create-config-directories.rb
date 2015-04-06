@@ -20,10 +20,11 @@ def set_dir_permissions(on_directory:)
 end
 
 CONFIG_DIRECTORIES.each do |directory|
+  directory = File.expand_path configatron[directory]
   begin
-    FileUtils.mkdir_p configatron[directory]
+    FileUtils.mkdir_p directory
   rescue Errno::EACCES
-    puts "Permission denied to create '#{configatron[directory]}'"
+    puts "Permission denied to create '#{directory}'"
   end
-  set_dir_permissions on_directory: configatron[directory] if configatron.has_key? :user
+  set_dir_permissions on_directory: directory if configatron.has_key? :user
 end
