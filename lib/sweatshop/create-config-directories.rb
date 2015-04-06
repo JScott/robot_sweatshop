@@ -1,35 +1,29 @@
 require 'fileutils'
 require_relative 'config'
 
-CONFIG_DIRECTORIES = [
-  'logfile_directory',
-  'pidfile_directory',
-  'moneta_directory',
-  'job_directory',
-  'workspace_directory'
-]
-
-# config = configatron.to_h
-#   config = config.each do |key, value|
-#     config[key] = File.expand_path value if key.to_s.match /_directory/
-#   end
-
-def set_dir_permissions(on_directory:)
+def set_dir_permissions(for_path:)
   user = configatron.user
   group = configatron.has_key?(:group) ? configatron.group : 'nogroup'
   begin
-    FileUtils.chown_R user, group, on_directory unless user.nil?
+    FileUtils.chown_R user, group, for_path unless user.nil?
   rescue ArgumentError
-    puts "Could not set permissions for '#{on_directory}'"
+    puts "Could not set permissions for '#{for_path}'"
   end
 end
 
-CONFIG_DIRECTORIES.each do |directory|
-  directory = File.expand_path configatron[directory]
+def create_path(path)
   begin
-    FileUtils.mkdir_p directory
+    FileUtils.mkdir_p path
   rescue Errno::EACCES
-    puts "Permission denied to create '#{directory}'"
+    puts "Permission denied to create '#{path}'"
   end
-  set_dir_permissions on_directory: directory if configatron.has_key? :user
+end
+
+config = configatron.to_h
+config.each do |key, value|
+  if key.to_s.match /_directory/
+    path = File.expand_path value
+    create_path path
+    set_dir_permissions for_path: path if configatron.has_key? :user
+  end
 end
