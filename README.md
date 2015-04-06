@@ -1,3 +1,5 @@
+[![Gem Version](https://badge.fury.io/rb/robot_sweatshop.svg)](http://badge.fury.io/rb/robot_sweatshop)
+
 # Robot Sweatshop
 
 [Jenkins](http://jenkins-ci.org/) is horrible to maintain and is problematic when automating installation and configuration. [Drone](https://drone.io/) assumes that you use Docker. [Travis-CI](https://travis-ci.org/recent) is difficult to self-host. All of these frameworks are highly opinionated in one way or another, forcing you to do things _their_ way.
@@ -10,7 +12,7 @@ Robot Sweatshop is a single-purpose CI server that runs collections of arbitrary
 - `gem install robot_sweatshop`
 - `sweatshop start` ([you may need sudo on OSX](https://github.com/JScott/robot_sweatshop/wiki))
 - `sweatshop job example --auto`
-- POST a Github payload to `localhost:8080/github/payload-for/example`
+- POST a Github payload to `yourserver.com:8080/github/payload-for/example`
 - `cat .robot_sweatshop/log/job-worker.log`
 
 # Usage
