@@ -11,7 +11,7 @@ CONFIG_DIRECTORIES = [
 
 def set_dir_permissions(on_directory:)
   user = configatron.user
-  group = configatron.has_key? :group ? configatron.group : 'nogroup'
+  group = configatron.has_key?(:group) ? configatron.group : 'nogroup'
   begin
     FileUtils.chown_R user, group, on_directory unless user.nil?
   rescue ArgumentError

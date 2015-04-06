@@ -15,9 +15,10 @@ def start_sweatshop(for_environment:)
   output = `eye load #{eye_config}`
   if $?.exitstatus != 0
     notify :failure, output
+    exit 1
   else
     notify :success, "Robot Sweatshop loaded with a #{for_environment} configuration"
     notify :info, `eye restart robot_sweatshop`
-    puts 'Check \'eye --help\' for more info on debugging'
+    notify :info, 'Run \'eye --help\' for more info on debugging'
   end
 end

@@ -1,12 +1,11 @@
-require_relative 'common'
 require_relative '../config'
 
-def empty_job
+def default_job
   "---\nbranch_whitelist:\n- master\n\ncommands:\n- echo 'Hello $WORLD!'\n\nenvironment:\n  WORLD: Earth\n"
 end
 
-def create_and_edit_job(job_path)
-  create_and_edit job_path, with_default: empty_job
+def get_job_path(for_job: nil)
+  "#{configatron.job_directory}/#{for_job}.yaml"
 end
 
 def list_jobs

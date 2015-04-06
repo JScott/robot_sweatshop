@@ -4,7 +4,6 @@ require 'commander/import'
 require 'colorize'
 require_relative '../lib/sweatshop/cli/common'
 require_relative '../lib/sweatshop/cli/job'
-require_relative '../lib/sweatshop/cli/inspect'
 require_relative '../lib/sweatshop/cli/start'
 require_relative '../lib/sweatshop/cli/config'
 require_relative '../lib/sweatshop/config'
@@ -18,27 +17,29 @@ program :help, 'Author', 'Justin Scott <jvscott@gmail.com>'
 command :job do |c|
   c.syntax = 'sweatshop job <name>'
   c.description = 'Creates and edits jobs.'
-  c.option '--edit', 'Manually edit the file.'
-  c.option '--reset', 'Reset to factory defaults before editing.'
+  c.option '--auto', 'Create the file without opening the editor.'
   c.action do |args, options|
-    options.default :edit => false
-    options.default :reset => false
-    job_file = get_job_file for_job: args.first
-    create job_file, with_contents: empty_job if options.reset
-    edit job_file if options.edit
+    options.default :auto => false
+    if args.count < 1
+      notify :failure, "Specify a job name as the command argument."
+      exit 1
+    else
+      job_file = get_job_path for_job: args.first
+      create job_file, with_contents: default_job
+      edit job_file unless options.auto
+    end
   end
 end
 
-command :audit do |c|
-  c.syntax = 'sweatshop audit [job-name]'
-  c.description = 'Audit job information.'
-  c.action do |args|
-    if args.first.nil?
-      list_jobs
-    else
-      job_file = get_job_file for_job: args.first
-      validate job_file unless job_file.nil?
-    end
+command :config do |c|
+  c.syntax = 'sweatshop config [options]'
+  c.description = 'Creates and edits the user configuration file.'
+  c.option '--auto', 'Create the file without opening the editor.'
+  c.action do |args, options|
+    options.default :auto => false
+    config_file = get_config_path for_scope: args.first
+    create config_file, with_contents: default_config
+    edit config_file unless options.auto
   end
 end
 
@@ -58,16 +59,5 @@ command :stop do |c|
   c.description = 'Stop the Sweatshop.'
   c.action do
     notify :info, `eye stop robot_sweatshop`
-  end
-end
-
-command :config do |c|
-  c.syntax = 'sweatshop config [options]'
-  c.description = 'Creates and edits the user configuration file.'
-  c.option '--reset', 'Reset to factory defaults before editing.'
-  c.action do |_args, options|
-    options.default :reset => false
-    remove_user_config if options.reset
-    create_and_edit_user_config
   end
 end
