@@ -1,6 +1,7 @@
 AllCops:
   Exclude:
     - kintama/**/*
+    - vendor/**/*
 
 Style/Encoding:
   Enabled: false
