@@ -4,28 +4,29 @@
 
 Robot Sweatshop is a single-purpose CI server that runs collections of arbitrary scripts when it needs to, usually when new code is pushed. There's no assumptions about what you want to report, what front-end you need, or even what repositories you want to clone because you can do that better than I can. It's just you, your code, and the scripts that test and deploy it.
 
+# Quick start
+
+- install [ZMQ as described in the EZMQ gem](https://github.com/colstrom/ezmq)
+- `gem install robot_sweatshop`
+- `sweatshop start` ([you may need sudo on OSX](https://github.com/JScott/robot_sweatshop/wiki))
+- `sweatshop job example --auto`
+- POST a Github payload to `localhost:8080/github/payload-for/example`
+- `cat .robot_sweatshop/log/job-worker.log`
+
 # Usage
 
-First install [ZMQ as described in the EZMQ gem](https://github.com/colstrom/ezmq). Then `gem install robot_sweatshop`.
-
-You can now use `sweatshop config` to configure the processes, `sweatshop setup` to ensure the directories in your config exist, and `sweatshop start` to run everything.
+Drop the `--auto` flag to create the job interactively. You can specify which branches will trigger the job, which commands will be run, and any environment variables you might need.
 
 Robot Sweatshop uses [Eye](https://github.com/kostya/eye) to handle its processes so you can use its commandline tool to monitor their status.
 
-After configuring a job, POST a payload to `localhost:8080/:format/payload-for/:job`. For example, triggering a Bitbucket Git POST hook on `localhost:8080/bitbucket/payload-for/example` will parse the payload and run the 'example' job with the payload data in the environment.
+# Configuration
 
-You can see what jobs are available with `sweatshop job --list`.
+By default, Robot Sweatshop looks in your current working directory to configure and run. You can supply a custom configuration with `sweatshop config [local|user|system]`. Read [the wiki](https://github.com/JScott/robot_sweatshop/wiki) for more information.
 
-Currently supported formats:
+# Supported payload formats
 
 - Github (application/json format only)
 - Bitbucket
-
-# Configuration
-
-The server isn't much help without a job to run. Run `sweatshop job <name>` to create a new job or edit an existing one.
-
-Not sure if your job is valid? Run `sweatshop job --inspection <name>` to see if there's something you overlooked.
 
 # Security
 
