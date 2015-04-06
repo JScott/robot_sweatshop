@@ -3,7 +3,7 @@ require_relative '../lib/sweatshop/queue-helper'
 
 def parse(payload = '', of_format:)
   of_format = of_format.downcase
-  lib_file = "#{__dir__}/lib/#{of_format}.rb"
+  lib_file = "#{__dir__}/../lib/sweatshop/payload/#{of_format}.rb"
   if of_format != 'payload' && File.file?(lib_file)
     require_relative lib_file
     Object.const_get("#{of_format.capitalize}Payload").new payload
