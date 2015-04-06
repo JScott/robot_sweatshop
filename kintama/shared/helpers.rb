@@ -48,7 +48,7 @@ module JobHelper
                   job_name: 'test_job'
   end
   def reset_test_file
-    test_file = File.expand_path "#{configatron.workspace_directory}/example-testingid/test.txt"
+    test_file = File.expand_path "#{configatron.workspace_directory}/test_job-testingid/test.txt"
     FileUtils.rm_rf test_file
     test_file
   end
