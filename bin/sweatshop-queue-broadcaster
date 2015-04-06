@@ -12,6 +12,7 @@ end
 
 loop do
   queues.each do |queue_name, queue|
+    p queue_name if queue.size > 0
     publisher.send queue_name, topic: 'busy-queues' if queue.size > 0
   end
   sleep @wait_time unless @wait_time == 0
