@@ -13,7 +13,7 @@ given 'the HTTP Input' do
   setup do
     @subscriber = EZMQ::Subscriber.new port: 5557, topic: 'busy-queues'
     @client = EZMQ::Client.new port: 5556
-    @job_name = 'example'
+    @job_name = 'test_job'
     @raw_payload_queue = 'raw-payload'
     clear_all_queues
   end

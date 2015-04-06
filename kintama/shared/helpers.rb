@@ -26,15 +26,15 @@ module InHelper
     payload = load_payload with_format
     JSON.generate payload: payload,
                   format: with_format,
-                  job_name: 'example'
+                  job_name: 'test_job'
   end
-  def input_http_url(for_job: 'example', in_format: 'bitbucket')
+  def input_http_url(for_job: 'test_job', in_format: 'bitbucket')
     "http://localhost:#{configatron.http_port}/#{in_format}/payload-for/#{for_job}"
   end
 end
 
 module PayloadHelper
-  def example_parsed_payload(with_payload: nil, for_branch: 'develop', for_job: 'example')
+  def example_parsed_payload(with_payload: nil, for_branch: 'develop', for_job: 'test_job')
     payload = with_payload || { branch: for_branch }
     JSON.generate payload: payload,
                   job_name: for_job
@@ -45,7 +45,7 @@ module JobHelper
   def example_job(in_context: {}, with_commands: [])
     JSON.generate context: in_context,
                   commands: with_commands,
-                  job_name: 'example'
+                  job_name: 'test_job'
   end
   def reset_test_file
     test_file = File.expand_path "#{configatron.workspace_directory}/example-testingid/test.txt"

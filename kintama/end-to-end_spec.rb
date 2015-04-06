@@ -11,7 +11,7 @@ describe 'Robot Sweatshop' do
 
   setup do
     @client = EZMQ::Client.new port: 5556
-    @job_name = 'example'
+    @job_name = 'test_job'
     @test_file = reset_test_file
     clear_all_queues
   end
