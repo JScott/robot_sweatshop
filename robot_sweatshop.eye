@@ -1,22 +1,21 @@
 #!/usr/bin/env ruby
 require 'bundler/setup'
 require 'yaml'
-require_relative 'lib/sweatshop/config'
 
-PATH_FOR = YAML.load_file '/tmp/.robot_sweatshop-eye-config.yaml'
-PID_PATH = configatron.pidfile_directory
-LOG_PATH = configatron.logfile_directory
+CONFIG = YAML.load_file '/tmp/.robot_sweatshop-eye-config.yaml'
+PID_PATH = CONFIG[:pidfile_directory]
+LOG_PATH = CONFIG[:logfile_directory]
 
 Eye.config do
-  logger PATH_FOR[:log_file]
+  logger CONFIG[:log_file]
 end
 
 Eye.application :robot_sweatshop do
   trigger :flapping, times: 10, within: 1.minute, retry_in: 10.minutes
   check :cpu, every: 10.seconds, below: 100, times: 3
-  working_dir PATH_FOR[:working_directory]
-  uid "#{configatron.user}" if configatron.has_key? :user
-  gid "#{configatron.group}" if configatron.has_key? :group
+  working_dir CONFIG[:working_directory]
+  uid "#{CONFIG[:user]}" if CONFIG[:user]
+  gid "#{CONFIG[:group]}" if CONFIG[:group]
 
   group 'input' do
     process :http do

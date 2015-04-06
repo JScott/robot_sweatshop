@@ -9,6 +9,11 @@ CONFIG_DIRECTORIES = [
   'workspace_directory'
 ]
 
+# config = configatron.to_h
+#   config = config.each do |key, value|
+#     config[key] = File.expand_path value if key.to_s.match /_directory/
+#   end
+
 def set_dir_permissions(on_directory:)
   user = configatron.user
   group = configatron.has_key?(:group) ? configatron.group : 'nogroup'
