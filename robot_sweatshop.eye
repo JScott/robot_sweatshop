@@ -5,7 +5,7 @@ PID_PATH = CONFIG[:pidfile_directory]
 LOG_PATH = CONFIG[:logfile_directory]
 
 Eye.config do
-  logger CONFIG[:log_file]
+  logger "#{CONFIG[:logfile_directory]}/eye.log"
 end
 
 Eye.application :robot_sweatshop do
