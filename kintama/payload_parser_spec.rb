@@ -16,7 +16,7 @@ describe 'the Payload Parser' do
     clear_all_queues
   end
 
-  %w(Bitbucket Github).each do |format|
+  %w(Bitbucket Github Custom).each do |format|
     given "valid #{format} data in 'raw-payload'" do
       setup do
         payload = example_raw_payload(with_format: format)
@@ -34,7 +34,9 @@ describe 'the Payload Parser' do
         response = JSON.parse response
 
         assert_kind_of Hash, response['payload']
-        Payload.hash_keys.each do |key|
+        keys = Payload.hash_keys
+        keys = %w(test1 test2) if format == 'Custom'
+        keys.each do |key|
           assert_not_nil response['payload'][key]
           assert_not_equal key, response['payload'][key] # important for how Ruby interprets "string"['key']
         end

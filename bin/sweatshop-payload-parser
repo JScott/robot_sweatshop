@@ -10,6 +10,7 @@ def parse(payload = '', of_format:)
   else
     puts "Dropping bad format: #{of_format}"
     nil
+    # Object.const_get("CustomPayload").new payload
   end
 end
 
