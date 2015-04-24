@@ -10,7 +10,7 @@ require_relative '../lib/sweatshop/config'
 require_relative '../lib/sweatshop/create-config-directories'
 
 program :name, 'Robot Sweatshop'
-program :version, '0.2.0'
+program :version, '0.2.1'
 program :description, 'A lightweight, unopinionated CI server'
 program :help, 'Author', 'Justin Scott <jvscott@gmail.com>'
 
