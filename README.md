@@ -36,12 +36,12 @@ You probably don't want to run Robot Sweatshop as a sudo user. Create a testing 
 
 # Roadmap
 
-- CLI job running
-- custom/empty payloads
-- Common scrips such as git repo syncing and creating a job run ID
-- Support for multiple workers
-- Better logging for the processes
-- Use [eye-http](https://github.com/kostya/eye-http) for the '/' route?
 - Improved architecture:
 
 ![Improved architecture diagram](http://40.media.tumblr.com/8a5b6ca59c0d93c4ce6fc6b733932a5f/tumblr_nko478zp9N1qh941oo1_1280.jpg)
+
+- Automatically detect payload format
+- Support for multiple workers
+- Better logging for the processes
+- Common scrips such as git repo syncing and creating a job run ID
+- Use [eye-http](https://github.com/kostya/eye-http) for the '/' route?
