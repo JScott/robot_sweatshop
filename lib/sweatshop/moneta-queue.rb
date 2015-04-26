@@ -16,7 +16,7 @@ class MonetaQueue
   end
 
   def self.watched_queues
-    %w(raw-payload parsed-payload jobs testing)
+    %w(payload parsed-payload jobs testing)
   end
 
   def enqueue(item)

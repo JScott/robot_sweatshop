@@ -7,7 +7,7 @@ require_relative '../lib/sweatshop/config'
 configure do
   set :port, configatron.http_port
   set :bind, configatron.http_bind
-  set :output_queue, 'raw-payload'
+  set :output_queue, 'payload'
   set :run, true
 end
 
