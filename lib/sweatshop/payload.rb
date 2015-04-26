@@ -1,4 +1,4 @@
-require_relative 'sweatshop/payload/payload'
-require_relative 'sweatshop/payload/bitbucket'
-require_relative 'sweatshop/payload/github'
-require_relative 'sweatshop/payload/json'
+require_relative 'payload/payload'
+require_relative 'payload/bitbucket'
+require_relative 'payload/github'
+require_relative 'payload/json'
