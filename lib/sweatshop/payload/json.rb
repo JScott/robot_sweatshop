@@ -2,7 +2,7 @@ require 'json'
 require_relative 'payload'
 
 # A parser for arbitrary data
-class CustomPayload < Payload
+class JSONPayload < Payload
   def initialize(payload)
     @payload = JSON.parse payload || {}
   end

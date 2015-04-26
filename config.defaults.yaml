@@ -8,3 +8,6 @@ moneta_directory: .robot_sweatshop/db
 # group: nogroup
 http_port: 8080
 http_bind: 0.0.0.0
+# queue_handler_port: 5556
+# queue_broadcaster_port: 5557
+payload_parser_port: 5558

@@ -29,7 +29,7 @@ By default, Robot Sweatshop looks in your current working directory to configure
 
 - Github (application/json format only)
 - Bitbucket
-- Custom (just POST some JSON)
+- JSON
 
 # Security
 
