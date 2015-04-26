@@ -1,6 +1,6 @@
 ---
 # http://www.url-encode-decode.com/
-malformed: payload=%7B%22nothing%22%3A%22here%22%7D
+empty: ''
 nonjson: not json
 json: '{"test1": "value", "test2": "value"}'
 bitbucket: |

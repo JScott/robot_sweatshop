@@ -41,7 +41,7 @@ describe 'the Payload Parser' do
     end
   end
 
-  %w(Malformed NonJSON).each do |format|
+  %w(Empty NonJSON).each do |format|
     given "a #{format} payload" do
       setup do
         payload = example_raw_payload of_format: format
