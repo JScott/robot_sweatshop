@@ -32,10 +32,10 @@ describe 'the Payload Parser' do
           Payload.hash_keys
         end
 
-        assert_kind_of Hash, response['payload']
+        assert_kind_of Hash, @response['payload']
         keys.each do |key|
-          assert_not_nil response['payload'][key]
-          assert_not_equal key, response['payload'][key] # important for how Ruby interprets "string"['key']
+          assert_not_nil @response['payload'][key]
+          assert_not_equal key, @response['payload'][key] # important for how Ruby interprets "string"['key']
         end
       end
     end
@@ -51,8 +51,7 @@ describe 'the Payload Parser' do
       end
 
       should 'return an empty string' do
-        response = @client.request datum
-        assert_equal '', response
+        assert_equal '', @response
       end
     end
   end
