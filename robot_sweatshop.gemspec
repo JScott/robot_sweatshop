@@ -20,9 +20,10 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency 'faker'
   gem.add_runtime_dependency 'commander'
   gem.add_runtime_dependency 'eye'
-  gem.add_runtime_dependency 'colorize'
+  gem.add_runtime_dependency 'colorize' # TODO: replace with rainbow
   gem.add_runtime_dependency 'configatron'
   gem.add_runtime_dependency 'moneta'
+  gem.add_runtime_dependency 'contracts'
 
   gem.add_development_dependency 'rake'
   gem.add_development_dependency 'kintama'

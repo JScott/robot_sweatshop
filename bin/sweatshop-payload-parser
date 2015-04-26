@@ -1,20 +1,25 @@
 #!/usr/bin/env ruby
+require 'bundler/setup'
 require 'json'
 require 'ezmq'
-require_relative '../lib/sweatshop/config'
+require 'contracts'
+require 'sweatshop/config'
+require 'sweatshop/payload/payload'
 
 $stdout.sync = true
+include Contracts
 
-# Contract String => Bool
+Contract String => Bool
 def is_json?(string)
   begin
     JSON.load string
+    true
   rescue JSON::ParserError => e  
     false
   end 
 end
 
-# Contract String => String
+Contract String => String
 def detect_format_of(payload)
   if payload.empty?
     'empty'
@@ -29,14 +34,13 @@ def detect_format_of(payload)
   end
 end
 
-# Or[Payload,nil]
-# Contract String => Payload
+Contract String => Or[Payload, nil]
 def parse(payload)
   format = detect_format_of payload
   lib_file = "#{__dir__}/../lib/sweatshop/payload/#{format}.rb"
   if File.file?(lib_file)
     require_relative lib_file
-    Object.const_get("#{format}Payload").new(payload).to_hash
+    Object.const_get("#{format}Payload").new payload
   else
     puts "Dropping #{format} payload"
     nil
