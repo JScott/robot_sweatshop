@@ -18,15 +18,9 @@ module QueueHelper
 end
 
 module InHelper
-  def load_payload(of_format)
+  def example_raw_payload(of_format:)
     payload_strings = YAML.load_file "#{__dir__}/../data/payload_data.yaml"
     payload_strings[of_format.downcase]
-  end
-  def example_raw_payload(with_format:)
-    payload = load_payload with_format
-    JSON.generate payload: payload,
-                  format: with_format,
-                  job_name: 'test_job'
   end
   def input_http_url(for_job: 'test_job', in_format: 'bitbucket')
     "http://localhost:#{configatron.http_port}/#{in_format}/payload-for/#{for_job}"
