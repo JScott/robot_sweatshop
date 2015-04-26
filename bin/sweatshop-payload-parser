@@ -4,7 +4,7 @@ require 'json'
 require 'ezmq'
 require 'contracts'
 require 'sweatshop/config'
-require 'sweatshop/payload/payload'
+require 'sweatshop/payload'
 
 $stdout.sync = true
 include Contracts
