@@ -22,8 +22,8 @@ module InHelper
     payload_strings = YAML.load_file "#{__dir__}/../data/payload_data.yaml"
     payload_strings[of_format.downcase]
   end
-  def input_http_url(for_job: 'test_job', in_format: 'bitbucket')
-    "http://localhost:#{configatron.http_port}/#{in_format}/payload-for/#{for_job}"
+  def input_http_url(for_job: 'test_job')
+    "http://localhost:#{configatron.http_port}/payload-for/#{for_job}"
   end
 end
 
