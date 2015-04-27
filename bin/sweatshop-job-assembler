@@ -26,7 +26,7 @@ def serialize(value)
   value.is_a?(Hash) ? JSON.dump(value) : value.to_s
 end
 
-Contract String => Hash # Or[Hash, nil]
+Contract String => Or[Hash, nil]
 def parse_payload(payload)
   client = EZMQ::Client.new port: configatron.payload_parser_port
   payload = client.request payload
