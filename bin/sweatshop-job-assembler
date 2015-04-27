@@ -1,12 +1,14 @@
 #!/usr/bin/env ruby
 require 'bundler/setup'
 require 'yaml'
-# require 'contracts'
+require 'contracts'
 require 'sweatshop/queue-helper'
 require 'sweatshop/config'
 
 $stdout.sync = true
+include Contracts
 
+Contract Hash => Or[Hash, nil]
 def load_config(for_job:)
   job_directory = File.expand_path configatron.job_directory
   file_path = "#{job_directory}/#{for_job}.yaml"
@@ -19,10 +21,12 @@ def load_config(for_job:)
   end
 end
 
+Contract Any => String
 def serialize(value)
-  value.is_a?(Hash) ? JSON.generate(value) : value.to_s
+  value.is_a?(Hash) ? JSON.dump(value) : value.to_s
 end
 
+Contract String => Hash # Or[Hash, nil]
 def parse_payload(payload)
   client = EZMQ::Client.new port: configatron.payload_parser_port
   payload = client.request payload
@@ -30,11 +34,13 @@ def parse_payload(payload)
   JSON.load payload
 end
 
+Contract Or[String, nil], Hash => Bool
 def whitelisted?(branch, in_config:)
   return true if in_config['branch_whitelist'].nil?
   in_config['branch_whitelist'].include? branch
 end
 
+Contract Hash => Or[Hash, nil]
 def assemble_job(request)
   job_config = load_config for_job: request['job_name']
   payload = parse_payload request['payload']
