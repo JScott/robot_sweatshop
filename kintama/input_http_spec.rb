@@ -17,7 +17,7 @@ given 'the HTTP Input' do
     @payload_queue = 'payload'
     clear_all_queues
   end
-  
+
   %w(Bitbucket Github JSON).each do |format|
     context "POSTing #{format} data" do
       setup do
@@ -38,8 +38,14 @@ given 'the HTTP Input' do
         response = @client.request "mirror-#{@payload_queue}"
         data = JSON.parse response
         %w(payload job_name).each do |type|
-          assert_kind_of String, data[type]
+          assert_kind_of String, data['payload'][type]
         end
+      end
+
+      should 'enqueue payload format' do
+        response = @client.request "mirror-#{@payload_queue}"
+        data = JSON.parse response
+        assert_kind_of String, data['format']
       end
     end
   end
