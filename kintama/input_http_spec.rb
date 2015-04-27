@@ -23,7 +23,15 @@ given 'the HTTP Input' do
       setup do
         url = input_http_url for_job: @job_name
         payload = example_raw_payload of_format: format
-        HTTP.post url, body: payload
+        user_agent = case format
+        when 'Bitbucket'
+          'Bitbucket.org'
+        when 'Github'
+          'Github-Hookshot/somehash'
+        else
+          'whatever'
+        end
+        HTTP['User-Agent' => user_agent].post(url, body: payload)
       end
 
       should 'enqueue to \'payload\'' do
@@ -34,18 +42,17 @@ given 'the HTTP Input' do
         end
       end
 
-      should 'enqueue payload details' do
+      should 'enqueue payload details and format' do
         response = @client.request "mirror-#{@payload_queue}"
         data = JSON.parse response
-        %w(payload job_name).each do |type|
-          assert_kind_of String, data['payload'][type]
-        end
+        assert_kind_of String, data['payload']
+        assert_equal format, data['format']
       end
 
-      should 'enqueue payload format' do
+      should 'enqueue job name' do
         response = @client.request "mirror-#{@payload_queue}"
         data = JSON.parse response
-        assert_kind_of String, data['format']
+        assert_kind_of String, data['job_name']
       end
     end
   end
