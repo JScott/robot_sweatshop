@@ -4,6 +4,8 @@ require 'yaml'
 require 'sweatshop/queue-helper'
 require 'sweatshop/config'
 
+$stdout.sync = true
+
 def load_config(for_job:)
   job_directory = File.expand_path configatron.job_directory
   file_path = "#{job_directory}/#{for_job}.yaml"
@@ -37,10 +39,8 @@ def assemble_job(data)
   end
 end
 
-QueueHelper.wait_for('parsed-payload') do |data|
+QueueHelper.wait_for('payload') do |data|
   puts "Assembling: #{data}"
   assembled_job = assemble_job data
   QueueHelper.enqueue assembled_job, to: 'jobs' if assembled_job
-  $stdout.flush
-  $stderr.flush
 end
