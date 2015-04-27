@@ -26,16 +26,6 @@ def whitelisted?(branch, in_config:)
   in_config['branch_whitelist'].include? branch
 end
 
-Contract Hash, Hash => Bool
-def can_work_with?(job_config, payload)
-  # TODO: payload.empty? isn't expressive
-  # have the payload parser return errors in a more explicit format
-  # {"error": "broken", "payload": ...}
-  return false if job_config.empty? || payload.empty?
-  return false unless whitelisted? payload['branch'], in_config: job_config
-  true
-end
-
 Contract Hash => Hash
 def convert_arrays_and_hashes_in(data)
   data.each_pair do |key, value|
@@ -62,19 +52,26 @@ def load_config_for(job_name)
   load_if_exists("#{job_directory}/#{job_name}.yaml") || empty_config
 end
 
-Contract String => Hash
+Contract String => [Hash, String]
 def parse_payload(payload)
   client = EZMQ::Client.new port: configatron.payload_parser_port
-  payload = client.request payload
-  puts "Payload Parser could not parse the given payload" if payload.empty?
-  JSON.load(payload) || {}
+  response = JSON.load client.request(payload)
+  puts response['error'] unless response['error'].empty?
+  [response['payload'], response['error']]
+end
+
+Contract Hash, Hash => Bool
+def can_work_with?(job_config, payload)
+  return false if job_config.empty?
+  return false unless whitelisted? payload['branch'], in_config: job_config
+  true
 end
 
 Contract Hash => Or[Hash, false]
 def assemble_job(request)
   job_config = load_config_for request['job_name']
-  payload = parse_payload request['payload']
-  return false unless can_work_with? job_config, payload
+  payload, error = parse_payload request['payload']
+  return false unless error.empty? && can_work_with?(job_config, payload)
   {
     commands: job_config['commands'],
     context: job_context(job_config['environment'], payload),
