@@ -28,10 +28,24 @@ module InHelper
 end
 
 module PayloadHelper
-  def example_parsed_payload(with_payload: nil, for_branch: 'develop', for_job: 'test_job')
-    payload = with_payload || { branch: for_branch }
+  def example_job_request(of_type:)
+    payload, job_name = case of_type
+    when 'Valid'
+      payload = example_raw_payload of_format: 'JSON'
+      [payload, 'test_job']
+    when 'IgnoredBranch'
+      payload = example_raw_payload of_format: 'Github' # master branch
+      [payload, 'test_job']
+    when 'UnknownJob'
+      payload = example_raw_payload of_format: 'Bitbucket' # develop branch
+      [payload, 'unknown_job']
+    when 'NonJSON'
+      ['not json', 'test_job']
+    else
+      ['', '']
+    end
     JSON.generate payload: payload,
-                  job_name: for_job
+                  job_name: job_name
   end
 end
 

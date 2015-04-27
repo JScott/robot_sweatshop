@@ -16,14 +16,15 @@ describe 'the Job Assembler' do
     clear_all_queues
   end
 
-  given 'valid payload data in \'payload\'' do
+  given 'valid requests in \'payload\'' do
     setup do
-      payload = example_parsed_payload(for_branch: 'develop')
-      @client.request "#{@payloads_queue} #{payload}"
-      sleep $for_a_while
+      payload = example_job_request of_type: 'Valid'
+      @response = Timeout.timeout($for_a_while) do
+        @client.request "#{@payloads_queue} #{payload}"
+      end
     end
 
-    should 'remove it from \'payload\'' do
+    should 'remove the request from \'payload\'' do
       response = @client.request @payloads_queue
       assert_equal '', response
     end
@@ -43,29 +44,33 @@ describe 'the Job Assembler' do
         assert_kind_of String, value
       end
     end
+
+    should 'build the context with a parsed payload' do
+      response = @client.request "mirror-#{@jobs_queue}"
+      response = JSON.load response
+      assert_kind_of Hash, response['context']
+      assert_equal 'value', response['context']['test1']
+    end
   end
 
-  given 'invalid job data in \'payload\'' do
-    setup do
-      invalid_data = {
-        ignored_branch: example_parsed_payload(for_branch: 'not_on_whitelist'),
-        bad_job:        example_parsed_payload(for_job: 'asdf'),
-        not_json:       'not_json'
-      }
-      invalid_data.each do |_type, datum|
-        @client.request "#{@payloads_queue} #{datum}"
+  %w(IgnoredBranch UnknownJob NonJSON).each do |request|
+    given "#{format} requests in \'payload\'" do
+      setup do
+        payload = example_job_request of_type: request
+        @response = Timeout.timeout($for_a_while) do
+          @client.request "#{@payloads_queue} #{payload}"
+        end
       end
-      sleep $for_a_while
-    end
 
-    should 'remove all of it from \'payload\'' do
-      response = @client.request @payloads_queue
-      assert_equal '', response
-    end
+      should 'remove the request from \'payload\'' do
+        response = @client.request @payloads_queue
+        assert_equal '', response
+      end
 
-    should 'not queue anything to \'jobs\'' do
-      response = @client.request @jobs_queue
-      assert_equal '', response
+      should 'not queue anything to \'jobs\'' do
+        response = @client.request @jobs_queue
+        assert_equal '', response
+      end
     end
   end
 end
