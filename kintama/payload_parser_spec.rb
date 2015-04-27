@@ -22,19 +22,21 @@ describe 'the Payload Parser' do
         end
       end
 
-      should 'return a parsed payload' do
+      should 'return a parsed payload object' do
         @response = JSON.parse @response
+        assert_nil @response['error']
+        assert_kind_of Hash, @response['payload']
+
         keys = case format
         when 'JSON'
           %w(test1 test2)
         else
           Payload.hash_keys
         end
-
-        assert_kind_of Hash, @response
         keys.each do |key|
-          assert_not_nil @response[key]
-          assert_not_equal key, @response[key] # important for how Ruby interprets "string"['key']
+          payload_value = @response['payload'][key]
+          assert_not_nil payload_value
+          assert_not_equal key, payload_value # catches "string"[key]
         end
       end
     end
@@ -49,8 +51,10 @@ describe 'the Payload Parser' do
         end
       end
 
-      should 'return an empty string' do
-        assert_equal '', @response
+      should 'return an error object' do
+        @response = JSON.load(@response)
+        assert_kind_of String, @response['error']
+        assert_nil @response['payload']
       end
     end
   end
