@@ -16,7 +16,7 @@ describe 'the Job Assembler' do
     clear_all_queues
   end
 
-  given 'valid requests in \'payload\'' do
+  given 'Git requests in \'payload\'' do
     setup do
       payload = example_job_request of_type: 'Valid'
       @client.request "#{@payloads_queue} #{payload}"
@@ -38,9 +38,7 @@ describe 'the Job Assembler' do
 
     should 'only enqueue strings into context' do
       response = @client.request "mirror-#{@jobs_queue}"
-      p response
       response = JSON.load response
-      p response
       response['context'].each do |_key, value|
         assert_kind_of String, value
       end
@@ -50,7 +48,7 @@ describe 'the Job Assembler' do
       response = @client.request "mirror-#{@jobs_queue}"
       response = JSON.load response
       assert_kind_of Hash, response['context']
-      assert_equal 'value', response['context']['test1']
+      assert_equal 'develop', response['context']['branch']
     end
   end
 
