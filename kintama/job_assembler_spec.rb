@@ -37,15 +37,10 @@ describe 'the Job Assembler' do
         assert_kind_of String, response['job_name']
       end
 
-      should 'store Hashes and Arrays in the context as JSON strings' do
+      should 'store everything in the context as strings' do
         response = @client.request "mirror-#{@jobs_queue}"
         response = JSON.load response
-        begin
-          assert_kind_of Array, JSON.load(response['context']['some_array'])
-          assert_kind_of Hash, JSON.load(response['context']['some_hash'])
-        rescue JSON::ParserError => e
-          flunk "Invalid JSON: #{value}"
-        end
+        response['context'].each { |_key, value| assert_kind_of String, value }
       end
 
       should 'build the context with a parsed payload' do

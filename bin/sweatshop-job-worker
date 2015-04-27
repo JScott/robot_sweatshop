@@ -21,7 +21,7 @@ end
 def execute(context = {}, command)
   puts "Executing '#{command}'..."
   # TODO: path.split(' ') to bypass the shell when we're not using env vars
-  
+
   # Run the command with the context in environment,
   # printing the output as it's generated
   IO.popen(context, command) do |io_stream|

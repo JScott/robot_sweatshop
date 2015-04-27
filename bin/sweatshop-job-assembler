@@ -27,18 +27,13 @@ def whitelisted?(branch, in_config:)
 end
 
 Contract Hash => Hash
-def convert_arrays_and_hashes_in(data)
-  data.each_pair do |key, value|
-    data[key] = value.to_json if value.is_a?(Array) || value.is_a?(Hash)
-  end
-  # Hash[data.map { |key, value| [key.to_sym, value.to_json] }]
-  # data.each_pair { |key, value| {key, value.to_json} }
+def sanitize(data)
+  data.each_pair { |key, value| data[key] = value.to_s }
 end
 
 Contract Hash, Hash => Hash
 def job_context(job_environment, context_from_payload)
-  context = job_environment.merge context_from_payload
-  convert_arrays_and_hashes_in context
+  sanitize job_environment.merge(context_from_payload)
 end
 
 Contract String => Or[Hash, nil]
