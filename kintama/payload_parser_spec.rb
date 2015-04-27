@@ -8,7 +8,6 @@ require_relative 'shared/helpers'
 describe 'the Payload Parser' do
   include QueueHelper
   include InHelper
-  include PayloadHelper
 
   setup do
     @client = EZMQ::Client.new port: configatron.payload_parser_port

@@ -21,7 +21,7 @@ describe 'the Job Assembler' do
       setup do
         payload = example_job_request of_type: request
         @client.request "#{@payloads_queue} #{payload}"
-        sleep $for_a_while
+        sleep $for_a_moment
       end
 
       should 'remove the request from \'payload\'' do
@@ -63,7 +63,7 @@ describe 'the Job Assembler' do
       setup do
         payload = example_job_request of_type: request
         @client.request "#{@payloads_queue} #{payload}"
-        sleep $for_a_while
+        sleep $for_a_moment
       end
 
       should 'remove the request from \'payload\'' do
