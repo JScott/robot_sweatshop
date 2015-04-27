@@ -6,7 +6,7 @@ require_relative 'shared/helpers'
 
 describe 'the Job Assembler' do
   include QueueHelper
-  include PayloadHelper
+  include InHelper
   include JobHelper
 
   setup do
@@ -19,9 +19,8 @@ describe 'the Job Assembler' do
   given 'valid requests in \'payload\'' do
     setup do
       payload = example_job_request of_type: 'Valid'
-      @response = Timeout.timeout($for_a_while) do
-        @client.request "#{@payloads_queue} #{payload}"
-      end
+      @client.request "#{@payloads_queue} #{payload}"
+      # sleep $for_a_while
     end
 
     should 'remove the request from \'payload\'' do
@@ -54,12 +53,11 @@ describe 'the Job Assembler' do
   end
 
   %w(IgnoredBranch UnknownJob NonJSON).each do |request|
-    given "#{format} requests in \'payload\'" do
+    given "#{request} requests in \'payload\'" do
       setup do
         payload = example_job_request of_type: request
-        @response = Timeout.timeout($for_a_while) do
-          @client.request "#{@payloads_queue} #{payload}"
-        end
+        @client.request "#{@payloads_queue} #{payload}"
+        sleep $for_a_while
       end
 
       should 'remove the request from \'payload\'' do

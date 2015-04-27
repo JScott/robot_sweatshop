@@ -25,9 +25,6 @@ module InHelper
   def input_http_url(for_job: 'test_job')
     "http://localhost:#{configatron.http_port}/payload-for/#{for_job}"
   end
-end
-
-module PayloadHelper
   def example_job_request(of_type:)
     payload, job_name = case of_type
     when 'Valid'
