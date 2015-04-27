@@ -20,7 +20,7 @@ describe 'Robot Sweatshop' do
     setup do
       url = input_http_url for_job: @job_name
 puts "posting..."
-      HTTP.post url, body: load_payload('bitbucket')
+      HTTP.post url, body: example_raw_payload(of_format: 'Bitbucket')
 puts "post successful"
       sleep $for_everything
     end
