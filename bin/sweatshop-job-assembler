@@ -31,7 +31,7 @@ def parse_payload(payload)
 end
 
 def whitelisted?(branch, in_config:)
-  return true unless in_config['branch_whitelist']
+  return true if in_config['branch_whitelist'].nil?
   in_config['branch_whitelist'].include? branch
 end
 

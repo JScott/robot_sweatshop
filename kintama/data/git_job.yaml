@@ -1,4 +1,7 @@
 ---
+branch_whitelist:
+- develop
+
 commands:
 - echo $custom_env > test.txt
 

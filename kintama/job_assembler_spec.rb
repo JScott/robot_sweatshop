@@ -16,44 +16,47 @@ describe 'the Job Assembler' do
     clear_all_queues
   end
 
-  given 'Git requests in \'payload\'' do
-    setup do
-      payload = example_job_request of_type: 'Valid'
-      @client.request "#{@payloads_queue} #{payload}"
-      sleep $for_a_while
-    end
+  %w(Git JSON).each do |request|
+    given "#{request} requests in \'payload\'" do
+      setup do
+        payload = example_job_request of_type: request
+        @client.request "#{@payloads_queue} #{payload}"
+        sleep $for_a_while
+      end
 
-    should 'remove the request from \'payload\'' do
-      response = @client.request @payloads_queue
-      assert_equal '', response
-    end
+      should 'remove the request from \'payload\'' do
+        response = @client.request @payloads_queue
+        assert_equal '', response
+      end
 
-    should 'enqueue commands, context, and job name to \'jobs\'' do
-      response = @client.request "mirror-#{@jobs_queue}"
-      response = JSON.load response
-      assert_kind_of Hash, response['context']
-      assert_kind_of Array, response['commands']
-      assert_kind_of String, response['job_name']
-    end
+      should 'enqueue commands, context, and job name to \'jobs\'' do
+        response = @client.request "mirror-#{@jobs_queue}"
+        response = JSON.load response
+        assert_kind_of Hash, response['context']
+        assert_kind_of Array, response['commands']
+        assert_kind_of String, response['job_name']
+      end
 
-    should 'only enqueue strings into context' do
-      response = @client.request "mirror-#{@jobs_queue}"
-      response = JSON.load response
-      response['context'].each do |_key, value|
-        assert_kind_of String, value
+      should 'only enqueue strings into context' do
+        response = @client.request "mirror-#{@jobs_queue}"
+        response = JSON.load response
+        response['context'].each do |_key, value|
+          assert_kind_of String, value
+        end
+      end
+
+      should 'build the context with a parsed payload' do
+        response = @client.request "mirror-#{@jobs_queue}"
+        response = JSON.load response
+        assert_kind_of Hash, response['context']
+        if request == 'Git'
+          assert_equal 'develop', response['context']['branch']
+        else
+          assert_equal 'value', response['context']['test1']          
+        end
       end
     end
-
-    should 'build the context with a parsed payload' do
-      response = @client.request "mirror-#{@jobs_queue}"
-      response = JSON.load response
-      assert_kind_of Hash, response['context']
-      assert_equal 'develop', response['context']['branch']
-    end
   end
-
-  # given 'JSON requests in \'payload\'' do
-  # end
 
   %w(IgnoredBranch UnknownJob NonJSON).each do |request|
     given "#{request} requests in \'payload\'" do
