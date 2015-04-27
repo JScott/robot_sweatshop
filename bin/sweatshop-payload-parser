@@ -16,34 +16,41 @@ def is_json?(string)
     true
   rescue JSON::ParserError => e
     false
-  end 
-end
-
-Contract String => String
-def detect_format_of(payload)
-  if payload.empty?
-    'empty'
-  elsif is_json? payload
-    payload = JSON.load payload
-    from_github = payload['compare'] && payload['compare'].match(/github.com/)
-    from_github ? 'Github' : 'JSON'
-  elsif payload.start_with? 'payload='
-    'Bitbucket'
-  else
-    'unsupported'
   end
 end
 
-Contract String => Or[Payload, nil]
+Contract String => Bool
+def from_github?(payload)
+  payload = JSON.parse payload
+  return false if payload['compare'].nil?
+  payload['compare'].include? "github.com"
+end
+
+Contract String => Bool
+def from_bitbucket?(payload)
+  payload.start_with? 'payload='
+end
+
+# Contract String => String
+def detect_format_of(payload)
+  return 'empty' if payload.empty?
+  if is_json? payload
+    return 'Github' if from_github? payload
+    return 'JSON'
+  end
+  return 'Bitbucket' if from_bitbucket? payload
+  'unsupported'
+end
+
+# Contract String => Hash, String
 def parse(payload)
   format = detect_format_of payload
   lib_file = "#{__dir__}/../lib/sweatshop/payload/#{format}.rb"
   if File.file?(lib_file)
     require_relative lib_file
-    Object.const_get("#{format}Payload").new payload
+    [Object.const_get("#{format}Payload").new(payload).to_hash, '']
   else
-    puts "Dropping #{format} payload, returning an empty string"
-    nil
+    [{}, "Can't parse #{format} payload"]
   end
 end
 
@@ -51,10 +58,6 @@ puts 'Started'
 server = EZMQ::Server.new port: configatron.payload_parser_port#, encode: -> m { JSON.dump m }
 server.listen do |payload|
   puts "Parsing: #{payload}"
-  payload = parse payload
-  if payload
-    JSON.dump payload.to_hash
-  else
-    ''
-  end
+  payload, error = parse payload
+  JSON.dump payload: payload, error: error
 end

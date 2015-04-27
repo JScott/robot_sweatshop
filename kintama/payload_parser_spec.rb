@@ -24,7 +24,7 @@ describe 'the Payload Parser' do
 
       should 'return a parsed payload object' do
         @response = JSON.parse @response
-        assert_nil @response['error']
+        assert_equal true, @response['error'].empty?
         assert_kind_of Hash, @response['payload']
 
         keys = case format
@@ -34,9 +34,9 @@ describe 'the Payload Parser' do
           Payload.hash_keys
         end
         keys.each do |key|
-          payload_value = @response['payload'][key]
-          assert_not_nil payload_value
-          assert_not_equal key, payload_value # catches "string"[key]
+          payload = @response['payload']
+          assert_not_nil payload[key]
+          assert_not_equal key, payload[key] # catches "string"[key]
         end
       end
     end
@@ -54,7 +54,7 @@ describe 'the Payload Parser' do
       should 'return an error object' do
         @response = JSON.load(@response)
         assert_kind_of String, @response['error']
-        assert_nil @response['payload']
+        assert_equal true, @response['payload'].empty?
       end
     end
   end

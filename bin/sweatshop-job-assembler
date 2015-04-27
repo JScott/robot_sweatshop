@@ -10,7 +10,7 @@ $stdout.sync = true
 include Contracts
 
 Contract None => Hash
-def empty_config()
+def empty_config
   puts "Job configuration not found"
   {}
 end  
@@ -22,7 +22,7 @@ def load_if_exists(config)
 end
 
 Contract None => String
-def job_directory()
+def job_directory
   File.expand_path configatron.job_directory
 end
 
