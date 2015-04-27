@@ -12,7 +12,7 @@ Robot Sweatshop is a single-purpose CI server that runs collections of arbitrary
 - `gem install robot_sweatshop`
 - `sweatshop start` ([you may need sudo on OSX](https://github.com/JScott/robot_sweatshop/wiki))
 - `sweatshop job example --auto`
-- POST a Github payload to `yourserver.com:8080/github/payload-for/example`
+- POST a Github payload to `yourserver.com:8080/payload-for/example`
 - `cat .robot_sweatshop/log/job-worker.log`
 
 # Usage
@@ -43,7 +43,6 @@ You probably don't want to run Robot Sweatshop as a sudo user. Create a testing 
 
 ![Improved architecture diagram](http://40.media.tumblr.com/8a5b6ca59c0d93c4ce6fc6b733932a5f/tumblr_nko478zp9N1qh941oo1_1280.jpg)
 
-- Automatically detect payload format
 - Support for multiple workers
 
 Beyond
