@@ -37,11 +37,14 @@ describe 'the Job Assembler' do
         assert_kind_of String, response['job_name']
       end
 
-      should 'only enqueue strings into context' do
+      should 'store Hashes and Arrays in the context as JSON strings' do
         response = @client.request "mirror-#{@jobs_queue}"
         response = JSON.load response
-        response['context'].each do |_key, value|
-          assert_kind_of String, value
+        begin
+          assert_kind_of Array, JSON.load(response['context']['some_array'])
+          assert_kind_of Hash, JSON.load(response['context']['some_hash'])
+        rescue JSON::ParserError => e
+          flunk "Invalid JSON: #{value}"
         end
       end
 
@@ -52,7 +55,7 @@ describe 'the Job Assembler' do
         if request == 'Git'
           assert_equal 'develop', response['context']['branch']
         else
-          assert_equal 'value', response['context']['test1']          
+          assert_equal 'value', response['context']['test1']
         end
       end
     end

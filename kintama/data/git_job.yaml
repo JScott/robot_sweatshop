@@ -7,4 +7,5 @@ commands:
 
 environment:
   custom_env: success
-  converts_to_string: { string: only }
+  some_hash: { string: only }
+  some_array: ['string', 'only']
