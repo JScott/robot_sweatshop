@@ -20,7 +20,7 @@ describe 'the Job Assembler' do
     setup do
       payload = example_job_request of_type: 'Valid'
       @client.request "#{@payloads_queue} #{payload}"
-      # sleep $for_a_while
+      sleep $for_a_while
     end
 
     should 'remove the request from \'payload\'' do

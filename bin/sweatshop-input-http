@@ -1,8 +1,9 @@
 #!/usr/bin/env ruby
+require 'bundler/setup'
 require 'sinatra'
 require 'ezmq'
 require 'json'
-require_relative '../lib/sweatshop/config'
+require 'sweatshop/config'
 
 configure do
   set :port, configatron.http_port

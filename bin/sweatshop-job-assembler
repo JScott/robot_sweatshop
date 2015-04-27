@@ -1,7 +1,8 @@
 #!/usr/bin/env ruby
+require 'bundler/setup'
 require 'yaml'
-require_relative '../lib/sweatshop/queue-helper'
-require_relative '../lib/sweatshop/config'
+require 'sweatshop/queue-helper'
+require 'sweatshop/config'
 
 def load_config(for_job:)
   job_directory = File.expand_path configatron.job_directory
