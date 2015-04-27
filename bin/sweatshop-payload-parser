@@ -42,7 +42,7 @@ def parse(payload)
     require_relative lib_file
     Object.const_get("#{format}Payload").new payload
   else
-    puts "Dropping #{format} payload"
+    puts "Dropping #{format} payload, returning an empty string"
     nil
   end
 end

@@ -28,7 +28,7 @@ module InHelper
   def example_job_request(of_type:)
     payload, job_name = case of_type
     when 'Valid'
-      payload = example_raw_payload of_format: 'JSON'
+      payload = example_raw_payload of_format: 'Bitbucket'
       [payload, 'test_job']
     when 'IgnoredBranch'
       payload = example_raw_payload of_format: 'Github' # master branch

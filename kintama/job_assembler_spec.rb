@@ -38,7 +38,9 @@ describe 'the Job Assembler' do
 
     should 'only enqueue strings into context' do
       response = @client.request "mirror-#{@jobs_queue}"
+      p response
       response = JSON.load response
+      p response
       response['context'].each do |_key, value|
         assert_kind_of String, value
       end
@@ -51,6 +53,9 @@ describe 'the Job Assembler' do
       assert_equal 'value', response['context']['test1']
     end
   end
+
+  # given 'JSON requests in \'payload\'' do
+  # end
 
   %w(IgnoredBranch UnknownJob NonJSON).each do |request|
     given "#{request} requests in \'payload\'" do

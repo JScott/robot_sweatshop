@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 require 'bundler/setup'
 require 'yaml'
+# require 'contracts'
 require 'sweatshop/queue-helper'
 require 'sweatshop/config'
 
@@ -9,7 +10,7 @@ $stdout.sync = true
 def load_config(for_job:)
   job_directory = File.expand_path configatron.job_directory
   file_path = "#{job_directory}/#{for_job}.yaml"
-  puts file_path
+  puts "Reading job config from #{file_path}"
   if File.file?(file_path)
     YAML.load_file file_path
   else
@@ -22,25 +23,34 @@ def serialize(value)
   value.is_a?(Hash) ? JSON.generate(value) : value.to_s
 end
 
-def assemble_job(data)
-  job_config = load_config for_job: data['job_name']
-  return nil if job_config.nil?
-  if job_config['branch_whitelist'].include? data['payload']['branch']
-    context = job_config['environment'].merge(data['payload'])
-    context.each { |key, value| context[key] = serialize value }
-    {
-      commands: job_config['commands'],
-      context: context,
-      job_name: data['job_name']
-    }
-  else
-    puts "Branch '#{data['payload']['branch']}' is not whitelisted"
-    nil
-  end
+def parse_payload(payload)
+  client = EZMQ::Client.new port: configatron.payload_parser_port
+  payload = client.request payload
+  puts "Payload Parser could not parse the given payload" if payload.empty?
+  JSON.load payload
 end
 
-QueueHelper.wait_for('payload') do |data|
-  puts "Assembling: #{data}"
-  assembled_job = assemble_job data
+def whitelisted?(branch, in_config:)
+  return true unless in_config['branch_whitelist']
+  in_config['branch_whitelist'].include? branch
+end
+
+def assemble_job(request)
+  job_config = load_config for_job: request['job_name']
+  payload = parse_payload request['payload']
+  return nil if job_config.nil? || payload.nil?
+  return nil unless whitelisted? payload['branch'], in_config: job_config
+  context = job_config['environment'].merge payload
+  context.each { |key, value| context[key] = serialize value }
+  {
+    commands: job_config['commands'],
+    context: context,
+    job_name: request['job_name']
+  }
+end
+
+QueueHelper.wait_for('payload') do |request|
+  puts "Assembling: #{request}"
+  assembled_job = assemble_job request
   QueueHelper.enqueue assembled_job, to: 'jobs' if assembled_job
 end
