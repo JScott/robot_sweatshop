@@ -55,6 +55,7 @@ def assemble_job(request)
   }
 end
 
+puts 'Started'
 QueueHelper.wait_for('payload') do |request|
   puts "Assembling: #{request}"
   assembled_job = assemble_job request
