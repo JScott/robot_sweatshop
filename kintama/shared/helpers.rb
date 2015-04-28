@@ -26,27 +26,34 @@ module InHelper
   def input_http_url(for_job: 'test_job')
     "http://localhost:#{configatron.http_port}/payload-for/#{for_job}"
   end
+  def example_payload_request(of_format:)
+    {
+      payload: example_raw_payload(of_format: of_format),
+      format: of_format
+    }
+  end
   def example_job_request(of_type:)
-    payload, job_name = case of_type
+    payload, job_name, format = case of_type
     when 'Git'
-      payload = example_raw_payload of_format: 'Bitbucket' # develop branch
-      [payload, 'git_job']
+      format = 'Bitbucket' # develop branch
+      [example_raw_payload(of_format: format), 'git_job', format]
     when 'JSON'
-      payload = example_raw_payload of_format: 'JSON'
-      [payload, 'test_job']
+      format = 'JSON'
+      [example_raw_payload(of_format: format), 'test_job', format]
     when 'IgnoredBranch'
-      payload = example_raw_payload of_format: 'Github' # master branch
-      [payload, 'git_job']
+      format = 'Github' # master branch
+      [example_raw_payload(of_format: format), 'git_job', format]
     when 'UnknownJob'
-      payload = example_raw_payload of_format: 'Bitbucket'
-      [payload, 'unknown_job']
+      format = 'Bitbucket'
+      [example_raw_payload(of_format: format), 'unknown_job', format]
     when 'NonJSON'
-      ['not json', 'git_job']
+      ['not json', 'git_job', 'JSON']
     else
-      ['', '']
+      ['I', 'AM', 'ERROR']
     end
     JSON.generate payload: payload,
-                  job_name: job_name
+                  job_name: job_name,
+                  format: format
   end
 end
 

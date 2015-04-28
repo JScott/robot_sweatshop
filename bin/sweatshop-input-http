@@ -8,35 +8,6 @@ require 'sweatshop/config'
 
 include Contracts
 
-Contract String => Bool
-def is_json?(string)
-  begin
-    JSON.load string
-    true
-  rescue JSON::ParserError => e
-    false
-  end
-end
-
-Contract Sinatra::Request => Bool
-def from_github?(request)
-  request.env['HTTP_USER_AGENT'].start_with? 'Github-Hookshot'
-end
-
-Contract Sinatra::Request => Bool
-def from_bitbucket?(request)
-  request.env['HTTP_USER_AGENT'].start_with? 'Bitbucket.org'
-end
-
-Contract Sinatra::Request, String => String
-def detect_format_of(request, payload)
-  return 'empty' if payload.empty?
-  return 'Github' if from_github? request
-  return 'Bitbucket' if from_bitbucket? request
-  return 'JSON' if is_json? payload
-  'unsupported'
-end
-
 configure do
   set :port, configatron.http_port
   set :bind, configatron.http_bind
@@ -48,12 +19,12 @@ get '/' do
 end
 
 post '/payload-for/:job_name' do
-  puts "Received #{params['format']} payload for #{params['job_name']}"
+  puts "Received payload for #{params['job_name']}"
   request.body.rewind
   payload = request.body.read
   hash = {
     payload: payload,
-    format: detect_format_of(request, payload),
+    user_agent: request.env['HTTP_USER_AGENT'],
     job_name: params['job_name']
   }
   client = EZMQ::Client.new port: 5556

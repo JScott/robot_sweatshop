@@ -9,6 +9,50 @@ require 'sweatshop/payload'
 $stdout.sync = true
 include Contracts
 
+Contract String => Bool
+def is_json?(string)
+  begin
+    JSON.load string
+    true
+  rescue JSON::ParserError => e
+    false
+  end
+end
+
+Contract String => Bool
+def from_github?(payload)
+  payload = JSON.parse payload
+  return false if payload['compare'].nil?
+  payload['compare'].include? "github.com"
+  # request.env['HTTP_USER_AGENT'].start_with? 'Github-Hookshot'
+end
+
+Contract String => Bool
+def from_bitbucket?(payload)
+  payload.start_with? 'payload='
+  # request.env['HTTP_USER_AGENT'].start_with? 'Bitbucket.org'
+end
+
+# Contract Sinatra::Request, String => String
+# def detect_format_of(request, payload)
+#   return 'empty' if payload.empty?
+#   return 'Github' if from_github? request
+#   return 'Bitbucket' if from_bitbucket? request
+#   return 'JSON' if json? payload
+#   'unsupported'
+# end
+
+# Contract String => String
+def detect_format_of(payload)
+  return 'empty' if payload.empty?
+  if is_json? payload
+    return 'Github' if from_github? payload
+    return 'JSON'
+  end
+  return 'Bitbucket' if from_bitbucket? payload
+  'unsupported'
+end
+
 # Contract String => Hash, String
 def parse(payload)
   format = detect_format_of payload

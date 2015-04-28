@@ -16,9 +16,9 @@ describe 'the Payload Parser' do
   %w(Bitbucket Github JSON).each do |format|
     given "valid #{format} payloads" do
       setup do
-        payload = example_raw_payload of_format: format
+        payload = example_payload_request of_format: format
         @response = Timeout.timeout($for_a_while) do
-          @client.request "#{payload}"
+          @client.request JSON.dump(payload)
         end
       end
 
