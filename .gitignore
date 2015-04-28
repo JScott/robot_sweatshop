@@ -1,5 +1,8 @@
+*.gem
+jobs/*.yaml
+.robot_sweatshop
+
 Gemfile.lock
-worker/workspaces/**/*
-!worker/workspaces/.keep
-conductor/jobs/*
-!conductor/jobs/example.yaml
+.bundle
+vendor
+coverage

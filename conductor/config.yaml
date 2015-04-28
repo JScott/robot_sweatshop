@@ -1,4 +1,0 @@
----
-:port: 8081
-:pidfile: /var/run/robot-sweatshop/conductor.pid
-:logfile: /var/log/robot-sweatshop/conductor.log

@@ -1,6 +1,2 @@
 source 'http://rubygems.org'
-gem 'commander'
-gem 'sinatra'
-gem 'pidfile'
-gem 'rspec'
-gem 'sidekiq'
+gemspec

@@ -1,0 +1,10 @@
+---
+branch_whitelist:
+- develop
+
+commands:
+- echo $custom_env > test.txt
+
+environment:
+  custom_env: success
+  converts_to_string: { string: only }

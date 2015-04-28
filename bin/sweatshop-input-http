@@ -1,0 +1,28 @@
+#!/usr/bin/env ruby
+require 'sinatra'
+require 'ezmq'
+require 'json'
+require_relative '../lib/sweatshop/config'
+
+configure do
+  set :port, configatron.http_port
+  set :bind, configatron.http_bind
+  set :output_queue, 'raw-payload'
+  set :run, true
+end
+
+get '/' do
+  'Everything\'s on schedule!'
+end
+
+post '/:format/payload-for/:job_name' do
+  puts "Received #{params['format']} payload for #{params['job_name']}"
+  request.body.rewind
+  hash = {
+    payload: request.body.read,
+    format: params['format'],
+    job_name: params['job_name']
+  }
+  client = EZMQ::Client.new port: 5556
+  client.request "#{settings.output_queue} #{JSON.generate hash}"
+end
