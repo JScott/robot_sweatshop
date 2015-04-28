@@ -47,10 +47,10 @@ def load_config_for(job_name)
   load_if_exists("#{job_directory}/#{job_name}.yaml") || empty_config
 end
 
-Contract String => [Hash, String]
-def parse_payload(payload)
+Contract Hash => [Hash, String]
+def parse_payload(request)
   client = EZMQ::Client.new port: configatron.payload_parser_port
-  response = JSON.load client.request(payload)
+  response = JSON.load client.request(JSON.dump request)
   puts response['error'] unless response['error'].empty?
   [response['payload'], response['error']]
 end
@@ -65,7 +65,7 @@ end
 Contract Hash => Or[Hash, false]
 def assemble_job(request)
   job_config = load_config_for request['job_name']
-  payload, error = parse_payload request['payload']
+  payload, error = parse_payload request
   return false unless error.empty? && can_work_with?(job_config, payload)
   {
     commands: job_config['commands'],

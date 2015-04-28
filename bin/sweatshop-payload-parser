@@ -10,7 +10,7 @@ $stdout.sync = true
 include Contracts
 
 Contract String => Bool
-def is_json?(string)
+def json?(string)
   begin
     JSON.load string
     true
@@ -20,55 +20,50 @@ def is_json?(string)
 end
 
 Contract String => Bool
-def from_github?(payload)
-  payload = JSON.parse payload
-  return false if payload['compare'].nil?
-  payload['compare'].include? "github.com"
-  # request.env['HTTP_USER_AGENT'].start_with? 'Github-Hookshot'
+def from_github?(user_agent)
+  user_agent.start_with? 'Github-Hookshot'
 end
 
 Contract String => Bool
-def from_bitbucket?(payload)
-  payload.start_with? 'payload='
-  # request.env['HTTP_USER_AGENT'].start_with? 'Bitbucket.org'
+def from_bitbucket?(user_agent)
+  user_agent.start_with? 'Bitbucket.org'
 end
 
-# Contract Sinatra::Request, String => String
-# def detect_format_of(request, payload)
-#   return 'empty' if payload.empty?
-#   return 'Github' if from_github? request
-#   return 'Bitbucket' if from_bitbucket? request
-#   return 'JSON' if json? payload
-#   'unsupported'
-# end
-
-# Contract String => String
-def detect_format_of(payload)
-  return 'empty' if payload.empty?
-  if is_json? payload
-    return 'Github' if from_github? payload
-    return 'JSON'
-  end
-  return 'Bitbucket' if from_bitbucket? payload
+Contract Hash => String
+def detect_format_of(request)
+  return 'empty' if request['payload'].empty?
+  return 'Github' if from_github? request['user_agent']
+  return 'Bitbucket' if from_bitbucket? request['user_agent']
+  return 'JSON' if json? request['payload']
   'unsupported'
 end
 
-# Contract String => Hash, String
-def parse(payload)
-  format = detect_format_of payload
+Contract Hash => Hash
+def parse(request)
+  format = detect_format_of request
   lib_file = "#{__dir__}/../lib/sweatshop/payload/#{format}.rb"
   if File.file?(lib_file)
     require_relative lib_file
-    [Object.const_get("#{format}Payload").new(payload).to_hash, '']
+    payload = Object.const_get("#{format}Payload").new(request['payload'])
+    {payload: payload.to_hash, error: ''}
   else
-    [{}, "Can't parse #{format} payload"]
+    {payload: {}, error: "Can't parse #{format} payload"}
   end
+end
+
+Contract Any => Hash
+def validate(request)
+  return {payload: {}, error: "Invalid JSON request"} unless json? request
+  request = JSON.load request
+  return {payload: {}, error: "Empty request"} if request.nil?
+  request
 end
 
 puts 'Started'
 server = EZMQ::Server.new port: configatron.payload_parser_port#, encode: -> m { JSON.dump m }
-server.listen do |payload|
-  puts "Parsing: #{payload}"
-  payload, error = parse payload
-  JSON.dump payload: payload, error: error
+server.listen do |request|
+  puts "Parsing: #{request}"
+  request = validate request
+  request = parse request unless request[:error]
+  JSON.dump request
 end

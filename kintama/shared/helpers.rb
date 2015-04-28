@@ -26,10 +26,20 @@ module InHelper
   def input_http_url(for_job: 'test_job')
     "http://localhost:#{configatron.http_port}/payload-for/#{for_job}"
   end
+  def user_agent_for(format)
+    case format
+    when 'Bitbucket'
+      'Bitbucket.org'
+    when 'Github'
+      'Github-Hookshot'
+    else
+      'SomeRandomUserAgent'
+    end
+  end
   def example_payload_request(of_format:)
     {
       payload: example_raw_payload(of_format: of_format),
-      format: of_format
+      user_agent: user_agent_for(of_format)
     }
   end
   def example_job_request(of_type:)
