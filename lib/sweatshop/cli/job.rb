@@ -1,7 +1,7 @@
 require_relative '../config'
 
 def default_job
-  "---\n# branch_whitelist:\n# - master\n\ncommands:\n- echo 'Hello $WORLD!'\n\nenvironment:\n  WORLD: Earth\n"
+  "---\n# branch_whitelist:\n# - master\n\ncommands:\n- echo \"Hello $WORLD!\"\n\nenvironment:\n  WORLD: Earth\n"
 end
 
 def get_job_path(for_job: nil)
