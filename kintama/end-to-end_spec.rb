@@ -18,10 +18,8 @@ describe 'Robot Sweatshop' do
   context "POST git data to the HTTP Input" do
     setup do
       url = input_http_url for_job: 'test_job'
-puts "posting..."
       HTTP.post url, body: example_raw_payload(of_format: 'JSON')
-puts "post successful"
-      sleep $for_everything
+      sleep $for_io_calls
     end
 
     should 'run jobs with the context as environment variables' do
