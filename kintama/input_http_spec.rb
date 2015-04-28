@@ -13,7 +13,6 @@ given 'the HTTP Input' do
   setup do
     @subscriber = EZMQ::Subscriber.new port: 5557, topic: 'busy-queues'
     @client = EZMQ::Client.new port: 5556
-    @job_name = 'test_job'
     @payload_queue = 'payload'
     clear_all_queues
   end
@@ -21,9 +20,8 @@ given 'the HTTP Input' do
   %w(Bitbucket Github JSON).each do |format|
     context "POSTing #{format} data" do
       setup do
-        url = input_http_url for_job: @job_name
-        payload = example_raw_payload of_format: format
-        HTTP.post url, body: payload
+        url = input_http_url for_job: 'test_job'
+        HTTP.post url, body: example_raw_payload(of_format: format)
       end
 
       should 'enqueue to \'payload\'' do
