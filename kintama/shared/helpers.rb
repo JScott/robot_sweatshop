@@ -45,28 +45,24 @@ module InHelper
   def job_request_data(type)
     case type
     when 'Git'
-      format = 'Bitbucket' # develop branch
-      [example_raw_payload(of_format: format), 'git_job', user_agent_for(format)]
+      ['Bitbucket', 'git_job'] # develop branch
     when 'JSON'
-      format = 'JSON'
-      [example_raw_payload(of_format: format), 'test_job', user_agent_for(format)]
+      ['JSON', 'test_job']
     when 'IgnoredBranch'
-      format = 'Github' # master branch
-      [example_raw_payload(of_format: format), 'git_job', user_agent_for(format)]
+      ['Github', 'git_job'] # master branch
     when 'UnknownJob'
-      format = 'Bitbucket'
-      [example_raw_payload(of_format: format), 'unknown_job', user_agent_for(format)]
+      ['Bitbucket', 'unknown_job']
     when 'NonJSON'
-      ['not json', 'git_job', user_agent_for('JSON')]
+      ['JSON', 'git_job', 'not json']
     else
       ['I', 'AM', 'ERROR']
     end
   end
   def example_job_request(of_type:)
-    payload, job_name, user_agent = job_request_data of_type
-    JSON.generate payload: payload,
+    format, job_name, payload = job_request_data of_type
+    JSON.generate payload: payload || example_raw_payload(of_format: format),
                   job_name: job_name,
-                  user_agent: user_agent
+                  user_agent: user_agent_for(format)
   end
 end
 
