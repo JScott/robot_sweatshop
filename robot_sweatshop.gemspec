@@ -24,6 +24,7 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency 'configatron'
   gem.add_runtime_dependency 'moneta'
   gem.add_runtime_dependency 'contracts'
+  gem.add_runtime_dependency 'thin'
 
   gem.add_development_dependency 'rake'
   gem.add_development_dependency 'kintama'
