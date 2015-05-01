@@ -30,6 +30,8 @@ describe 'the Payload Parser' do
         keys = case format
         when 'JSON'
           %w(test1 test2)
+        when 'Empty'
+          []
         else
           Payload.hash_keys
         end
@@ -42,7 +44,7 @@ describe 'the Payload Parser' do
     end
   end
 
-  %w(Empty NonJSON).each do |format|
+  %w(NonJSON).each do |format|
     given "#{format} payloads" do
       setup do
         payload = example_raw_payload of_format: format
