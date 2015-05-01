@@ -48,13 +48,15 @@ module InHelper
       ['Bitbucket', 'git_job'] # develop branch payload
     when 'JSON'
       ['JSON', 'test_job']
-    when 'Minimal'
+    when 'MinimalJob'
       ['JSON', 'minimal_job']
+    when 'EmptyPayload'
+      ['Empty', 'test_job']
     when 'IgnoredBranch'
       ['Github', 'git_job'] # master branch payload
     when 'UnknownJob'
       ['Bitbucket', 'unknown_job']
-    when 'Empty'
+    when 'EmptyJob'
       ['JSON', 'empty_job']
     else
       ['', '']

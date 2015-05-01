@@ -16,7 +16,7 @@ describe 'the Job Assembler' do
     clear_all_queues
   end
 
-  %w(Git JSON Minimal).each do |request|
+  %w(Git JSON MinimalJob EmptyPayload).each do |request|
     given "#{request} requests in \'payload\'" do
       setup do
         payload = example_job_request of_type: request
@@ -43,20 +43,22 @@ describe 'the Job Assembler' do
         response['context'].each { |_key, value| assert_kind_of String, value }
       end
 
-      should 'build the context with a parsed payload' do
-        response = @client.request "mirror-#{@jobs_queue}"
-        response = JSON.load response
-        assert_kind_of Hash, response['context']
-        if request == 'Git'
-          assert_equal 'develop', response['context']['branch']
-        else
-          assert_equal 'value', response['context']['test1']
+      unless request == 'EmptyPayload'
+        should 'build the context with a parsed payload' do
+          response = @client.request "mirror-#{@jobs_queue}"
+          response = JSON.load response
+          assert_kind_of Hash, response['context']
+          if request == 'Git'
+            assert_equal 'develop', response['context']['branch']
+          else
+            assert_equal 'value', response['context']['test1']
+          end
         end
       end
     end
   end
 
-  %w(IgnoredBranch UnknownJob Empty).each do |request|
+  %w(IgnoredBranch UnknownJob EmptyJob).each do |request|
     given "#{request} requests in \'payload\'" do
       setup do
         payload = example_job_request of_type: request
