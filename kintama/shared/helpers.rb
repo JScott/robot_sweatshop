@@ -50,8 +50,6 @@ module InHelper
       ['JSON', 'test_job']
     when 'MinimalJob'
       ['JSON', 'minimal_job']
-    when 'EmptyPayload'
-      ['Empty', 'test_job']
     when 'IgnoredBranch'
       ['Github', 'git_job'] # master branch payload
     when 'UnknownJob'

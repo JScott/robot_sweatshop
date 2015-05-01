@@ -13,7 +13,7 @@ describe 'the Payload Parser' do
     @client = EZMQ::Client.new port: configatron.payload_parser_port
   end
 
-  %w(Bitbucket Github JSON).each do |format|
+  %w(Bitbucket Github JSON Empty).each do |format|
     given "valid #{format} payloads" do
       setup do
         payload = example_payload_request of_format: format

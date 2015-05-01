@@ -38,10 +38,10 @@ def detect_format_of(request)
   'unsupported'
 end
 
-Contract String, String => Hash
+Contract String, String => Or[Hash, nil]
 def payload_hash_from(payload, format)
   lib_file = "#{__dir__}/../lib/sweatshop/payload/#{format}.rb"
-  return {} unless File.file?(lib_file)
+  return nil unless File.file?(lib_file)
   require_relative lib_file
   Object.const_get("#{format}Payload").new(payload).to_hash
 end
@@ -50,6 +50,7 @@ Contract Hash => Hash
 def parse(request)
   format = detect_format_of request
   payload = payload_hash_from request['payload'], format
+  return {payload: {}, error: "Can't parse #{format} payload"} if payload.nil?
   {payload: payload, error: ''}
 end
 
