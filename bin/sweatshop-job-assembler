@@ -69,7 +69,7 @@ def assemble_job(request)
   return false unless error.empty? && can_work_with?(job_config, payload)
   {
     commands: job_config['commands'],
-    context: job_context(job_config['environment'], payload),
+    context: job_context(job_config['environment'] || {}, payload),
     job_name: request['job_name']
   }
 end
