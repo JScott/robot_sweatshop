@@ -56,6 +56,8 @@ module InHelper
       ['Bitbucket', 'unknown_job']
     when 'EmptyJob'
       ['JSON', 'empty_job']
+    when 'NonJSON'
+      ['NonJSON', 'test_job']
     else
       ['', '']
     end

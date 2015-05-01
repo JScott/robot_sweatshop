@@ -12,7 +12,7 @@ Robot Sweatshop is a single-purpose CI server that runs collections of arbitrary
 - `gem install robot_sweatshop`
 - `sweatshop start` ([you may need sudo on OSX](https://github.com/JScott/robot_sweatshop/wiki))
 - `sweatshop job example --auto`
-- `curl --data '{"your": "json"}' http://localhost:8080/payload-for/example`
+- `curl -X POST http://localhost:8080/payload-for/example`
 - `cat .robot_sweatshop/log/job-worker.log`
 
 # Usage
@@ -30,6 +30,7 @@ By default, Robot Sweatshop looks in your current working directory to configure
 - Github (application/json format only)
 - Bitbucket
 - JSON
+- Empty
 
 # Security
 

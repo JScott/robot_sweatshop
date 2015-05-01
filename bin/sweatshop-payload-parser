@@ -59,8 +59,6 @@ Contract Any => Hash
 def validate(request)
   return {payload: {}, error: "Invalid JSON request"} unless json? request
   JSON.load request
-  # return {payload: {}, error: "Empty request"} if request.nil?
-  # request
 end
 
 puts 'Started'
