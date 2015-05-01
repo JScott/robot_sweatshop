@@ -13,7 +13,7 @@ $stderr.sync = true
 def from_workspace(named: 'no_job_name')
   workspace = "#{named}-#{@worker_id}"
   puts "Workspace: #{workspace}"
-  path = File.expand_path "#{configatron.workspace_directory}/#{workspace}"
+  path = File.expand_path "#{configatron.workspace_path}/#{workspace}"
   FileUtils.mkpath path
   Dir.chdir(path) { yield if block_given? }
 end

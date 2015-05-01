@@ -23,7 +23,7 @@ Robot Sweatshop uses [Eye](https://github.com/kostya/eye) to handle its processe
 
 # Configuration
 
-By default, Robot Sweatshop looks in your current working directory to configure and run. You can supply a custom configuration with `sweatshop config [local|user|system]`. Read [the wiki](https://github.com/JScott/robot_sweatshop/wiki) for more information.
+By default, Robot Sweatshop looks in your current working path to configure and run. You can supply a custom configuration with `sweatshop config [local|user|system]`. Read [the wiki](https://github.com/JScott/robot_sweatshop/wiki) for more information.
 
 # Supported payload formats
 

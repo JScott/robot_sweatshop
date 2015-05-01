@@ -16,8 +16,8 @@ def empty_config
 end
 
 Contract None => String
-def job_directory
-  File.expand_path configatron.job_directory
+def job_path
+  File.expand_path configatron.job_path
 end
 
 Contract Or[String, nil], Hash => Bool
@@ -44,7 +44,7 @@ end
 
 Contract String => Hash
 def load_config_for(job_name)
-  load_if_exists("#{job_directory}/#{job_name}.yaml") || empty_config
+  load_if_exists("#{job_path}/#{job_name}.yaml") || empty_config
 end
 
 Contract Hash => [Hash, String]

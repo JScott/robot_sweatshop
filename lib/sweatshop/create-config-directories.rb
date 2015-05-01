@@ -21,7 +21,7 @@ end
 
 config = configatron.to_h
 config.each do |key, value|
-  if key.to_s.match /_directory/
+  if key.to_s.match /_path/
     path = File.expand_path value
     create_path path
     set_dir_permissions for_path: path if configatron.has_key? :user

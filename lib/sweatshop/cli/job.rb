@@ -5,10 +5,10 @@ def default_job
 end
 
 def get_job_path(for_job: nil)
-  "#{configatron.job_directory}/#{for_job}.yaml"
+  "#{configatron.job_path}/#{for_job}.yaml"
 end
 
 def list_jobs
-  job_directory = File.expand_path configatron.job_directory
-  puts Dir.glob("#{job_directory}/*.yaml").map { |file| File.basename(file, '.yaml') }
+  job_path = File.expand_path configatron.job_path
+  puts Dir.glob("#{job_path}/*.yaml").map { |file| File.basename(file, '.yaml') }
 end
