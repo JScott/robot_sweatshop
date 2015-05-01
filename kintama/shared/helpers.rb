@@ -33,7 +33,7 @@ module InHelper
     when 'Github'
       'Github-Hookshot'
     else
-      'SomeRandomUserAgent'
+      'SomeUserAgent'
     end
   end
   def example_payload_request(of_format:)
@@ -45,22 +45,24 @@ module InHelper
   def job_request_data(type)
     case type
     when 'Git'
-      ['Bitbucket', 'git_job'] # develop branch
+      ['Bitbucket', 'git_job'] # develop branch payload
     when 'JSON'
       ['JSON', 'test_job']
+    when 'Minimal'
+      ['JSON', 'minimal_job']
     when 'IgnoredBranch'
-      ['Github', 'git_job'] # master branch
+      ['Github', 'git_job'] # master branch payload
     when 'UnknownJob'
       ['Bitbucket', 'unknown_job']
-    when 'NonJSON'
-      ['JSON', 'git_job', 'not json']
+    when 'Empty'
+      ['JSON', 'empty_job']
     else
-      ['I', 'AM', 'ERROR']
+      ['', '']
     end
   end
   def example_job_request(of_type:)
-    format, job_name, payload = job_request_data of_type
-    JSON.generate payload: payload || example_raw_payload(of_format: format),
+    format, job_name = job_request_data of_type
+    JSON.generate payload: example_raw_payload(of_format: format),
                   job_name: job_name,
                   user_agent: user_agent_for(format)
   end

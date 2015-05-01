@@ -16,7 +16,7 @@ describe 'the Job Assembler' do
     clear_all_queues
   end
 
-  %w(Git JSON).each do |request|
+  %w(Git JSON Minimal).each do |request|
     given "#{request} requests in \'payload\'" do
       setup do
         payload = example_job_request of_type: request
@@ -56,7 +56,7 @@ describe 'the Job Assembler' do
     end
   end
 
-  %w(IgnoredBranch UnknownJob NonJSON).each do |request|
+  %w(IgnoredBranch UnknownJob Empty).each do |request|
     given "#{request} requests in \'payload\'" do
       setup do
         payload = example_job_request of_type: request
