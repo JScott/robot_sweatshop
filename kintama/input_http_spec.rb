@@ -17,7 +17,7 @@ given 'the HTTP Input' do
     clear_all_queues
   end
 
-  %w(Bitbucket Github JSON).each do |format|
+  %w(Bitbucket Github JSON Empty).each do |format|
     context "POSTing #{format} data" do
       setup do
         url = input_http_url for_job: 'test_job'
