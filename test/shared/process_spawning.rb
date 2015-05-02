@@ -1,4 +1,4 @@
-$for_a_moment = 0.1
+$for_a_moment = 0.2
 $for_a_while = 0.5
 $for_io_calls = 1
 $for_everything = 2
