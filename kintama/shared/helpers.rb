@@ -1,9 +1,9 @@
 require 'bundler/setup'
 require 'yaml'
 require 'json'
-require 'sweatshop/moneta-queue'
-require 'sweatshop/payload'
-require 'sweatshop/config'
+require 'robot_sweatshop/moneta-queue'
+require 'robot_sweatshop/payload'
+require 'robot_sweatshop/config'
 
 module QueueHelper
   def clear_all_queues

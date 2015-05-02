@@ -1,13 +1,11 @@
 #!/usr/bin/env ruby
+require 'bundler/setup'
 require 'yaml'
 require 'commander/import'
 require 'colorize'
-require_relative '../lib/sweatshop/cli/common'
-require_relative '../lib/sweatshop/cli/job'
-require_relative '../lib/sweatshop/cli/start'
-require_relative '../lib/sweatshop/cli/config'
-require_relative '../lib/sweatshop/config'
-require_relative '../lib/sweatshop/create-config-directories'
+require 'robot_sweatshop/cli'
+require 'robot_sweatshop/config'
+require 'robot_sweatshop/create-config-directories'
 
 program :name, 'Robot Sweatshop'
 program :version, '0.3.0'

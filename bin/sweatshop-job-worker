@@ -1,8 +1,9 @@
 #!/usr/bin/env ruby
+require 'bundler/setup'
 require 'faker'
 require 'fileutils'
-require_relative '../lib/sweatshop/queue-helper'
-require_relative '../lib/sweatshop/config'
+require 'robot_sweatshop/queue-helper'
+require 'robot_sweatshop/config'
 
 $stdout.sync = true
 $stderr.sync = true

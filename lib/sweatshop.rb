@@ -1,5 +1,0 @@
-require_relative 'sweatshop/moneta-queue'
-require_relative 'sweatshop/queue-helper'
-require_relative 'sweatshop/config'
-require_relative 'sweatshop/payload'
-require_relative 'sweatshop/cli'

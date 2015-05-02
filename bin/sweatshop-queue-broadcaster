@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
-require_relative '../lib/sweatshop/moneta-queue'
+require 'bundler/setup'
 require 'ezmq'
+require 'robot_sweatshop/moneta-queue'
 
 publisher = EZMQ::Publisher.new port: 5557
 queues = {}

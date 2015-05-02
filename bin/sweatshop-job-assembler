@@ -3,8 +3,8 @@ require 'bundler/setup'
 require 'yaml'
 require 'json'
 require 'contracts'
-require 'sweatshop/queue-helper'
-require 'sweatshop/config'
+require 'robot_sweatshop/queue-helper'
+require 'robot_sweatshop/config'
 
 $stdout.sync = true
 include Contracts

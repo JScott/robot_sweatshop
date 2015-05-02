@@ -3,7 +3,7 @@ require 'bundler/setup'
 require 'sinatra'
 require 'ezmq'
 require 'json'
-require 'sweatshop/config'
+require 'robot_sweatshop/config'
 
 configure do
   set :port, configatron.http_port

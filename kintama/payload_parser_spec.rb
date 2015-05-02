@@ -17,7 +17,7 @@ describe 'the Payload Parser' do
     given "valid #{format} payloads" do
       setup do
         payload = example_payload_request of_format: format
-        @response = Timeout.timeout($for_a_while) do
+        @response = Timeout.timeout($for_a_moment) do
           @client.request JSON.dump(payload)
         end
       end
@@ -48,7 +48,7 @@ describe 'the Payload Parser' do
     given "#{format} payloads" do
       setup do
         payload = example_raw_payload of_format: format
-        @response = Timeout.timeout($for_a_while) do
+        @response = Timeout.timeout($for_a_moment) do
           @client.request "#{payload}"
         end
       end

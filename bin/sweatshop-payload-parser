@@ -3,8 +3,8 @@ require 'bundler/setup'
 require 'json'
 require 'ezmq'
 require 'contracts'
-require 'sweatshop/config'
-require 'sweatshop/payload'
+require 'robot_sweatshop/config'
+require 'robot_sweatshop/payload'
 
 $stdout.sync = true
 include Contracts
@@ -40,7 +40,8 @@ end
 
 Contract String, String => Or[Hash, nil]
 def payload_hash_from(payload, format)
-  lib_file = "#{__dir__}/../lib/sweatshop/payload/#{format.downcase}.rb"
+  # TODO: use require instead of require_relative
+  lib_file = "#{__dir__}/../lib/robot_sweatshop/payload/#{format.downcase}.rb"
   return nil unless File.file?(lib_file)
   require_relative lib_file
   Object.const_get("#{format}Payload").new(payload).to_hash

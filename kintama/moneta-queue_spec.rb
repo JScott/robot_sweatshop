@@ -1,6 +1,7 @@
+require 'bundler/setup'
 require 'kintama'
+require 'robot_sweatshop/moneta-queue'
 require_relative 'shared/helpers'
-require_relative '../lib/sweatshop/moneta-queue'
 
 given 'the Moneta Queue class' do
   include QueueHelper
