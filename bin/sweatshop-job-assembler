@@ -11,7 +11,7 @@ include Contracts
 
 Contract None => Hash
 def empty_config
-  puts "Job configuration not found"
+  puts "Job configuration not found or empty"
   {}
 end
 
