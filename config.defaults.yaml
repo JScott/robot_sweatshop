@@ -6,7 +6,7 @@ workspace_path: .robot_sweatshop/workspaces
 database_path: .robot_sweatshop/db
 http_port: 8080
 http_bind: 0.0.0.0
-conveyor_belt_port: 5559 # 5556
+conveyor_port: 5559 # 5556
 # queue_broadcaster_port: # 5557
 payload_parser_port: 5558
 job_timeout_length: 300 # 5 minutes

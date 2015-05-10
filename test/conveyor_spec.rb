@@ -7,18 +7,18 @@ require 'robot_sweatshop/config'
 # require_relative 'shared/helpers'
 
 Kintama.on_start do
-  conveyor_belt_script = File.expand_path "#{__dir__}/../bin/sweatshop-conveyor-belt"
-  @pid = spawn conveyor_belt_script, out: '/dev/null', err: '/dev/null'
+  conveyor_script = File.expand_path "#{__dir__}/../bin/sweatshop-conveyor"
+  @pid = spawn conveyor_script, out: '/dev/null', err: '/dev/null'
 end
 
 Kintama.on_finish do
   Process.kill 'TERM', @pid
 end
 
-describe 'the Conveyor Belt' do
+describe 'the Conveyor' do
   setup do
     client_settings = {
-      port: configatron.conveyor_belt_port,
+      port: configatron.conveyor_port,
       encode: -> message { Oj.dump message },
       decode: -> message { Oj.load message }
     }
