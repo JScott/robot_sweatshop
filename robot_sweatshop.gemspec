@@ -26,6 +26,7 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency 'sinatra'
   gem.add_runtime_dependency 'ezmq'
   gem.add_runtime_dependency 'stubborn_queue'
+  gem.add_runtime_dependency 'oj'
 
   gem.add_development_dependency 'rake'
   gem.add_development_dependency 'kintama'
