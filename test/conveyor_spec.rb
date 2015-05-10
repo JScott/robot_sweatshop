@@ -3,8 +3,6 @@ require 'kintama'
 require 'ezmq'
 require 'oj'
 require 'robot_sweatshop/config'
-# require_relative 'shared/process_spawning'
-# require_relative 'shared/helpers'
 
 Kintama.on_start do
   conveyor_script = File.expand_path "#{__dir__}/../bin/sweatshop-conveyor"
@@ -52,5 +50,14 @@ describe 'the Conveyor' do
       @client.request 'assurance that the server is still up'
     end
     assert_nil response
+  end
+
+  should 'finish items by ID to prevent requeueing' do
+    response = Timeout.timeout(@wait) do
+      @client.request({method: 'enqueue', data: @item}, {})
+      id = @client.request({method: 'dequeue'}, {})
+      @client.request({method: 'finish', data: id}, {})
+    end
+    assert_not_equal '', response
   end
 end
