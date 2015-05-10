@@ -10,7 +10,7 @@ require 'robot_sweatshop/config'
 $stdout.sync = true
 include Contracts
 
-Contract Hash => String
+Contract String => Fixnum
 def enqueue(item)
   puts "enqueue #{item}"
   @items.enqueue item
@@ -22,6 +22,8 @@ def dequeue
 end
 
 def lookup(id)
+  puts "lookup #{id}"
+  @items.lookup id
 end
 
 puts 'Starting Conveyor Belt'
@@ -32,14 +34,14 @@ server_settings = {
 }
 server = EZMQ::Server.new server_settings
 server.listen do |request|
-  puts request
-  case request['method']
+  next unless request.is_a? Hash
+  case request[:method]
   when 'enqueue'
-    enqueue request['item']
+    enqueue request[:data]
   when 'dequeue'
     dequeue
   when 'lookup'
-    lookup request['id']
+    lookup request[:data]
   else
     ''
   end
