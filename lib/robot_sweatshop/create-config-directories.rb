@@ -1,5 +1,4 @@
 require 'fileutils'
-require_relative 'config'
 
 def create_path(path)
   begin
