@@ -18,7 +18,7 @@ describe 'the Conveyor Belt' do
   setup do
     client_settings = {
       port: configatron.conveyor_belt_port,
-      encode: -> message { Oj.dump message},
+      encode: -> message { Oj.dump message },
       decode: -> message { Oj.load message }
     }
     @client = EZMQ::Client.new client_settings
@@ -31,7 +31,6 @@ describe 'the Conveyor Belt' do
       @client.request({method: 'enqueue', data: @item}, {})
       @client.request({method: 'dequeue'}, {})
     end
-    puts id
     assert_kind_of Fixnum, id
   end
 
@@ -51,6 +50,6 @@ describe 'the Conveyor Belt' do
       @client.request ''
       @client.request 'assurance that the server is still up'
     end
-    assert_equal '', response
+    assert_nil response
   end
 end
