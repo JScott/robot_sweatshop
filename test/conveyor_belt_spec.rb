@@ -7,18 +7,19 @@ require 'robot_sweatshop/config'
 # require_relative 'shared/helpers'
 
 Kintama.on_start do
-  conveyor_belt_script = File.expand_path "#{__dir__}/../bin/sweatshop-conveyor-belt"
-  pid = spawn conveyor_belt_script#, out: '/dev/null', err: '/dev/null'
-  Process.detach pid
-  sleep 1
+  # raise "Please stop Robot Sweatshop before running tests" unless `lsof -i :#{configatron.conveyor_belt_port}`.empty?
+  # conveyor_belt_script = File.expand_path "#{__dir__}/../bin/sweatshop-conveyor-belt"
+  # pid = spawn conveyor_belt_script#, out: '/dev/null', err: '/dev/null'
+  # Process.detach pid
+  # sleep 1
 end
 
 describe 'the Conveyor Belt' do
   setup do
     client_settings = {
       port: configatron.conveyor_belt_port,
-      encode: -> message { Oj.load message },
-      decode: -> message { Oj.dump message }
+      encode: -> message { Oj.dump message },
+      decode: -> message { Oj.load message }
     }
     @client = EZMQ::Client.new client_settings
     @item = 'test_item'
