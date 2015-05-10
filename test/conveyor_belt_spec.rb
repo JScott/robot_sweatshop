@@ -8,8 +8,9 @@ require 'robot_sweatshop/config'
 
 Kintama.on_start do
   conveyor_belt_script = File.expand_path "#{__dir__}/../bin/sweatshop-conveyor-belt"
-  pid = spawn conveyor_belt_script, out: '/dev/null', err: '/dev/null'
+  pid = spawn conveyor_belt_script#, out: '/dev/null', err: '/dev/null'
   Process.detach pid
+  sleep 1
 end
 
 describe 'the Conveyor Belt' do
@@ -29,6 +30,7 @@ describe 'the Conveyor Belt' do
       @client.request method: 'enqueue', data: @item
       @client.request method: 'dequeue'
     end
+    puts id
     assert_kind_of Fixnum, id
   end
 
