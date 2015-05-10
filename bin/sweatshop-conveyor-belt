@@ -27,7 +27,7 @@ def dequeue
   @items.dequeue
 end
 
-Contract String => String
+Contract Fixnum => String
 def lookup(id)
   puts "lookup #{id}"
   @items.lookup id
