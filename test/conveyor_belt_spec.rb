@@ -18,7 +18,7 @@ describe 'the Conveyor Belt' do
   setup do
     client_settings = {
       port: configatron.conveyor_belt_port,
-      encode: -> message { Oj.dump message },
+      encode: -> message { Oj.dump message},
       decode: -> message { Oj.load message }
     }
     @client = EZMQ::Client.new client_settings
@@ -28,8 +28,8 @@ describe 'the Conveyor Belt' do
 
   should 'enqueue and dequeue items' do
     id = Timeout.timeout(@wait) do
-      @client.request method: 'enqueue', data: @item
-      @client.request method: 'dequeue'
+      @client.request({method: 'enqueue', data: @item}, {})
+      @client.request({method: 'dequeue'}, {})
     end
     puts id
     assert_kind_of Fixnum, id
@@ -37,9 +37,9 @@ describe 'the Conveyor Belt' do
 
   should 'lookup items by ID' do
     item = Timeout.timeout(@wait) do
-      @client.request method: 'enqueue', data: @item
-      id = @client.request method: 'dequeue'
-      @client.request method: 'lookup', data: id
+      @client.request({method: 'enqueue', data: @item}, {})
+      id = @client.request({method: 'dequeue'}, {})
+      @client.request({method: 'lookup', data: id}, {})
     end
     assert_equal @item, item
   end
@@ -47,7 +47,7 @@ describe 'the Conveyor Belt' do
   should 'return nothing when given invalid data' do
     response = Timeout.timeout(@wait) do
       @client.request 'not json'
-      @client.request method: 'invalid'
+      @client.request({method: 'invalid'}, {})
       @client.request ''
       @client.request 'assurance that the server is still up'
     end
