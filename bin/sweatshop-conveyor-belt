@@ -16,11 +16,13 @@ def enqueue(item)
   @items.enqueue item
 end
 
+Contract None => Fixnum
 def dequeue
   puts "dequeue"
   @items.dequeue
 end
 
+Contract String => String
 def lookup(id)
   puts "lookup #{id}"
   @items.lookup id
