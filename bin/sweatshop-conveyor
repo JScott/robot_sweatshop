@@ -33,9 +33,9 @@ def lookup(id)
   @items.lookup id
 end
 
-puts 'Starting Conveyor Belt'
+puts 'Starting the Conveyor'
 server_settings = {
-  port: configatron.conveyor_belt_port,
+  port: configatron.conveyor_port,
   encode: -> message { Oj.dump message },
   decode: -> message { Oj.load message }
 }
