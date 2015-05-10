@@ -6,7 +6,12 @@ require 'oj'
 require 'contracts'
 require 'robot_sweatshop/config'
 
-@items = StubbornQueue.new name: 'test', timeout: configatron.job_timeout_length
+queue_settings = {
+  name: 'test',
+  timeout: configatron.job_timeout_length,
+  file: "#{configatron.database_path}/conveyor.db"
+}
+@items = StubbornQueue.new queue_settings
 $stdout.sync = true
 include Contracts
 

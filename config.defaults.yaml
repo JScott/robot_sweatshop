@@ -3,7 +3,7 @@ pidfile_path: .robot_sweatshop/run
 logfile_path: .robot_sweatshop/log
 job_path: .robot_sweatshop/jobs
 workspace_path: .robot_sweatshop/workspaces
-moneta_path: .robot_sweatshop/db
+database_path: .robot_sweatshop/db
 http_port: 8080
 http_bind: 0.0.0.0
 conveyor_belt_port: 5559 # 5556
