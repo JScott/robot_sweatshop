@@ -21,20 +21,6 @@ Eye.application :robot_sweatshop do
       daemonize true
     end
   end
-  group 'queue' do
-    process :handler do
-      pid_file "#{PID_PATH}/queue-handler.pid"
-      stdall "#{LOG_PATH}/queue-handler.log"
-      start_command "#{__dir__}/bin/sweatshop-queue-handler"
-      daemonize true
-    end
-    process :broadcaster do
-      pid_file "#{PID_PATH}/queue-broadcaster.pid"
-      stdall "#{LOG_PATH}/queue-broadcaster.log"
-      start_command "#{__dir__}/bin/sweatshop-queue-broadcaster #{configatron.eye.broadcaster_interval}"
-      daemonize true
-    end
-  end
   group 'job' do
     process :assembler do
       pid_file "#{PID_PATH}/job-assembler.pid"
