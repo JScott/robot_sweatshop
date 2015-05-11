@@ -2,6 +2,7 @@ require 'bundler/setup'
 require 'kintama'
 require 'ezmq'
 require 'oj'
+require 'timeout'
 require 'robot_sweatshop/config'
 
 Kintama.on_start do
@@ -21,8 +22,6 @@ describe 'the Conveyor' do
       decode: -> message { Oj.load message }
     }
     @client = EZMQ::Client.new client_settings
-    @item = 'test_item'
-    @wait = 1
   end
 
   should 'enqueue and dequeue items' do
