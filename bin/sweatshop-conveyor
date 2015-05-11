@@ -33,6 +33,12 @@ def lookup(id)
   @items.lookup id
 end
 
+Contract Fixnum => Bool
+def finish(id)
+  puts "finish #{id}"
+  @items.finish id
+end
+
 puts 'Starting the Conveyor'
 server_settings = {
   port: configatron.conveyor_port,
@@ -49,6 +55,8 @@ server.listen do |request|
     dequeue
   when 'lookup'
     lookup request[:data]
+  when 'finish'
+    finish request[:data]
   else
     ''
   end
