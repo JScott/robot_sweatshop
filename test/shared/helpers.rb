@@ -1,24 +1,15 @@
 require 'bundler/setup'
 require 'yaml'
-require 'json'
-require 'robot_sweatshop/moneta-queue'
+require 'oj'
 require 'robot_sweatshop/payload'
 require 'robot_sweatshop/config'
 
-module QueueHelper
-  def clear_all_queues
-    MonetaQueue.watched_queues.each do |queue|
-      queue = MonetaQueue.new queue
-      queue.clear
-    end
-  end
-  def enqueue(queue_name, item)
-    queue = MonetaQueue.new queue_name
-    queue.enqueue item
-  end
-end
+$for_a_moment = 0.2
+$for_a_while = 0.5
+$for_io_calls = 1
+$for_everything = 2
 
-module InHelper
+module InputHelper
   def example_raw_payload(of_format:)
     payload_strings = YAML.load_file "#{__dir__}/../data/payload_data.yaml"
     payload_strings[of_format.downcase]
@@ -64,21 +55,21 @@ module InHelper
   end
   def example_job_request(of_type:)
     format, job_name = job_request_data of_type
-    JSON.generate payload: example_raw_payload(of_format: format),
-                  job_name: job_name,
-                  user_agent: user_agent_for(format)
+    Oj.dump payload: example_raw_payload(of_format: format),
+            job_name: job_name,
+            user_agent: user_agent_for(format)
   end
 end
 
-module JobHelper
-  def example_job(in_context: {}, with_commands: [])
-    JSON.generate context: in_context,
-                  commands: with_commands,
-                  job_name: 'test_job'
-  end
-  def reset_test_file
-    test_file = File.expand_path "#{configatron.workspace_path}/test_job-testingid/test.txt"
-    FileUtils.rm_rf test_file
-    test_file
-  end
-end
+# module JobHelper
+#   def example_job(in_context: {}, with_commands: [])
+#     JSON.generate context: in_context,
+#                   commands: with_commands,
+#                   job_name: 'test_job'
+#   end
+#   def reset_test_file
+#     test_file = File.expand_path "#{configatron.workspace_path}/test_job-testingid/test.txt"
+#     FileUtils.rm_rf test_file
+#     test_file
+#   end
+# end

@@ -2,10 +2,16 @@
 require 'bundler/setup'
 require 'sinatra'
 require 'ezmq'
-require 'json'
+require 'oj'
 require 'robot_sweatshop/config'
 
 configure do
+  client_settings = {
+    port: configatron.conveyor_port,
+    encode: -> message { Oj.dump message },
+    decode: -> message { Oj.load message }
+  }
+  set :client, EZMQ::Client.new(client_settings)
   set :port, configatron.http_port
   set :bind, configatron.http_bind
   set :run, true
@@ -20,10 +26,13 @@ post '/payload-for/:job_name' do
   request.body.rewind
   payload = request.body.read
   hash = {
-    payload: payload,
-    user_agent: request.env['HTTP_USER_AGENT'],
-    job_name: params['job_name']
+    method: 'enqueue',
+    data: {
+      payload: payload,
+      user_agent: request.env['HTTP_USER_AGENT'],
+      job_name: params['job_name']
+    }
   }
-  client = EZMQ::Client.new port: 5556
-  client.request "payload #{JSON.generate hash}"
+  settings.client.request hash, {}
+  Oj.dump hash
 end
