@@ -1,8 +1,0 @@
-*.gem
-jobs/*.yaml
-.robot_sweatshop
-
-Gemfile.lock
-.bundle
-vendor
-coverage

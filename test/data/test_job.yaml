@@ -1,8 +1,0 @@
----
-commands:
-- echo $custom_env > test.txt
-
-environment:
-  custom_env: success
-  some_hash: { string: only }
-  some_array: ['string', 'only']
