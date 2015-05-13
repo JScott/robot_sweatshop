@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Robot Sweatshop is an awesome continuous integration tool" />
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+    <title>Robot Sweatshop: lightweight, unopinionated Continuous Integration</title>
+  </head>
+  <body>
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/JScott/robot_sweatshop">View on GitHub</a>
+
+          <h1 id="project_title">Robot Sweatshop</h1>
+          <h2 id="project_tagline">Lightweight, unopinionated Continuous Integration</h2>
+
+          <section id="downloads">
+            <a class="zip_download_link" href="https://github.com/JScott/robot_sweatshop/archive/master.zip">Download this project as a .zip file</a>
+            <a class="tar_download_link" href="https://github.com/JScott/robot_sweatshop/archive/master.tar.gz">Download this project as a tar.gz file</a>
+          </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <p><a href="http://jenkins-ci.org/">Jenkins</a> is horrible to maintain and is problematic when automating installation and configuration. <a href="https://drone.io/">Drone</a> assumes that you use Docker. <a href="https://travis-ci.org/">Travis-CI</a> is difficult to self-host. All of these frameworks are highly opinionated in one way or another, forcing you to do things their way.</p>
+
+        <p>Robot Sweatshop is a single-purpose CI server that runs collections of arbitrary scripts when it needs to, usually when new code is pushed. There's no assumptions about what you want to report, what front-end you need, or even what repositories you want to clone because you can do that better than I can. It's just you, your code, and the scripts that test and deploy it.</p>
+
+        <p>For more information, visit the <a href="https://github.com/JScott/robot_sweatshop">GitHub repository</a></p>
+
+        <h2>TL;DR</h2>
+
+        <ol>
+          <li>install ZMQ <a href="https://github.com/colstrom/ezmq#operating-system-notes">as described in the EZMQ gem</a></li>
+          <li><code>gem install robot_sweatshop</code></li>
+          <li><code>sweatshop start</code></li>
+          <li><code>sweatshop job example --auto</code></li>
+          <li><code>curl -d '' http://localhost:8080/payload-for/example</code></li>
+          <li><code>cat .robot_sweatshop/log/job-worker.log</code></li>
+        </ol>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Slate theme maintained by <a href="https://github.com/jasoncostello">Jason Costello</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+  </body>
+</html>
