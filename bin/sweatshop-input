@@ -34,5 +34,5 @@ post '/payload-for/:job_name' do
     }
   }
   settings.client.request hash, {}
-  Oj.dump hash
+  200
 end
