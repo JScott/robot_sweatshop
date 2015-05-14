@@ -6,7 +6,7 @@ require 'robot_sweatshop/config'
 
 module Setup
   def self.process(name)
-    input_script = File.expand_path "#{__dir__}/../../bin/sweatshop-input"
+    input_script = File.expand_path "#{__dir__}/../../bin/sweatshop-#{name}"
     spawn input_script, out: '/dev/null', err: '/dev/null'
   end
 

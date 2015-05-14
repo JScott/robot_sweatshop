@@ -44,6 +44,14 @@ def supported?(method)
   %w(enqueue dequeue lookup finish).include? method
 end
 
+Contract Hash => String
+def complete(request)
+  arguments = []
+  arguments.push request[:data] if request[:data]
+  result = send request[:method], *arguments
+  Oj.dump result
+end
+
 puts 'Starting the Conveyor'
 server_settings = {
   port: configatron.conveyor_port,
@@ -55,7 +63,5 @@ server.listen do |request|
   puts "Received: #{request.inspect}"
   next unless request.is_a?(Hash)
   next unless supported?(request[:method])
-  arguments = []
-  arguments.push request[:data] if request[:data]
-  Oj.dump send(request[:method], *arguments)
+  complete request
 end
