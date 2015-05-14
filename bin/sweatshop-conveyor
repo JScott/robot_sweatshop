@@ -47,6 +47,7 @@ server_settings = {
 }
 server = EZMQ::Server.new server_settings
 server.listen do |request|
+  puts "Received: '#{request}'"
   next unless request.is_a? Hash
   case request[:method]
   when 'enqueue'
