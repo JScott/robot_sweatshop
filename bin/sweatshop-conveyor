@@ -15,10 +15,10 @@ queue_settings = {
 $stdout.sync = true
 include Contracts
 
-Contract String => Fixnum
+Contract Hash => Fixnum
 def enqueue(item)
   puts "enqueue #{item}"
-  @items.enqueue item
+  @items.enqueue Oj.dump(item)
 end
 
 Contract None => Fixnum
@@ -27,10 +27,10 @@ def dequeue
   @items.dequeue
 end
 
-Contract Fixnum => String
+Contract Fixnum => Hash
 def lookup(id)
   puts "lookup #{id}"
-  @items.lookup id
+  Oj.load @items.lookup(id)
 end
 
 Contract Fixnum => Bool
@@ -39,18 +39,23 @@ def finish(id)
   @items.finish id
 end
 
+Contract String => Bool
+def supported?(method)
+  %w(enqueue dequeue lookup finish).include? method
+end
+
 puts 'Starting the Conveyor'
 server_settings = {
   port: configatron.conveyor_port,
-  encode: -> message { Oj.dump message },
+  encode: -> message { message },
   decode: -> message { Oj.load message }
 }
 server = EZMQ::Server.new server_settings
 server.listen do |request|
   puts "Received: #{request.inspect}"
-  next unless request.is_a? Hash
-  next unless %w(enqueue dequeue lookup finish).include? request[:method]
+  next unless request.is_a?(Hash)
+  next unless supported?(request[:method])
   arguments = []
   arguments.push request[:data] if request[:data]
-  send request[:method], *arguments
+  Oj.dump send(request[:method], *arguments)
 end

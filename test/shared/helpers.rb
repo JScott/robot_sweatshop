@@ -4,10 +4,7 @@ require 'oj'
 require 'robot_sweatshop/payload'
 require 'robot_sweatshop/config'
 
-$for_a_moment = 0.2
-$for_a_while = 0.5
-$for_io_calls = 1
-$for_everything = 2
+$a_moment = 0.5
 
 module InputHelper
   def example_raw_payload(of_format:)
