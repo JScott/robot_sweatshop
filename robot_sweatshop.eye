@@ -13,32 +13,36 @@ Eye.application :robot_sweatshop do
   check :cpu, every: 10.seconds, below: 100, times: 3
   working_dir CONFIG[:working_path]
 
-  group 'input' do
-    process :http do
-      pid_file "#{PID_PATH}/input-http.pid"
-      stdall "#{LOG_PATH}/input-http.log"
-      start_command "#{__dir__}/bin/sweatshop-input-http"
-      daemonize true
-    end
-  end
-  group 'job' do
-    process :assembler do
-      pid_file "#{PID_PATH}/job-assembler.pid"
-      stdall "#{LOG_PATH}/job-assembler.log"
-      start_command "#{__dir__}/bin/sweatshop-job-assembler"
-      daemonize true
-    end
-    process :worker do
-      pid_file "#{PID_PATH}/job-worker.pid"
-      stdall "#{LOG_PATH}/job-worker.log"
-      start_command "#{__dir__}/bin/sweatshop-job-worker #{configatron.eye.worker_id}"
-      daemonize true
-    end
-  end
-  process :payload_parser do
-    pid_file "#{PID_PATH}/payload_parser.pid"
-    stdall "#{LOG_PATH}/payload_parser.log"
-    start_command "#{__dir__}/bin/sweatshop-payload-parser"
+  process :input do
+    pid_file "#{PID_PATH}/input.pid"
+    stdall "#{LOG_PATH}/input.log"
+    start_command "#{__dir__}/bin/sweatshop-input"
     daemonize true
   end
+  process :conveyor do
+    pid_file "#{PID_PATH}/conveyor.pid"
+    stdall "#{LOG_PATH}/conveyor.log"
+    start_command "#{__dir__}/bin/sweatshop-conveyor"
+    daemonize true
+  end
+  # group 'job' do
+  #   process :assembler do
+  #     pid_file "#{PID_PATH}/job-assembler.pid"
+  #     stdall "#{LOG_PATH}/job-assembler.log"
+  #     start_command "#{__dir__}/bin/sweatshop-job-assembler"
+  #     daemonize true
+  #   end
+  #   process :worker do
+  #     pid_file "#{PID_PATH}/job-worker.pid"
+  #     stdall "#{LOG_PATH}/job-worker.log"
+  #     start_command "#{__dir__}/bin/sweatshop-job-worker #{configatron.eye.worker_id}"
+  #     daemonize true
+  #   end
+  # end
+  # process :payload_parser do
+  #   pid_file "#{PID_PATH}/payload_parser.pid"
+  #   stdall "#{LOG_PATH}/payload_parser.log"
+  #   start_command "#{__dir__}/bin/sweatshop-payload-parser"
+  #   daemonize true
+  # end
 end
