@@ -5,6 +5,7 @@ require 'oj'
 require 'timeout'
 require 'http'
 require 'robot_sweatshop/config'
+require 'fileutils'
 require_relative 'shared/helpers'
 
 Kintama.on_start do
@@ -12,6 +13,7 @@ Kintama.on_start do
   @pid = spawn input_script, out: '/dev/null', err: '/dev/null'
   sleep 1
 
+  FileUtils.rm '.test.txt' if File.exist? '.test.txt'
   @server_thread = Thread.new do
     server_settings = {
       port: configatron.conveyor_port,
@@ -19,7 +21,11 @@ Kintama.on_start do
       decode: -> message { Oj.load message }
     }
     server = EZMQ::Server.new server_settings
-    server.listen { |message| message }
+    server.listen do |message|
+      file = File.new '.test.txt', 'w'
+      file.write message
+      file.close
+    end
   end
 end
 
@@ -37,35 +43,19 @@ given 'the HTTP Input' do
         url = input_http_url for_job: 'test_job'
         Timeout.timeout(0.5) { @response = HTTP.post url, body: example_raw_payload(of_format: format) }
         assert_equal 200, @response.code
-        @data_sent = Oj.load @response.body.to_s
       end
 
       should 'send to the conveyor' do
+        assert_equal true, File.exists?('.test.txt')
       end
 
-      should 'enqueue payload details and format' do
+      should 'enqueue payload details, user agent, and job name' do
+        request = eval File.read('.test.txt') # please don't hack me thx
+        assert_equal 'enqueue', request[:method]
+        assert_not_nil request[:data][:payload]
+        assert_not_nil request[:data][:user_agent]
+        assert_not_nil request[:data][:job_name]
       end
-
-      # should 'enqueue to \'payload\'' do
-      #   Timeout.timeout(@wait) do
-      #     @subscriber.listen do |message, topic|
-      #       break if message == @payload_queue
-      #     end
-      #   end
-      # end
-
-      # should 'enqueue payload details and format' do
-      #   response = @client.request "mirror-#{@payload_queue}"
-      #   data = Oj.parse response
-      #   assert_kind_of String, data['payload']
-      #   assert_kind_of String, data['user_agent']
-      # end
-
-      # should 'enqueue job name' do
-      #   response = @client.request "mirror-#{@payload_queue}"
-      #   data = Oj.parse response
-      #   assert_kind_of String, data['job_name']
-      # end
     end
   end
 end
