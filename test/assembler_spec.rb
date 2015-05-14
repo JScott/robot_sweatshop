@@ -1,19 +1,15 @@
+require 'bundler/setup'
 require 'kintama'
 require 'ezmq'
-require 'json'
-require_relative 'shared/process_spawning'
-require_relative 'shared/helpers'
+require 'oj'
+require 'timeout'
+require 'robot_sweatshop/config'
 
 describe 'the Job Assembler' do
-  include QueueHelper
-  include InHelper
-  include JobHelper
+  # include InputHelper
 
   setup do
-    @client = EZMQ::Client.new port: 5556
-    @payloads_queue = 'payload'
-    @jobs_queue = 'jobs'
-    clear_all_queues
+    @client = EZMQ::Client.new port: configatron.conveyor_port
   end
 
   %w(Git JSON MinimalJob).each do |request|
