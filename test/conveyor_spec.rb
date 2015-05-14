@@ -22,6 +22,8 @@ describe 'the Conveyor' do
       decode: -> message { Oj.load message }
     }
     @client = EZMQ::Client.new client_settings
+    @wait = 0.5
+    @item = 'test_item'
   end
 
   should 'enqueue and dequeue items' do
