@@ -4,10 +4,11 @@ require 'ezmq'
 require 'oj'
 require 'timeout'
 require 'robot_sweatshop/config'
+require_relative 'shared/setup'
+$stdout.sync = true
 
 Kintama.on_start do
-  conveyor_script = File.expand_path "#{__dir__}/../bin/sweatshop-conveyor"
-  @pid = spawn conveyor_script, out: '/dev/null', err: '/dev/null'
+  @pid = Setup::process 'conveyor'
 end
 
 Kintama.on_finish do
@@ -22,12 +23,11 @@ describe 'the Conveyor' do
       decode: -> message { Oj.load message }
     }
     @client = EZMQ::Client.new client_settings
-    @wait = 0.5
-    @item = 'test_item'
+    @item = {test: 'item'}
   end
 
   should 'enqueue and dequeue items' do
-    id = Timeout.timeout(@wait) do
+    id = Timeout.timeout($a_moment) do
       @client.request({method: 'enqueue', data: @item}, {})
       @client.request({method: 'dequeue'}, {})
     end
@@ -35,7 +35,7 @@ describe 'the Conveyor' do
   end
 
   should 'lookup items by ID' do
-    item = Timeout.timeout(@wait) do
+    item = Timeout.timeout($a_moment) do
       @client.request({method: 'enqueue', data: @item}, {})
       id = @client.request({method: 'dequeue'}, {})
       @client.request({method: 'lookup', data: id}, {})
@@ -44,7 +44,7 @@ describe 'the Conveyor' do
   end
 
   should 'return nothing when given invalid data' do
-    response = Timeout.timeout(@wait) do
+    response = Timeout.timeout($a_moment) do
       @client.request 'not json'
       @client.request({method: 'invalid'}, {})
       @client.request ''
@@ -54,7 +54,7 @@ describe 'the Conveyor' do
   end
 
   should 'finish items by ID to prevent requeueing' do
-    response = Timeout.timeout(@wait) do
+    response = Timeout.timeout($a_moment) do
       @client.request({method: 'enqueue', data: @item}, {})
       id = @client.request({method: 'dequeue'}, {})
       @client.request({method: 'finish', data: id}, {})

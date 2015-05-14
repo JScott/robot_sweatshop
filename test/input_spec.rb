@@ -6,27 +6,13 @@ require 'timeout'
 require 'http'
 require 'robot_sweatshop/config'
 require 'fileutils'
+require_relative 'shared/setup'
 require_relative 'shared/helpers'
+$stdout.sync = true
 
 Kintama.on_start do
-  input_script = File.expand_path "#{__dir__}/../bin/sweatshop-input"
-  @pid = spawn input_script, out: '/dev/null', err: '/dev/null'
-  sleep 1
-
-  FileUtils.rm '.test.txt' if File.exist? '.test.txt'
-  @server_thread = Thread.new do
-    server_settings = {
-      port: configatron.conveyor_port,
-      encode: -> message { Oj.dump message },
-      decode: -> message { Oj.load message }
-    }
-    server = EZMQ::Server.new server_settings
-    server.listen do |message|
-      file = File.new '.test.txt', 'w'
-      file.write message
-      file.close
-    end
-  end
+  @pid = Setup::process 'conveyor'
+  @server_thread = Setup::stub_server
 end
 
 Kintama.on_finish do
@@ -41,7 +27,7 @@ given 'the HTTP Input' do
     context "POSTing #{format} data" do
       setup do
         url = input_http_url for_job: 'test_job'
-        Timeout.timeout(0.5) { @response = HTTP.post url, body: example_raw_payload(of_format: format) }
+        Timeout.timeout($a_moment) { @response = HTTP.post url, body: example_raw_payload(of_format: format) }
         assert_equal 200, @response.code
       end
 
