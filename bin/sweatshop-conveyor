@@ -47,18 +47,10 @@ server_settings = {
 }
 server = EZMQ::Server.new server_settings
 server.listen do |request|
-  puts "Received: '#{request}'"
+  puts "Received: #{request.inspect}"
   next unless request.is_a? Hash
-  case request[:method]
-  when 'enqueue'
-    enqueue request[:data]
-  when 'dequeue'
-    dequeue
-  when 'lookup'
-    lookup request[:data]
-  when 'finish'
-    finish request[:data]
-  else
-    ''
-  end
+  next unless %w(enqueue dequeue lookup finish).include? request[:method]
+  arguments = []
+  arguments.push request[:data] if request[:data]
+  send request[:method], *arguments
 end
