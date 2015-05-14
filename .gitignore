@@ -1,3 +1,4 @@
+.test.*
 *.gem
 jobs/*.yaml
 .robot_sweatshop
