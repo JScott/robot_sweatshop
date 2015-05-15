@@ -33,43 +33,46 @@ describe 'the Job Assembler' do
   end
 
   %w(Git JSON MinimalJob).each do |request|
-    given "#{request} requests on the conveyor" do
+    given "#{request} requests on the Conveyor" do
       setup do
         @client.request(job_enqueue(request),{})
         sleep $a_moment
+        @response = eval File.read(stub_output)
       end
 
       should 'push the parsed payload to a Worker' do
-        # check results from stub_pull
-        assert_kind_of Hash, response['context']
-        assert_kind_of Array, response['commands']
-        assert_kind_of String, response['job_name']
+        assert_kind_of Hash, @response['context']
+        assert_kind_of Array, @response['commands']
+        assert_kind_of String, @response['job_name']
       end
 
       should 'store everything in the context as strings' do
-        # check results from stub_pull
-        response['context'].each { |_key, value| assert_kind_of String, value }
+        @response['context'].each { |_key, value| assert_kind_of String, value }
       end
 
       should 'build the context with a parsed payload' do
-        # check results from stub_pull
         if request == 'Git'
-          assert_equal 'develop', response['context']['branch']
+          assert_equal 'develop', @response['context']['branch']
         else
-          assert_equal 'value', response['context']['test1']
+          assert_equal 'value', @response['context']['test1']
         end
+      end
+
+      should 'grab commands from the job config' do
+        assert_match 'echo', @response['comands'].first
       end
     end
   end
 
   %w(IgnoredBranch UnknownJob EmptyJob NonJSON).each do |request|
-    given "#{request} requests in \'payload\'" do
+    given "#{request} requests on the Conveyor" do
       setup do
         @client.request(job_enqueue(request),{})
+        sleep $a_moment
       end
 
       should 'push nothing to Workers' do
-        # chck results from stub_pull
+        assert_equal false, File.exist?(stub_output)
       end
     end
   end
