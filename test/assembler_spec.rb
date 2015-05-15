@@ -12,10 +12,12 @@ Kintama.on_start do
   @pids = []
   @pids.push Setup::process('assembler')
   @pids.push Setup::process('conveyor')
+  @puller_thread = Setup::stub 'Puller', port: configatron.worker_port
 end
 
 Kintama.on_finish do
   @pids.each { |pid| Process.kill 'TERM', pid }
+  @puller_thread.kill
 end
 
 describe 'the Job Assembler' do

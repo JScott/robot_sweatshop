@@ -9,4 +9,5 @@ http_bind: 0.0.0.0
 conveyor_port: 5559 # 5556
 # queue_broadcaster_port: # 5557
 payload_parser_port: 5558
+worker_port: 5560 # 5557
 job_timeout_length: 300 # 5 minutes
