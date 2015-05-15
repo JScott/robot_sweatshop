@@ -10,11 +10,11 @@ module Setup
     spawn input_script, out: '/dev/null', err: '/dev/null'
   end
 
-  def self.stub_server
+  def self.stub_server(bound_to:)
     FileUtils.rm '.test.txt' if File.exist? '.test.txt'
     Thread.new do
       server_settings = {
-        port: configatron.conveyor_port,
+        port: bound_to,
         encode: -> message { Oj.dump message },
         decode: -> message { Oj.load message }
       }
