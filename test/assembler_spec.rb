@@ -29,7 +29,7 @@ describe 'the Job Assembler' do
       encode: -> message { Oj.dump message },
       decode: -> message { Oj.load message }
     }
-    @client = EZMQ::Client.new client_settings
+    @client = Setup::client port: configatron.conveyor_port
   end
 
   %w(Git JSON MinimalJob).each do |request|

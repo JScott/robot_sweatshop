@@ -10,11 +10,19 @@ module Setup
     spawn input_script, out: '/dev/null', err: '/dev/null'
   end
 
+  def self.client(port:)
+    client_settings = {
+      port: port,
+      encode: -> message { Oj.dump message },
+      decode: -> message { Oj.load message }
+    }
+    EZMQ::Client.new client_settings
+  end
+
   def self.stub(type, port:)
     FileUtils.rm '.test.txt' if File.exist? '.test.txt'
     Thread.new do
       puller = EZMQ.const_get(type).new socket_settings(port)
-      p puller
       puller.listen { |message| write message }
     end
   end
