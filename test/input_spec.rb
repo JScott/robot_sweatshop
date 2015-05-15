@@ -5,7 +5,6 @@ require 'oj'
 require 'timeout'
 require 'http'
 require 'robot_sweatshop/config'
-require 'fileutils'
 require_relative 'shared/setup'
 require_relative 'shared/helpers'
 $stdout.sync = true
@@ -13,7 +12,7 @@ $stdout.sync = true
 Kintama.on_start do
   @pid = Setup::process 'input'
   sleep $a_moment
-  @server_thread = Setup::stub_server
+  @server_thread = Setup::stub_server bound_to: configatron.conveyor_port
 end
 
 Kintama.on_finish do
@@ -27,8 +26,8 @@ given 'the HTTP Input' do
   %w(Bitbucket Github JSON Empty).each do |format|
     context "POSTing #{format} data" do
       setup do
-        url = input_http_url for_job: 'test_job'
-        Timeout.timeout($a_moment) { @response = HTTP.post url, body: example_raw_payload(of_format: format) }
+        url = input_url for_job: 'test_job'
+        Timeout.timeout($a_moment) { @response = HTTP.post url, body: example_raw_payload(format) }
         assert_equal 200, @response.code
       end
 

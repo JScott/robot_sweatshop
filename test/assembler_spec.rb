@@ -4,51 +4,57 @@ require 'ezmq'
 require 'oj'
 require 'timeout'
 require 'robot_sweatshop/config'
+require_relative 'shared/setup'
+require_relative 'shared/helpers'
+$stdout.sync = true
+
+Kintama.on_start do
+  @pids = []
+  @pids.push Setup::process('assembler')
+  @pids.push Setup::process('conveyor')
+end
+
+Kintama.on_finish do
+  @pids.each { |pid| Process.kill 'TERM', pid }
+end
 
 describe 'the Job Assembler' do
-  # include InputHelper
+  include InputHelper
 
   setup do
-    @client = EZMQ::Client.new port: configatron.conveyor_port
+    client_settings = {
+      port: configatron.conveyor_port,
+      encode: -> message { Oj.dump message },
+      decode: -> message { Oj.load message }
+    }
+    @client = EZMQ::Client.new client_settings
   end
 
   %w(Git JSON MinimalJob).each do |request|
-    given "#{request} requests in \'payload\'" do
+    given "#{request} requests on the conveyor" do
       setup do
-        payload = example_job_request of_type: request
-        @client.request "#{@payloads_queue} #{payload}"
-        sleep $for_a_moment
+        @client.request(job_enqueue(request),{})
+        sleep $a_moment
       end
 
-      should 'remove the request from \'payload\'' do
-        response = @client.request @payloads_queue
-        assert_equal '', response
-      end
-
-      should 'enqueue commands, context, and job name to \'jobs\'' do
-        response = @client.request "mirror-#{@jobs_queue}"
-        response = JSON.load response
+      should 'push the parsed payload to a Worker' do
+        # check results from stub_pull
         assert_kind_of Hash, response['context']
         assert_kind_of Array, response['commands']
         assert_kind_of String, response['job_name']
       end
 
       should 'store everything in the context as strings' do
-        response = @client.request "mirror-#{@jobs_queue}"
-        response = JSON.load response
+        # check results from stub_pull
         response['context'].each { |_key, value| assert_kind_of String, value }
       end
 
-      unless request == 'EmptyPayload'
-        should 'build the context with a parsed payload' do
-          response = @client.request "mirror-#{@jobs_queue}"
-          response = JSON.load response
-          assert_kind_of Hash, response['context']
-          if request == 'Git'
-            assert_equal 'develop', response['context']['branch']
-          else
-            assert_equal 'value', response['context']['test1']
-          end
+      should 'build the context with a parsed payload' do
+        # check results from stub_pull
+        if request == 'Git'
+          assert_equal 'develop', response['context']['branch']
+        else
+          assert_equal 'value', response['context']['test1']
         end
       end
     end
@@ -57,19 +63,11 @@ describe 'the Job Assembler' do
   %w(IgnoredBranch UnknownJob EmptyJob NonJSON).each do |request|
     given "#{request} requests in \'payload\'" do
       setup do
-        payload = example_job_request of_type: request
-        @client.request "#{@payloads_queue} #{payload}"
-        sleep $for_a_moment
+        @client.request(job_enqueue(request),{})
       end
 
-      should 'remove the request from \'payload\'' do
-        response = @client.request @payloads_queue
-        assert_equal '', response
-      end
-
-      should 'not queue anything to \'jobs\'' do
-        response = @client.request @jobs_queue
-        assert_equal '', response
+      should 'push nothing to Workers' do
+        # chck results from stub_pull
       end
     end
   end
