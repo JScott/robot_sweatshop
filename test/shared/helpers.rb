@@ -60,6 +60,10 @@ module InputHelper
     end
   end
 
+  def stub_output
+    '.test.txt'
+  end
+
   # def reset_test_file
   #   File.truncate '.test.txt', 0 if File.exist? '.text.txt'
   # end

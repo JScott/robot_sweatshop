@@ -32,11 +32,11 @@ given 'the HTTP Input' do
       end
 
       should 'send to the conveyor' do
-        assert_equal true, File.exists?('.test.txt')
+        assert_equal true, File.exist?(stub_output)
       end
 
       should 'enqueue payload details, user agent, and job name' do
-        request = eval File.read('.test.txt') # please don't hack me thx
+        request = eval File.read(stub_output) # please don't hack me thx
         assert_equal 'enqueue', request[:method]
         assert_not_nil request[:data][:payload]
         assert_not_nil request[:data][:user_agent]
