@@ -17,12 +17,7 @@ end
 
 describe 'the Conveyor' do
   setup do
-    client_settings = {
-      port: configatron.conveyor_port,
-      encode: -> message { Oj.dump message },
-      decode: -> message { Oj.load message }
-    }
-    @client = EZMQ::Client.new client_settings
+    @client = Setup::client port: configatron.conveyor_port
     @item = {test: 'item'}
   end
 
