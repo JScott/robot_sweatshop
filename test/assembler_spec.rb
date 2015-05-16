@@ -48,25 +48,26 @@ describe 'the Job Assembler' do
       end
 
       should 'push the parsed payload to a Worker' do
-        assert_kind_of Hash, @response['context']
-        assert_kind_of Array, @response['commands']
-        assert_kind_of String, @response['job_name']
+        assert_kind_of Hash, @response[:context]
+        assert_kind_of Array, @response[:commands]
+        assert_kind_of String, @response[:job_name]
       end
 
       should 'store everything in the context as strings' do
-        @response['context'].each { |_key, value| assert_kind_of String, value }
+        @response[:context].each { |_key, value| assert_kind_of String, value }
       end
 
       should 'build the context with a parsed payload' do
+        p @response
         if request == 'Git'
-          assert_equal 'develop', @response['context']['branch']
+          assert_equal 'develop', @response[:context]['branch']
         else
-          assert_equal 'value', @response['context']['test1']
+          assert_equal 'value', @response[:context]['test1']
         end
       end
 
       should 'grab commands from the job config' do
-        assert_match 'echo', @response['comands'].first
+        assert_match 'echo', @response[:commands].first
       end
     end
   end
