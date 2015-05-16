@@ -1,11 +1,10 @@
 #!/usr/bin/env ruby
 require 'bundler/setup'
 require 'yaml'
-require 'json'
+require 'oj'
 require 'contracts'
-require 'robot_sweatshop/queue-helper'
+require 'exponential_backoff'
 require 'robot_sweatshop/config'
-
 $stdout.sync = true
 include Contracts
 
@@ -75,8 +74,25 @@ def assemble_job(request)
 end
 
 puts 'Started'
-QueueHelper.wait_for('payload') do |request|
-  puts "Assembling: #{request}"
+# TODO: profiler to get a better idea of how long we should wait based on historical information
+backoff = ExponentialBackoff.new 0.1, 3
+conveyor_settings = {
+  port: configatron.conveyor_port,
+  encode: -> message { Oj.load message },
+  decode: -> message { Oj.load message }
+}
+conveyor = EZMQ::Client.new conveyor_settings
+worker_settings = {
+  port: configatron.worker_port,
+  encode: -> message { Oj.load message },
+  decode: -> message { Oj.load message }
+}
+worker = EZMQ::Pusher.new worker_settings
+backoff.intervals.each do |interval|
+  job_id = conveyor.request({method: 'dequeue'}, {})
+  raw_job = conveyor.request({method: 'lookup', data: job_id}, {})
+  puts "Assembling: '#{raw_job}'"
   assembled_job = assemble_job request
-  QueueHelper.enqueue assembled_job, to: 'jobs' if assembled_job
+  assembled_job.merge! job_id: job_id
+  worker.send(assembled_job, {})
 end

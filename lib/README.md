@@ -10,5 +10,5 @@ assembler <-> payload-parser
 { payload:, user_agent: } <-> { payload:, error: }
 
 assembler -> worker
-{ context:, commands:, job_name: }
+{ context:, commands:, job_name:, job_id }
 ```
