@@ -11,7 +11,7 @@ $stdout.sync = true
 
 Kintama.on_start do
   @pid = Setup::process 'input'
-  sleep $a_moment
+  sleep $a_while
   @server_thread = Setup::stub 'Server', port: configatron.conveyor_port
 end
 

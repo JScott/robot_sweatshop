@@ -5,6 +5,7 @@ require 'robot_sweatshop/payload'
 require 'robot_sweatshop/config'
 
 $a_moment = 0.5
+$a_while = 1
 
 module InputHelper
   def example_raw_payload(format)
