@@ -40,4 +40,9 @@ module Setup
       decode: -> message { Oj.load message }
     }
   end
+
+  def self.test_jobs
+    test_jobs = Dir.glob "#{__dir__}/../data/*_job.yaml"
+    test_jobs.each { |test_job| FileUtils.cp test_job, configatron.job_path }
+  end
 end

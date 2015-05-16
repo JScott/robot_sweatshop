@@ -4,20 +4,10 @@ require 'yaml'
 require 'oj'
 require 'contracts'
 require 'exponential_backoff'
+require 'ezmq'
 require 'robot_sweatshop/config'
 $stdout.sync = true
 include Contracts
-
-Contract None => Hash
-def empty_config
-  puts "Job configuration not found or empty"
-  {}
-end
-
-Contract None => String
-def job_path
-  File.expand_path configatron.job_path
-end
 
 Contract Or[String, nil], Hash => Bool
 def whitelisted?(branch, in_config:)
@@ -46,15 +36,32 @@ def load_config_for(job_name)
   load_if_exists("#{job_path}/#{job_name}.yaml") || empty_config
 end
 
+Contract None => String
+def job_path
+  File.expand_path configatron.job_path
+end
+
+Contract None => Hash
+def empty_config
+  puts "Job configuration not found or empty"
+  {}
+end
+
 Contract Hash => [Hash, String]
 def parse_payload(request)
-  conveyor_settings = {
-    port: configatron.conveyor_port,
+  client_settings = {
+    port: configatron.payload_parser_port,
     encode: -> message { Oj.dump message },
     decode: -> message { Oj.load message }
   }
-  conveyor = EZMQ::Client.new port: configatron.payload_parser_port
-  response = conveyor.request(request, {})
+  client = EZMQ::Client.new client_settings
+  request_hash = {
+    payload: request[:payload],
+    user_agent: request[:user_agent]
+  }
+  p request_hash
+  response = client.request(request_hash, {})
+  p response
   puts response[:error] unless response[:error].empty?
   [response[:payload], response[:error]]
 end
@@ -66,15 +73,16 @@ def can_work_with?(job_config, payload)
   true
 end
 
-Contract Hash => Or[Hash, false]
-def assemble_job(request)
-  job_config = load_config_for request[:job_name]
-  payload, error = parse_payload request
-  return false unless error.empty? && can_work_with?(job_config, payload)
+Contract Hash => Hash
+def assemble(raw_job)
+  job_config = load_config_for raw_job[:job_name]
+  payload, error = parse_payload raw_job
+  return {} unless error.empty? && can_work_with?(job_config, payload)
   {
     commands: job_config[:commands],
     context: job_context(job_config[:environment] || {}, payload),
-    job_name: request[:job_name]
+    job_name: raw_job[:job_name],
+    job_id: raw_job[:job_id]
   }
 end
 
@@ -98,7 +106,7 @@ backoff.intervals.each do |interval|
   job_id = conveyor.request({method: 'dequeue'}, {})
   raw_job = conveyor.request({method: 'lookup', data: job_id}, {})
   puts "Assembling: '#{raw_job}'"
-  assembled_job = assemble_job request
-  assembled_job.merge! job_id: job_id
-  worker.send(assembled_job, {})
+  raw_job.merge! job_id: job_id
+  assembled_job = assemble raw_job
+  worker.send(assembled_job, {}) unless assembled_job.empty?
 end

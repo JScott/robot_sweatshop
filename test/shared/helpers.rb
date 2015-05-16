@@ -18,7 +18,7 @@ module InputHelper
   end
 
   def job_enqueue(type)
-    job, format = job_configuration type
+    format, job = job_configuration type
     {
       method: 'enqueue',
       data: {

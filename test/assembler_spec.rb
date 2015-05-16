@@ -12,7 +12,9 @@ Kintama.on_start do
   @pids = []
   @pids.push Setup::process('assembler')
   @pids.push Setup::process('conveyor')
+  @pids.push Setup::process('payload-parser')
   @puller_thread = Setup::stub 'Puller', port: configatron.worker_port
+  Setup::test_jobs
 end
 
 Kintama.on_finish do
