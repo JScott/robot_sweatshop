@@ -10,6 +10,11 @@ module Setup
     spawn input_script, out: '/dev/null', err: '/dev/null'
   end
 
+  def self.clear_conveyor
+    db_file = "#{configatron.database_path}/conveyor.db"
+    File.truncate db_file, 0 if File.exist? db_file
+  end
+
   def self.client(port:)
     client_settings = {
       port: port,
