@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 require 'bundler/setup'
-require 'json'
+require 'oj'
 require 'ezmq'
 require 'contracts'
 require 'robot_sweatshop/config'
@@ -12,9 +12,9 @@ include Contracts
 Contract String => Bool
 def json?(string)
   begin
-    JSON.load string
+    Oj.load string
     true
-  rescue JSON::ParserError => e
+  rescue Oj::ParseError => e
     false
   end
 end
@@ -31,10 +31,10 @@ end
 
 Contract Hash => String
 def detect_format_of(request)
-  return 'empty' if request['payload'].empty?
-  return 'Github' if from_github? request['user_agent']
-  return 'Bitbucket' if from_bitbucket? request['user_agent']
-  return 'JSON' if json? request['payload']
+  return 'empty' if request[:payload].empty?
+  return 'Github' if from_github? request[:user_agent]
+  return 'Bitbucket' if from_bitbucket? request[:user_agent]
+  return 'JSON' if json? request[:payload]
   'unsupported'
 end
 
@@ -51,22 +51,20 @@ Contract Hash => Hash
 def parse(request)
   format = detect_format_of request
   return {payload: {}, error: ''} if format == 'empty'
-  payload = payload_hash_from request['payload'], format
-  return {payload: {}, error: "Can't parse #{format} payload"} if payload.nil?
+  return {payload: {}, error: 'Unknown format'} if format == 'unsupported'
+  payload = payload_hash_from request[:payload], format
+  return {payload: {}, error: "Invalid #{format} payload"} if payload.nil?
   {payload: payload, error: ''}
 end
 
-Contract Any => Hash
-def validate(request)
-  return {payload: {}, error: "Invalid JSON request"} unless json? request
-  JSON.load request
-end
-
 puts 'Started'
-server = EZMQ::Server.new port: configatron.payload_parser_port#, encode: -> m { JSON.dump m }
+server_settings = {
+  port: configatron.payload_parser_port,
+  encode: -> message { message },
+  decode: -> message { Oj.load message }
+}
+server = EZMQ::Server.new server_settings
 server.listen do |request|
   puts "Parsing: #{request}"
-  request = validate request
-  request = parse request unless request[:error]
-  JSON.dump request
+  Oj.dump parse(request)
 end
