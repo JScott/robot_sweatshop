@@ -33,8 +33,8 @@ describe 'the Payload Parser' do
       end
 
       should 'return a parsed payload object' do
-        assert_equal true, @response['error'].empty?
-        assert_kind_of Hash, @response['payload']
+        assert_equal true, @response[:error].empty?
+        assert_kind_of Hash, @response[:payload]
 
         # keys = Payload.hash_keys
         # keys = %w(test1 test2) if format == 'JSON'
@@ -48,7 +48,7 @@ describe 'the Payload Parser' do
           Payload.hash_keys
         end
         keys.each do |key|
-          payload = @response['payload']
+          payload = @response[:payload]
           assert_not_nil payload[key]
           assert_not_equal key, payload[key] # catches "string"[key]
         end
@@ -66,8 +66,8 @@ describe 'the Payload Parser' do
       end
 
       should 'return an error object' do
-        assert_kind_of String, @response['error']
-        assert_equal true, @response['payload'].empty?
+        assert_kind_of String, @response[:error]
+        assert_equal true, @response[:payload].empty?
       end
     end
   end
