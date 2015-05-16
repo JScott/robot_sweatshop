@@ -4,7 +4,7 @@ require 'oj'
 require 'robot_sweatshop/payload'
 require 'robot_sweatshop/config'
 
-$a_moment = 0.5
+$a_moment = 0.1
 $a_while = 1
 
 module InputHelper

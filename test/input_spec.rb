@@ -27,7 +27,7 @@ given 'the HTTP Input' do
     context "POSTing #{format} data" do
       setup do
         url = input_url for_job: 'test_job'
-        Timeout.timeout($a_moment) { @response = HTTP.post url, body: example_raw_payload(format) }
+        Timeout.timeout($a_while) { @response = HTTP.post url, body: example_raw_payload(format) }
         assert_equal 200, @response.code
       end
 
