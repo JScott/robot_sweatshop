@@ -1,32 +1,44 @@
+require 'bundler/setup'
 require 'kintama'
 require 'ezmq'
-require 'json'
+require 'oj'
 require 'timeout'
-require_relative 'shared/process_spawning'
+require 'robot_sweatshop/config'
+require_relative 'shared/setup'
 require_relative 'shared/helpers'
+$stdout.sync = true
+
+Kintama.on_start do
+  @pid = Setup::process 'payload-parser'
+end
+
+Kintama.on_finish do
+  Process.kill 'TERM', @pid
+end
 
 describe 'the Payload Parser' do
-  include QueueHelper
-  include InHelper
+  include InputHelper
 
   setup do
-    @client = EZMQ::Client.new port: configatron.payload_parser_port
+    @client = Setup::client port: configatron.payload_parser_port
   end
 
   %w(Bitbucket Github JSON Empty).each do |format|
     given "valid #{format} payloads" do
       setup do
-        payload = example_payload_request of_format: format
-        @response = Timeout.timeout($for_a_moment) do
-          @client.request JSON.dump(payload)
+        payload = payload_parser_request(format)
+        @response = Timeout.timeout($a_moment) do
+          @client.request(payload, {})
         end
       end
 
       should 'return a parsed payload object' do
-        @response = JSON.parse @response
         assert_equal true, @response['error'].empty?
         assert_kind_of Hash, @response['payload']
 
+        # keys = Payload.hash_keys
+        # keys = %w(test1 test2) if format == 'JSON'
+        # keys = [] if format == 'Empty'
         keys = case format
         when 'JSON'
           %w(test1 test2)
@@ -47,14 +59,13 @@ describe 'the Payload Parser' do
   %w(NonJSON).each do |format|
     given "#{format} payloads" do
       setup do
-        payload = example_raw_payload of_format: format
-        @response = Timeout.timeout($for_a_moment) do
-          @client.request "#{payload}"
+        payload = payload_parser_request(format)
+        @response = Timeout.timeout($a_moment) do
+          @client.request(payload, {})
         end
       end
 
       should 'return an error object' do
-        @response = JSON.load(@response)
         assert_kind_of String, @response['error']
         assert_equal true, @response['payload'].empty?
       end
