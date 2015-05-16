@@ -36,17 +36,9 @@ describe 'the Payload Parser' do
         assert_equal true, @response[:error].empty?
         assert_kind_of Hash, @response[:payload]
 
-        # keys = Payload.hash_keys
-        # keys = %w(test1 test2) if format == 'JSON'
-        # keys = [] if format == 'Empty'
-        keys = case format
-        when 'JSON'
-          %w(test1 test2)
-        when 'Empty'
-          []
-        else
-          Payload.hash_keys
-        end
+        keys = Payload.hash_keys
+        keys = %w(test1 test2) if format == 'JSON'
+        keys = [] if format == 'Empty'
         keys.each do |key|
           payload = @response[:payload]
           assert_not_nil payload[key]
