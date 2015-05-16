@@ -47,12 +47,11 @@ def payload_hash_from(payload, format)
   Object.const_get("#{format}Payload").new(payload).to_hash
 end
 
-Contract Hash => Hash
-def parse(request)
-  format = detect_format_of request
+Contract String, String => Hash
+def parse(raw_payload, format)
   return {payload: {}, error: ''} if format == 'empty'
   return {payload: {}, error: 'Unknown format'} if format == 'unsupported'
-  payload = payload_hash_from request[:payload], format
+  payload = payload_hash_from raw_payload, format
   return {payload: {}, error: "Invalid #{format} payload"} if payload.nil?
   {payload: payload, error: ''}
 end
@@ -66,5 +65,6 @@ server_settings = {
 server = EZMQ::Server.new server_settings
 server.listen do |request|
   puts "Parsing: #{request}"
-  Oj.dump parse(request)
+  format = detect_format_of request
+  Oj.dump parse(request[:payload], format)
 end
