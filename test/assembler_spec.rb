@@ -42,9 +42,7 @@ describe 'the Job Assembler' do
   %w(Git JSON MinimalJob).each do |request|
     given "#{request} requests on the Conveyor" do
       setup do
-        p 1
         @client.request(job_enqueue(request),{})
-        p 2
         sleep $a_moment
         @response = eval File.read(stub_output)
       end

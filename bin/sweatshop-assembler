@@ -77,8 +77,8 @@ def assemble(raw_job)
   payload, error = parse_payload raw_job
   return {} unless error.empty? && can_work_with?(job_config, payload)
   {
-    commands: job_config[:commands],
-    context: job_context(job_config[:environment] || {}, payload),
+    commands: job_config['commands'],
+    context: job_context(job_config['environment'] || {}, payload),
     job_name: raw_job[:job_name],
     job_id: raw_job[:job_id]
   }
