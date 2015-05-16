@@ -28,6 +28,13 @@ module InputHelper
     }
   end
 
+  def payload_parser_request(format)
+    {
+      payload: example_raw_payload(format),
+      user_agent: user_agent_for(format)
+    }
+  end
+
   def job_configuration(type)
     case type
     when 'Git'
