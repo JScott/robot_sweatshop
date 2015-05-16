@@ -21,7 +21,7 @@ def enqueue(item)
   @items.enqueue Oj.dump(item)
 end
 
-Contract None => Fixnum
+Contract None => Or[Fixnum,nil]
 def dequeue
   puts "dequeue"
   @items.dequeue
@@ -47,9 +47,8 @@ end
 Contract Hash => String
 def complete(request)
   arguments = []
-  arguments.push request[:data] if request[:data]
-  result = send request[:method], *arguments
-  Oj.dump result
+  return Oj.dump send(request[:method], request[:data]) if request[:data]
+  Oj.dump send(request[:method])
 end
 
 puts 'Starting the Conveyor'
@@ -63,5 +62,5 @@ server.listen do |request|
   puts "Received: #{request.inspect}"
   next unless request.is_a?(Hash)
   next unless supported?(request[:method])
-  complete request
+  complete(request)
 end

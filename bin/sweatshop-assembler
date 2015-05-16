@@ -59,9 +59,7 @@ def parse_payload(request)
     payload: request[:payload],
     user_agent: request[:user_agent]
   }
-  p request_hash
   response = client.request(request_hash, {})
-  p response
   puts response[:error] unless response[:error].empty?
   [response[:payload], response[:error]]
 end
@@ -96,14 +94,18 @@ conveyor_settings = {
 conveyor = EZMQ::Client.new conveyor_settings
 worker_settings = {
   port: configatron.worker_port,
-  encode: -> message { message },
+  encode: -> message { Oj.dump message },
   decode: -> message { Oj.load message }
 }
 worker = EZMQ::Pusher.new worker_settings
 
 backoff = ExponentialBackoff.new 0.1, 3
 backoff.intervals.each do |interval|
+  print '.'
+  sleep interval
   job_id = conveyor.request({method: 'dequeue'}, {})
+  next if job_id.nil?
+  backoff.clear
   raw_job = conveyor.request({method: 'lookup', data: job_id}, {})
   puts "Assembling: '#{raw_job}'"
   raw_job.merge! job_id: job_id

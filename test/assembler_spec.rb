@@ -9,17 +9,17 @@ require_relative 'shared/helpers'
 $stdout.sync = true
 
 Kintama.on_start do
+  Setup::clear_conveyor
   @pids = []
   @pids.push Setup::process('assembler')
   @pids.push Setup::process('conveyor')
   @pids.push Setup::process('payload-parser')
-  @puller_thread = Setup::stub 'Puller', port: configatron.worker_port
+  @puller = Setup::stub 'Puller', port: configatron.worker_port
   Setup::test_jobs
 end
 
 Kintama.on_finish do
   @pids.each { |pid| Process.kill 'TERM', pid }
-  @puller_thread.kill
 end
 
 describe 'the Job Assembler' do
@@ -34,10 +34,17 @@ describe 'the Job Assembler' do
     @client = Setup::client port: configatron.conveyor_port
   end
 
+  teardown do
+    @client.socket.close
+    @client.context.terminate
+  end
+
   %w(Git JSON MinimalJob).each do |request|
     given "#{request} requests on the Conveyor" do
       setup do
+        p 1
         @client.request(job_enqueue(request),{})
+        p 2
         sleep $a_moment
         @response = eval File.read(stub_output)
       end
