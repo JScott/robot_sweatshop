@@ -27,7 +27,7 @@ describe 'the Payload Parser' do
     given "valid #{format} payloads" do
       setup do
         payload = payload_parser_request(format)
-        @response = Timeout.timeout($a_moment) do
+        @response = Timeout.timeout($a_while) do
           @client.request(payload, {})
         end
       end
@@ -52,7 +52,7 @@ describe 'the Payload Parser' do
     given "#{format} payloads" do
       setup do
         payload = payload_parser_request(format)
-        @response = Timeout.timeout($a_moment) do
+        @response = Timeout.timeout($a_while) do
           @client.request(payload, {})
         end
       end

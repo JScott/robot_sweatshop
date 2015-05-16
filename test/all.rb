@@ -13,3 +13,4 @@ end
 
 run_test 'input'
 run_test 'conveyor'
+run_test 'payload_parser'
