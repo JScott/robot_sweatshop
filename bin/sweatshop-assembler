@@ -17,8 +17,8 @@ end
 
 Contract Hash => Hash
 def sanitize(data)
-  data = data.map { |key, value| {key.to_sym => value.to_s} }
-  data.first
+  data = data.map { |key, value| {key => value.to_s} }
+  data.reduce(:merge)
 end
 
 Contract Hash, Hash => Hash
