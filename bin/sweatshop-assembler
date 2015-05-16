@@ -21,8 +21,8 @@ end
 
 Contract Or[String, nil], Hash => Bool
 def whitelisted?(branch, in_config:)
-  return true if in_config['branch_whitelist'].nil?
-  in_config['branch_whitelist'].include? branch
+  return true if in_config[:branch_whitelist].nil?
+  in_config[:branch_whitelist].include? branch
 end
 
 Contract Hash => Hash
@@ -48,46 +48,52 @@ end
 
 Contract Hash => [Hash, String]
 def parse_payload(request)
-  client = EZMQ::Client.new port: configatron.payload_parser_port
-  response = JSON.load client.request(JSON.dump request)
-  puts response['error'] unless response['error'].empty?
-  [response['payload'], response['error']]
+  conveyor_settings = {
+    port: configatron.conveyor_port,
+    encode: -> message { Oj.dump message },
+    decode: -> message { Oj.load message }
+  }
+  conveyor = EZMQ::Client.new port: configatron.payload_parser_port
+  response = conveyor.request(request, {})
+  puts response[:error] unless response[:error].empty?
+  [response[:payload], response[:error]]
 end
 
 Contract Hash, Hash => Bool
 def can_work_with?(job_config, payload)
   return false if job_config.empty?
-  return false unless whitelisted? payload['branch'], in_config: job_config
+  return false unless whitelisted? payload[:branch], in_config: job_config
   true
 end
 
 Contract Hash => Or[Hash, false]
 def assemble_job(request)
-  job_config = load_config_for request['job_name']
+  job_config = load_config_for request[:job_name]
   payload, error = parse_payload request
   return false unless error.empty? && can_work_with?(job_config, payload)
   {
-    commands: job_config['commands'],
-    context: job_context(job_config['environment'] || {}, payload),
-    job_name: request['job_name']
+    commands: job_config[:commands],
+    context: job_context(job_config[:environment] || {}, payload),
+    job_name: request[:job_name]
   }
 end
 
 puts 'Started'
 # TODO: profiler to get a better idea of how long we should wait based on historical information
-backoff = ExponentialBackoff.new 0.1, 3
 conveyor_settings = {
   port: configatron.conveyor_port,
-  encode: -> message { Oj.load message },
+  encode: -> message { Oj.dump message },
   decode: -> message { Oj.load message }
 }
 conveyor = EZMQ::Client.new conveyor_settings
 worker_settings = {
   port: configatron.worker_port,
-  encode: -> message { Oj.load message },
+  encode: -> message { message },
   decode: -> message { Oj.load message }
 }
 worker = EZMQ::Pusher.new worker_settings
+
+backoff = ExponentialBackoff.new 0.1, 3
 backoff.intervals.each do |interval|
   job_id = conveyor.request({method: 'dequeue'}, {})
   raw_job = conveyor.request({method: 'lookup', data: job_id}, {})
