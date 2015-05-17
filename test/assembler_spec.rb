@@ -32,6 +32,7 @@ describe 'the Job Assembler' do
       decode: -> message { Oj.load message }
     }
     @client = Setup::client port: configatron.conveyor_port
+    # clear_stub_output
   end
 
   teardown do
@@ -44,30 +45,33 @@ describe 'the Job Assembler' do
       setup do
         @client.request(job_enqueue(request),{})
         sleep $a_moment
-        @response = eval File.read(stub_output)
+        @worker_data = eval File.read(stub_output)
       end
 
       should 'push the parsed payload to a Worker' do
-        assert_kind_of Hash, @response[:context]
-        assert_kind_of Array, @response[:commands]
-        assert_kind_of String, @response[:job_name]
+        assert_kind_of Hash, @worker_data[:context]
+        assert_kind_of Array, @worker_data[:commands]
+        assert_kind_of String, @worker_data[:job_name]
       end
 
       should 'store everything in the context as strings' do
-        @response[:context].each { |_key, value| assert_kind_of String, value }
+        @worker_data[:context].each do |key, value|
+          assert_kind_of String, key
+          assert_kind_of String, value
+        end
       end
 
       should 'build the context with a parsed payload' do
-        p @response
         if request == 'Git'
-          assert_equal 'develop', @response[:context]['branch']
+          assert_equal 'develop', @worker_data[:context]['branch']
         else
-          assert_equal 'value', @response[:context]['test1']
+          p @worker_data
+          assert_equal 'value', @worker_data[:context]['test1']
         end
       end
 
       should 'grab commands from the job config' do
-        assert_match 'echo', @response[:commands].first
+        assert_match /echo/, @worker_data[:commands].first
       end
     end
   end

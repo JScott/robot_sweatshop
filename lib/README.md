@@ -12,3 +12,6 @@ assembler <-> payload-parser
 assembler -> worker
 { context:, commands:, job_name:, job_id }
 ```
+
+context is passed around with string keys because it's user provided
+everything else is passed with symbol keys
