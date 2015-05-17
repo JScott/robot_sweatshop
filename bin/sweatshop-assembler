@@ -100,13 +100,13 @@ worker_settings = {
 }
 worker = EZMQ::Pusher.new worker_settings
 
-backoff = ExponentialBackoff.new 0.1, 3
-backoff.intervals.each do |interval|
+throttle = ExponentialBackoff.new 0.1, 3
+loop do
   print '.'
-  sleep interval
+  sleep throttle.next_interval
   job_id = conveyor.request({method: 'dequeue'}, {})
   next if job_id.nil?
-  backoff.clear
+  throttle.clear
   raw_job = conveyor.request({method: 'lookup', data: job_id}, {})
   puts "Assembling: '#{raw_job}'"
   raw_job.merge! job_id: job_id

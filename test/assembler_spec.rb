@@ -65,7 +65,6 @@ describe 'the Job Assembler' do
         if request == 'Git'
           assert_equal 'develop', @worker_data[:context]['branch']
         else
-          p @worker_data
           assert_equal 'value', @worker_data[:context]['test1']
         end
       end

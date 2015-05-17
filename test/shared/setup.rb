@@ -27,8 +27,8 @@ module Setup
   def self.stub(type, port:)
     FileUtils.rm '.test.txt' if File.exist? '.test.txt'
     Thread.new do
-      puller = EZMQ.const_get(type).new socket_settings(port)
-      puller.listen { |message| write message }
+      listener = EZMQ.const_get(type).new socket_settings(port)
+      listener.listen { |message| write message }
     end
   end
 
