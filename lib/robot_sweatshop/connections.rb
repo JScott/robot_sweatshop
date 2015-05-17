@@ -8,4 +8,8 @@ module ExtendedEZMQ
       self.decode = -> message { Oj.load message }
     end
   end
+
+  # refine EZMQ do
+  #   def self.with
+  # end
 end
