@@ -77,7 +77,7 @@ module InputHelper
     (not File.exist? stub_output) || File.read(stub_output).empty?
   end
 
-  def clear_stub_output!
+  def clear_stub_output
     FileUtils.touch '.test.txt'
     File.truncate '.test.txt', 0 # if File.exist? '.test.txt'
   end

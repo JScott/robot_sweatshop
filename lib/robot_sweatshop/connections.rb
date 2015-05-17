@@ -1,11 +1,11 @@
 require 'ezmq'
+require 'robot_sweatshop/config'
 
-# TODO: set up the client_settings and client stuff here
-# the current ezmq bug makes this hard so I'm waiting a bit first
-
-# server_settings = {
-#   port: configatron.payload_parser_port,
-#   encode: -> message { message },
-#   decode: -> message { Oj.load message }
-# }
-# server = EZMQ::Server.new server_settings
+module ExtendedEZMQ
+  refine EZMQ::Socket do
+    def serialize_with_json!(except_encode_because_of_ezmq_bug: false)
+      self.encode = -> message { Oj.dump message } unless except_encode_because_of_ezmq_bug
+      self.decode = -> message { Oj.load message }
+    end
+  end
+end
