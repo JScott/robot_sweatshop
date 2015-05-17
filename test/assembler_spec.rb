@@ -32,7 +32,7 @@ describe 'the Job Assembler' do
       decode: -> message { Oj.load message }
     }
     @client = Setup::client port: configatron.conveyor_port
-    clear_stub_output!
+    clear_stub_output
   end
 
   teardown do
