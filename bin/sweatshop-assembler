@@ -69,7 +69,7 @@ end
 Contract Hash => Hash
 def assemble(raw_job)
   job_config = load_config_for raw_job[:job_name]
-  payload, error = parse_payload raw_job
+  payload, error = parse_payload raw_job # TODO: why not up a level?
   return {} unless error.empty? && can_work_with?(job_config, payload['branch'])
   {
     commands: job_config['commands'],
@@ -79,23 +79,31 @@ def assemble(raw_job)
   }
 end
 
+Contract EZMQ::Client => Fixnum
+def request_id_from(client)
+  print '.'
+  client.request({method: 'dequeue'}, {})
+end
+
 puts 'Started'
 # TODO: profiler to get a better idea of how long we should wait based on historical information
 conveyor = EZMQ::Client.new port: configatron.conveyor_port
 conveyor.serialize_with_json!
 worker = EZMQ::Pusher.new port: configatron.worker_port
 worker.serialize_with_json!
-
 throttle = ExponentialBackoff.new 0.1, 3
+
 loop do
-  print '.'
   sleep throttle.next_interval
-  job_id = conveyor.request({method: 'dequeue'}, {})
+  job_id = request_id_from conveyor
   next if job_id.nil?
   throttle.clear
+
+
   raw_job = conveyor.request({method: 'lookup', data: job_id}, {})
   puts "Assembling: '#{raw_job}'"
   raw_job.merge! job_id: job_id
   assembled_job = assemble raw_job
+
   worker.send(assembled_job, {}) unless assembled_job.empty?
 end
