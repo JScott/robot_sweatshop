@@ -45,14 +45,10 @@ def empty_config
 end
 
 Contract Hash => [Hash, String]
-def parse_payload(request)
+def parse_payload(raw_job)
   parser = EZMQ::Client.new port: configatron.payload_parser_port
   parser.serialize_with_json!
-  request_hash = {
-    payload: request[:payload],
-    user_agent: request[:user_agent]
-  }
-  response = parser.request(request_hash, {})
+  response = parser.request(raw_job, {})
   puts response[:error] unless response[:error].empty?
   [response[:payload], response[:error]]
 end
@@ -74,7 +70,6 @@ Contract Hash => Hash
 def assemble(raw_job)
   job_config = load_config_for raw_job[:job_name]
   payload, error = parse_payload raw_job
-  p payload
   return {} unless error.empty? && can_work_with?(job_config, payload['branch'])
   {
     commands: job_config['commands'],
@@ -102,6 +97,5 @@ loop do
   puts "Assembling: '#{raw_job}'"
   raw_job.merge! job_id: job_id
   assembled_job = assemble raw_job
-  p "ASSEMB&&&&",assembled_job
   worker.send(assembled_job, {}) unless assembled_job.empty?
 end
