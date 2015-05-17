@@ -5,6 +5,8 @@ require 'ezmq'
 require 'contracts'
 require 'robot_sweatshop/config'
 require 'robot_sweatshop/payload'
+require 'robot_sweatshop/connections'
+using ExtendedEZMQ
 
 $stdout.sync = true
 include Contracts
@@ -57,12 +59,8 @@ def parse(raw_payload, format)
 end
 
 puts 'Started'
-server_settings = {
-  port: configatron.payload_parser_port,
-  encode: -> message { message },
-  decode: -> message { Oj.load message }
-}
-server = EZMQ::Server.new server_settings
+server = EZMQ::Server.new port: configatron.payload_parser_port
+server.serialize_with_json! except_encode_because_of_ezmq_bug: true
 server.listen do |request|
   puts "Parsing: #{request}"
   format = detect_format_of request
