@@ -1,6 +1,7 @@
 require 'bundler/setup'
 require 'yaml'
 require 'oj'
+require 'fileutils'
 require 'robot_sweatshop/payload'
 require 'robot_sweatshop/config'
 
@@ -72,8 +73,13 @@ module InputHelper
     '.test.txt'
   end
 
-  def clear_stub_output
-    File.truncate '.test.txt', 0 if File.exist? '.test.txt'
+  def stub_output_empty?
+    (not File.exist? stub_output) || File.read(stub_output).empty?
+  end
+
+  def clear_stub_output!
+    FileUtils.touch '.test.txt'
+    File.truncate '.test.txt', 0 # if File.exist? '.test.txt'
   end
 
   # def example_payload_request(of_format:)
