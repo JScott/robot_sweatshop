@@ -72,6 +72,10 @@ module InputHelper
     '.test.txt'
   end
 
+  def clear_stub_output
+    File.truncate '.test.txt', 0 if File.exist? '.test.txt'
+  end
+
   # def example_payload_request(of_format:)
   #   {
   #     payload: example_raw_payload(of_format: of_format),
