@@ -80,7 +80,7 @@ end
 
 Contract Hash => [Hash, String]
 def parse_payload_from(job)
-  response = @parser.request(job, {})
+  response = @parser.request job, {}
   puts response[:error] unless response[:error].empty?
   [response[:payload], response[:error]]
 end
