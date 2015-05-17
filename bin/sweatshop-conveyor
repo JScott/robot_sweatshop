@@ -5,6 +5,8 @@ require 'stubborn_queue'
 require 'oj'
 require 'contracts'
 require 'robot_sweatshop/config'
+require 'robot_sweatshop/connections'
+using ExtendedEZMQ
 
 queue_settings = {
   name: 'test',
@@ -52,15 +54,11 @@ def complete(request)
 end
 
 puts 'Starting the Conveyor'
-server_settings = {
-  port: configatron.conveyor_port,
-  encode: -> message { message },
-  decode: -> message { Oj.load message }
-}
-server = EZMQ::Server.new server_settings
+server = EZMQ::Server.new port: configatron.conveyor_port
+server.serialize_with_json! except_encode_because_of_ezmq_bug: true
 server.listen do |request|
   puts "Received: #{request.inspect}"
-  next unless request.is_a?(Hash)
-  next unless supported?(request[:method])
-  complete(request)
+  next unless request.is_a? Hash
+  next unless supported? request[:method]
+  complete request
 end
