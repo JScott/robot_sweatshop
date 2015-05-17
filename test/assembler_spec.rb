@@ -32,7 +32,7 @@ describe 'the Job Assembler' do
       decode: -> message { Oj.load message }
     }
     @client = Setup::client port: configatron.conveyor_port
-    # clear_stub_output
+    clear_stub_output!
   end
 
   teardown do
@@ -83,7 +83,7 @@ describe 'the Job Assembler' do
       end
 
       should 'push nothing to Workers' do
-        assert_equal false, File.exist?(stub_output)
+        assert stub_output_empty?
       end
     end
   end

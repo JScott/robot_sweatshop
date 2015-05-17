@@ -9,12 +9,6 @@ require 'robot_sweatshop/config'
 $stdout.sync = true
 include Contracts
 
-Contract Or[String, nil], Hash => Bool
-def whitelisted?(branch, in_config:)
-  return true if in_config[:branch_whitelist].nil?
-  in_config[:branch_whitelist].include? branch
-end
-
 Contract Hash => Hash
 def sanitize(data)
   data = data.map { |key, value| {key => value.to_s} }
@@ -65,10 +59,16 @@ def parse_payload(request)
   [response[:payload], response[:error]]
 end
 
-Contract Hash, Hash => Bool
-def can_work_with?(job_config, payload)
+Contract Or[String, nil], Hash => Bool
+def whitelisted?(branch, in_config:)
+  return true if in_config['branch_whitelist'].nil?
+  in_config['branch_whitelist'].include? branch
+end
+
+Contract Hash, Or[String, nil] => Bool
+def can_work_with?(job_config, branch)
   return false if job_config.empty?
-  return false unless whitelisted? payload[:branch], in_config: job_config
+  return false unless whitelisted? branch, in_config: job_config
   true
 end
 
@@ -76,7 +76,8 @@ Contract Hash => Hash
 def assemble(raw_job)
   job_config = load_config_for raw_job[:job_name]
   payload, error = parse_payload raw_job
-  return {} unless error.empty? && can_work_with?(job_config, payload)
+  p payload
+  return {} unless error.empty? && can_work_with?(job_config, payload['branch'])
   {
     commands: job_config['commands'],
     context: job_context(job_config['environment'] || {}, payload),
@@ -111,5 +112,6 @@ loop do
   puts "Assembling: '#{raw_job}'"
   raw_job.merge! job_id: job_id
   assembled_job = assemble raw_job
+  p "ASSEMB&&&&",assembled_job
   worker.send(assembled_job, {}) unless assembled_job.empty?
 end
