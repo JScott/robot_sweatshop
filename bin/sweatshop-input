@@ -4,17 +4,15 @@ require 'sinatra'
 require 'ezmq'
 require 'oj'
 require 'robot_sweatshop/config'
+require 'robot_sweatshop/connections'
+using ExtendedEZMQ
 
 configure do
-  client_settings = {
-    port: configatron.conveyor_port,
-    encode: -> message { Oj.dump message },
-    decode: -> message { Oj.load message }
-  }
-  set :client, EZMQ::Client.new(client_settings)
   set :port, configatron.http_port
   set :bind, configatron.http_bind
   set :run, true
+  set :conveyor, EZMQ::Client.new(port: configatron.conveyor_port)
+  settings.conveyor.serialize_with_json!
 end
 
 get '/' do
@@ -33,6 +31,6 @@ post '/payload-for/:job_name' do
       job_name: params['job_name']
     }
   }
-  settings.client.request hash, {}
+  settings.conveyor.request hash, {}
   200
 end
