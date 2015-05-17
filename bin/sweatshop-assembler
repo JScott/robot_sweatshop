@@ -44,66 +44,70 @@ def empty_config
   {}
 end
 
-Contract Hash => [Hash, String]
-def parse_payload(raw_job)
-  parser = EZMQ::Client.new port: configatron.payload_parser_port
-  parser.serialize_with_json!
-  response = parser.request(raw_job, {})
-  puts response[:error] unless response[:error].empty?
-  [response[:payload], response[:error]]
-end
-
 Contract Or[String, nil], Hash => Bool
 def whitelisted?(branch, in_config:)
   return true if in_config['branch_whitelist'].nil?
   in_config['branch_whitelist'].include? branch
 end
 
-Contract Hash, Or[String, nil] => Bool
+Contract Hash, Or[String,nil] => Bool
 def can_work_with?(job_config, branch)
   return false if job_config.empty?
   return false unless whitelisted? branch, in_config: job_config
   true
 end
 
-Contract Hash => Hash
-def assemble(raw_job)
-  job_config = load_config_for raw_job[:job_name]
-  payload, error = parse_payload raw_job # TODO: why not up a level?
-  return {} unless error.empty? && can_work_with?(job_config, payload['branch'])
+Contract Hash, Hash => Hash
+def assemble(job, payload)
+  job_config = load_config_for job[:job_name]
+  return {} unless can_work_with?(job_config, payload['branch'])
   {
     commands: job_config['commands'],
     context: job_context(job_config['environment'] || {}, payload),
-    job_name: raw_job[:job_name],
-    job_id: raw_job[:job_id]
+    job_name: job[:job_name],
+    job_id: job[:job_id]
   }
 end
 
-Contract EZMQ::Client => Fixnum
-def request_id_from(client)
-  print '.'
-  client.request({method: 'dequeue'}, {})
+Contract None => Or[Hash,nil]
+def request_job
+  job_id = @conveyor.request({method: 'dequeue'}, {})
+  return nil if job_id.nil?
+  raw_job = @conveyor.request({method: 'lookup', data: job_id}, {})
+  puts "Assembling: '#{raw_job}'"
+  raw_job.merge job_id: job_id
+end
+
+Contract Hash => [Hash, String]
+def parse_payload_from(job)
+  response = @parser.request(job, {})
+  puts response[:error] unless response[:error].empty?
+  [response[:payload], response[:error]]
+end
+
+Contract Proc => Or[Hash,nil]
+def exponentially_retry
+  sleep @timer.next_interval
+  value = yield if block_given?
+  @timer.clear unless value.nil?
+  value
 end
 
 puts 'Started'
+@conveyor = EZMQ::Client.new port: configatron.conveyor_port
+@conveyor.serialize_with_json!
+@worker = EZMQ::Pusher.new port: configatron.worker_port
+@worker.serialize_with_json!
+@parser = EZMQ::Client.new port: configatron.payload_parser_port
+@parser.serialize_with_json!
+@timer = ExponentialBackoff.new 0.1, 3
+
 # TODO: profiler to get a better idea of how long we should wait based on historical information
-conveyor = EZMQ::Client.new port: configatron.conveyor_port
-conveyor.serialize_with_json!
-worker = EZMQ::Pusher.new port: configatron.worker_port
-worker.serialize_with_json!
-throttle = ExponentialBackoff.new 0.1, 3
-
 loop do
-  sleep throttle.next_interval
-  job_id = request_id_from conveyor
-  next if job_id.nil?
-  throttle.clear
-
-
-  raw_job = conveyor.request({method: 'lookup', data: job_id}, {})
-  puts "Assembling: '#{raw_job}'"
-  raw_job.merge! job_id: job_id
-  assembled_job = assemble raw_job
-
-  worker.send(assembled_job, {}) unless assembled_job.empty?
+  job = exponentially_retry { request_job }
+  next if job.nil?
+  payload, error = parse_payload_from job
+  next unless error.empty?
+  assembled_job = assemble job, payload
+  @worker.send(assembled_job, {}) unless assembled_job.empty?
 end
