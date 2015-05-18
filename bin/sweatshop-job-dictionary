@@ -4,7 +4,6 @@ require 'oj'
 require 'ezmq'
 require 'contracts'
 require 'robot_sweatshop/config'
-require 'robot_sweatshop/payload'
 require 'robot_sweatshop/connections'
 $stdout.sync = true
 include Contracts
