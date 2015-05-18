@@ -6,10 +6,9 @@ require 'contracts'
 require 'robot_sweatshop/config'
 require 'robot_sweatshop/payload'
 require 'robot_sweatshop/connections'
-using ExtendedEZMQ
-
 $stdout.sync = true
 include Contracts
+using ExtendedEZMQ
 
 Contract String => Bool
 def json?(string)
@@ -51,7 +50,7 @@ end
 
 Contract Hash, Hash => Hash
 def formatted(payload={}, error:'')
-  {payload: payload, error: error}
+  {data: payload, error: error}
 end
 
 Contract String, String => Hash

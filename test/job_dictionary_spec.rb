@@ -36,12 +36,12 @@ describe 'the Job Dictionary' do
       end
 
       should 'return a defined job object' do
-        assert_kind_of Hash, @response[:payload]
+        assert_kind_of Hash, @response[:data]
         no_environment = job_name =~ /empty|minimal/
         has_whitelist = job_name =~ /git/
-        assert_not_nil @response[:payload]['branch_whitelist'] if has_whitelist
-        assert_not_nil @response[:payload]['commands']
-        assert_not_nil @response[:payload]['environment'] unless no_environment
+        assert_not_nil @response[:data]['branch_whitelist'] if has_whitelist
+        assert_not_nil @response[:data]['commands']
+        assert_not_nil @response[:data]['environment'] unless no_environment
       end
     end
   end
@@ -56,7 +56,7 @@ describe 'the Job Dictionary' do
 
       should 'return an error object' do
         assert_kind_of String, @response[:error]
-        assert_equal true, @response[:payload].empty?
+        assert_equal true, @response[:data].empty?
       end
     end
   end
