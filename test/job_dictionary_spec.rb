@@ -24,7 +24,7 @@ describe 'the Job Dictionary' do
   end
 
   %w(git_job minimal_job test_job).each do |job_name|
-    given "some #{job_name.gsub '_', ' '}" do
+    given "a #{job_name.gsub '_', ' '}" do
       setup do
         @response = Timeout.timeout($a_while) do
           @client.request job_name
@@ -47,10 +47,10 @@ describe 'the Job Dictionary' do
   end
 
   %w(empty_job undefined_job weird_job).each do |job_name|
-    given "some #{job_name.gsub '_', ' '}" do
+    given "a #{job_name.gsub '_', ' '}" do
       setup do
         @response = Timeout.timeout($a_while) do
-          @client.request 'not_a_job'
+          @client.request job_name
         end
       end
 

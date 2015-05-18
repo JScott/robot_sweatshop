@@ -33,16 +33,18 @@ def load_config_for(job_name)
   load_if_exists("#{job_path}/#{job_name}.yaml") || empty_config
 end
 
+Contract String => Hash
 def define(job_name)
   config = load_config_for job_name
   return {payload: {}, error: "Job not found or empty"} if config.empty?
-  return {payload: {}, error: "No commands"} if config['commands'].is_a? Array
+  return {payload: {}, error: "No commands"} unless config['commands'].is_a? Array
   {payload: config, error: ''}
 end
 
 puts 'Started'
 server = EZMQ::Server.new port: configatron.job_dictionary_port
 server.serialize_with_json! except_encode_because_of_ezmq_bug: true
+server.encode = -> m { p m }
 server.listen do |job_name|
   puts "Looking up: #{job_name}"
   Oj.dump define(job_name)

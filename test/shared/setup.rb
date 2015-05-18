@@ -17,7 +17,7 @@ module Setup
 
   def self.client(port:)
     client_settings = {
-      port: port,
+      port: port, # TODO: socket_settings??
       encode: -> message { Oj.dump message },
       decode: -> message { Oj.load message }
     }
