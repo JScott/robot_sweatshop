@@ -14,3 +14,6 @@ end
 run_test 'input'
 run_test 'conveyor'
 run_test 'payload_parser'
+run_test 'job_dictionary'
+# run_test 'assembler'
+# run_test 'worker'
