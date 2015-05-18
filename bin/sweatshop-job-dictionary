@@ -1,0 +1,49 @@
+#!/usr/bin/env ruby
+require 'bundler/setup'
+require 'oj'
+require 'ezmq'
+require 'contracts'
+require 'robot_sweatshop/config'
+require 'robot_sweatshop/payload'
+require 'robot_sweatshop/connections'
+using ExtendedEZMQ
+
+$stdout.sync = true
+include Contracts
+
+Contract None => String
+def job_path
+  File.expand_path configatron.job_path
+end
+
+Contract String => Or[Hash, nil]
+def load_if_exists(config_path)
+  puts "Reading job configuration from #{config_path}"
+  YAML.load_file config_path if File.exists? config_path
+end
+
+Contract None => Hash
+def empty_config
+  puts "Job configuration not found or empty"
+  {}
+end
+
+Contract String => Hash
+def load_config_for(job_name)
+  load_if_exists("#{job_path}/#{job_name}.yaml") || empty_config
+end
+
+def define(job_name)
+  config = load_config_for job_name
+  return {payload: {}, error: "Job not found or empty"} if config.empty?
+  return {payload: {}, error: "No commands"} if config['commands'].is_a? Array
+  {payload: config, error: ''}
+end
+
+puts 'Started'
+server = EZMQ::Server.new port: configatron.job_dictionary_port
+server.serialize_with_json! except_encode_because_of_ezmq_bug: true
+server.listen do |job_name|
+  puts "Looking up: #{job_name}"
+  Oj.dump define(job_name)
+end
