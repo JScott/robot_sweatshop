@@ -33,28 +33,26 @@ end
 
 Contract None => Or[Hash,nil]
 def request_job
-  job_id = @socket_for[:conveyor].request({method: 'dequeue'}, {})
+  job_id = @socket[:conveyor].request({method: 'dequeue'}, {})
   return nil if job_id.nil?
-  raw_job = @socket_for[:conveyor].request({method: 'lookup', data: job_id}, {})
+  raw_job = @socket[:conveyor].request({method: 'lookup', data: job_id}, {})
   puts "Assembling: '#{raw_job}'"
   raw_job.merge job_id: job_id
 end
 
-Contract EZMQ::Client, Any => [Hash, String]
-def request(client, data)
-  response = client.request data, {}
+Contract EZMQ::Socket, Any => [Hash, String]
+def request(socket, data)
+  response = socket.request data, {}
   puts response[:error] unless response[:error].empty?
   [response[:payload], response[:error]]
 end
 
-Contract Hash => [Hash, String]
-def parse_payload_from(job)
-  request @socket_for[:parser], job
-end
-
-Contract Hash => [Hash, String]
-def request_definition_for(job)
-  request @socket_for[:dictionary], job[:job_name]
+Contract Hash => [Hash, Hash, String]
+def request_data_for(job)
+  payload, error = request @socket[:parser], job
+  definition, error = request @socket[:dictionary], job[:job_name] if error.empty?
+  [{}, {}, error] unless error.empty?
+  [payload, definition, error]
 end
 
 Contract Proc => Or[Hash,nil]
@@ -72,24 +70,22 @@ def whitelisted?(definition, branch)
 end
 
 puts 'Started'
-@socket_for = {
+@socket = {
   conveyor: EZMQ::Client.new(port: configatron.conveyor_port),
   worker: EZMQ::Pusher.new(port: configatron.worker_port),
   parser: EZMQ::Client.new(port: configatron.payload_parser_port),
   dictionary: EZMQ::Client.new(port: configatron.job_dictionary_port)
 }
-@socket_for.each { |_key, socket| socket.serialize_with_json! }
+@socket.each { |_key, socket| socket.serialize_with_json! }
 @timer = ExponentialBackoff.new 0.1, 3
 
 # TODO: profiler to get a better idea of how long we should wait based on historical information
 loop do
   job = exponentially_retry { request_job }
   next if job.nil?
-  payload, error = parse_payload_from job
-  next unless error.empty?
-  definition, error = request_definition_for job
+  payload, definition, error = request_data_for job
   next unless error.empty?
   next unless whitelisted?(definition, payload['branch'])
   assembled_job = assemble job, payload, definition
-  @socket_for[:worker].send(assembled_job, {}) unless assembled_job.empty?
+  @socket[:worker].send(assembled_job, {}) unless assembled_job.empty?
 end
