@@ -44,7 +44,7 @@ Contract EZMQ::Socket, Any => [Hash, String]
 def request(socket, data)
   response = socket.request data, {}
   puts response[:error] unless response[:error].empty?
-  [response[:payload], response[:error]]
+  [response[:data], response[:error]]
 end
 
 Contract Hash => [Hash, Hash, String]

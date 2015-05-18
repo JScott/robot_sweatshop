@@ -13,5 +13,11 @@ something = finish(id)
 sweatshop-payload-parser
 ```
 req: { payload:, user_agent: }
-rep: { payload:, error: }
+rep: { data:, error: }
+```
+
+sweatshop-job-dictionary
+```
+req: { job_name: }
+rep: { data:, error: }
 ```
