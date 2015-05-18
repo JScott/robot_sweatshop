@@ -1,4 +1,5 @@
 require 'ezmq'
+require 'oj'
 require 'robot_sweatshop/config'
 
 module ExtendedEZMQ

@@ -1,7 +1,6 @@
 #!/usr/bin/env ruby
 require 'bundler/setup'
 require 'yaml'
-require 'oj'
 require 'contracts'
 require 'exponential_backoff'
 require 'ezmq'
