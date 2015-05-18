@@ -2,7 +2,6 @@
 require 'bundler/setup'
 require 'sinatra'
 require 'ezmq'
-require 'oj'
 require 'robot_sweatshop/config'
 require 'robot_sweatshop/connections'
 using ExtendedEZMQ
