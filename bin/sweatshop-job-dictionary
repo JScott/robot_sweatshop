@@ -33,12 +33,17 @@ def load_config_for(job_name)
   load_if_exists("#{job_path}/#{job_name}.yaml") || empty_config
 end
 
+Contract Hash, Hash => Hash
+def formatted(payload={}, error:'')
+  {payload: payload, error: error}
+end
+
 Contract String => Hash
 def define(job_name)
   config = load_config_for job_name
-  return {payload: {}, error: "Job not found or empty"} if config.empty?
-  return {payload: {}, error: "No commands"} unless config['commands'].is_a? Array
-  {payload: config, error: ''}
+  return formatted error: 'Job not found or empty' if config.empty?
+  return formatted error: 'No commands' unless config['commands'].is_a? Array
+  formatted config
 end
 
 puts 'Started'
