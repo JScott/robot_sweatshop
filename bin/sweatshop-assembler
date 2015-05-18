@@ -22,45 +22,37 @@ def job_context(job_environment, context_from_payload)
   sanitize job_environment.merge(context_from_payload)
 end
 
-Contract String => Or[Hash, nil]
-def load_if_exists(config)
-  puts "Reading job configuration from #{config}"
-  YAML.load_file config if File.exists? config
-end
+# Contract String => Or[Hash, nil]
+# def load_if_exists(config)
+#   puts "Reading job configuration from #{config}"
+#   YAML.load_file config if File.exists? config
+# end
 
-Contract String => Hash
-def load_config_for(job_name)
-  load_if_exists("#{job_path}/#{job_name}.yaml") || empty_config
-end
+# Contract String => Hash
+# def load_config_for(job_name)
+#   load_if_exists("#{job_path}/#{job_name}.yaml") || empty_config
+# end
 
-Contract None => String
-def job_path
-  File.expand_path configatron.job_path
-end
+# Contract None => String
+# def job_path
+#   File.expand_path configatron.job_path
+# end
 
-Contract None => Hash
-def empty_config
-  puts "Job configuration not found or empty"
-  {}
-end
+# Contract None => Hash
+# def empty_config
+#   puts "Job configuration not found or empty"
+#   {}
+# end
 
-Contract Or[String, nil], Hash => Bool
-def whitelisted?(branch, in_config:)
-  return true if in_config['branch_whitelist'].nil?
-  in_config['branch_whitelist'].include? branch
-end
-
-Contract Hash, Or[String,nil] => Bool
-def can_work_with?(job_config, branch)
-  return false if job_config.empty?
-  return false unless whitelisted? branch, in_config: job_config
-  true
-end
+# Contract Hash, Or[String,nil] => Bool
+# def can_work_with?(job_config, branch)
+#   return false if job_config.empty?
+####   return false unless whitelisted? branch, in_config: job_config
+#   true
+# end
 
 Contract Hash, Hash => Hash
-def assemble(job, payload)
-  job_config = load_config_for job[:job_name]
-  return {} unless can_work_with?(job_config, payload['branch'])
+def assemble(job, payload, config)
   {
     commands: job_config['commands'],
     context: job_context(job_config['environment'] || {}, payload),
@@ -73,16 +65,26 @@ Contract None => Or[Hash,nil]
 def request_job
   job_id = @conveyor.request({method: 'dequeue'}, {})
   return nil if job_id.nil?
-  raw_job = @conveyor.request({method: 'lookup', data: job_id}, {})
+  raw_payload = @conveyor.request({method: 'lookup', data: job_id}, {})
   puts "Assembling: '#{raw_job}'"
   raw_job.merge job_id: job_id
 end
 
-Contract Hash => [Hash, String]
-def parse_payload_from(job)
-  response = @parser.request job, {}
+Contract EZMQ::Client, Hash => [Hash, String]
+def request(client, data)
+  response client.request data, {}
   puts response[:error] unless response[:error].empty?
   [response[:payload], response[:error]]
+end
+
+Contract Hash => [Hash, String]
+def parse_payload_from(job)
+  request @parser, job
+end
+
+Contract Hash => [Hash, String]
+def request_definition_for(job)
+  request @dictionary, job
 end
 
 Contract Proc => Or[Hash,nil]
@@ -93,6 +95,12 @@ def exponentially_retry
   value
 end
 
+Contract Hash, Or[String, nil] => Bool
+def whitelisted?(definition, branch)
+  return true if definition['branch_whitelist'].nil?
+  definition['branch_whitelist'].include? branch
+end
+
 puts 'Started'
 @conveyor = EZMQ::Client.new port: configatron.conveyor_port
 @conveyor.serialize_with_json!
@@ -100,6 +108,8 @@ puts 'Started'
 @worker.serialize_with_json!
 @parser = EZMQ::Client.new port: configatron.payload_parser_port
 @parser.serialize_with_json!
+@dictionary = EZMQ::Client.new port: configatron.job_reader_port # TODO
+@dictionary.serialize_with_json!
 @timer = ExponentialBackoff.new 0.1, 3
 
 # TODO: profiler to get a better idea of how long we should wait based on historical information
@@ -108,6 +118,9 @@ loop do
   next if job.nil?
   payload, error = parse_payload_from job
   next unless error.empty?
+  definition, error = request_definition_for job
+  next unless error.empty?
+  next unless whitelisted?(definition, payload['branch'])
   assembled_job = assemble job, payload
   @worker.send(assembled_job, {}) unless assembled_job.empty?
 end
