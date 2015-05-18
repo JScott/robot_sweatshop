@@ -33,9 +33,9 @@ end
 
 Contract None => Or[Hash,nil]
 def request_job
-  job_id = @conveyor.request({method: 'dequeue'}, {})
+  job_id = @socket_for[:conveyor].request({method: 'dequeue'}, {})
   return nil if job_id.nil?
-  raw_job = @conveyor.request({method: 'lookup', data: job_id}, {})
+  raw_job = @socket_for[:conveyor].request({method: 'lookup', data: job_id}, {})
   puts "Assembling: '#{raw_job}'"
   raw_job.merge job_id: job_id
 end
@@ -49,13 +49,12 @@ end
 
 Contract Hash => [Hash, String]
 def parse_payload_from(job)
-  request @parser, job
+  request @socket_for[:parser], job
 end
 
 Contract Hash => [Hash, String]
 def request_definition_for(job)
-  p job
-  request @dictionary, job[:job_name]
+  request @socket_for[:dictionary], job[:job_name]
 end
 
 Contract Proc => Or[Hash,nil]
@@ -73,14 +72,13 @@ def whitelisted?(definition, branch)
 end
 
 puts 'Started'
-@conveyor = EZMQ::Client.new port: configatron.conveyor_port
-@conveyor.serialize_with_json!
-@worker = EZMQ::Pusher.new port: configatron.worker_port
-@worker.serialize_with_json!
-@parser = EZMQ::Client.new port: configatron.payload_parser_port
-@parser.serialize_with_json!
-@dictionary = EZMQ::Client.new port: configatron.job_dictionary_port
-@dictionary.serialize_with_json!
+@socket_for = {
+  conveyor: EZMQ::Client.new(port: configatron.conveyor_port),
+  worker: EZMQ::Pusher.new(port: configatron.worker_port),
+  parser: EZMQ::Client.new(port: configatron.payload_parser_port),
+  dictionary: EZMQ::Client.new(port: configatron.job_dictionary_port)
+}
+@socket_for.each { |_key, socket| socket.serialize_with_json! }
 @timer = ExponentialBackoff.new 0.1, 3
 
 # TODO: profiler to get a better idea of how long we should wait based on historical information
@@ -93,5 +91,5 @@ loop do
   next unless error.empty?
   next unless whitelisted?(definition, payload['branch'])
   assembled_job = assemble job, payload, definition
-  @worker.send(assembled_job, {}) unless assembled_job.empty?
+  @socket_for[:worker].send(assembled_job, {}) unless assembled_job.empty?
 end
