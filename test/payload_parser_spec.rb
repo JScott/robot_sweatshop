@@ -32,10 +32,12 @@ describe 'the Payload Parser' do
         end
       end
 
-      should 'return a parsed payload object' do
+      should 'return no error' do
         assert_equal true, @response[:error].empty?
-        assert_kind_of Hash, @response[:payload]
+      end
 
+      should 'return a parsed payload object' do
+        assert_kind_of Hash, @response[:payload]
         keys = Payload.hash_keys
         keys = %w(test1 test2) if format == 'JSON'
         keys = [] if format == 'Empty'
