@@ -22,35 +22,6 @@ def job_context(job_environment, context_from_payload)
   sanitize job_environment.merge(context_from_payload)
 end
 
-# Contract String => Or[Hash, nil]
-# def load_if_exists(config)
-#   puts "Reading job configuration from #{config}"
-#   YAML.load_file config if File.exists? config
-# end
-
-# Contract String => Hash
-# def load_config_for(job_name)
-#   load_if_exists("#{job_path}/#{job_name}.yaml") || empty_config
-# end
-
-# Contract None => String
-# def job_path
-#   File.expand_path configatron.job_path
-# end
-
-# Contract None => Hash
-# def empty_config
-#   puts "Job configuration not found or empty"
-#   {}
-# end
-
-# Contract Hash, Or[String,nil] => Bool
-# def can_work_with?(job_config, branch)
-#   return false if job_config.empty?
-####   return false unless whitelisted? branch, in_config: job_config
-#   true
-# end
-
 Contract Hash, Hash => Hash
 def assemble(job, payload, config)
   {
