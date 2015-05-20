@@ -1,7 +1,6 @@
 require 'bundler/setup'
 require 'kintama'
 require 'ezmq'
-require 'oj'
 require 'timeout'
 require 'robot_sweatshop/config'
 require 'robot_sweatshop/connections'
