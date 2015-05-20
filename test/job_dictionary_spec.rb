@@ -4,6 +4,7 @@ require 'ezmq'
 require 'oj'
 require 'timeout'
 require 'robot_sweatshop/config'
+require 'robot_sweatshop/connections'
 require_relative 'shared/setup'
 require_relative 'shared/helpers' # do I need this?
 $stdout.sync = true
@@ -18,9 +19,11 @@ end
 
 describe 'the Job Dictionary' do
   include InputHelper
+  using ExtendedEZMQ
 
   setup do
-    @client = Setup::client port: configatron.job_dictionary_port
+    @client = EZMQ::Client.new port: configatron.job_dictionary_port
+    @client.serialize_with_json!
   end
 
   %w(git_job minimal_job test_job).each do |job_name|

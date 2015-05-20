@@ -4,6 +4,7 @@ require 'ezmq'
 require 'oj'
 require 'timeout'
 require 'robot_sweatshop/config'
+require 'robot_sweatshop/connections'
 require_relative 'shared/setup'
 $stdout.sync = true
 
@@ -16,8 +17,11 @@ Kintama.on_finish do
 end
 
 describe 'the Conveyor' do
+  using ExtendedEZMQ
+
   setup do
-    @client = Setup::client port: configatron.conveyor_port
+    @client = EZMQ::Client.new port: configatron.conveyor_port
+    @client.serialize_with_json!
     @item = {test: 'item'}
   end
 
