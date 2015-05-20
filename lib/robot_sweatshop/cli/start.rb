@@ -1,5 +1,5 @@
 require 'yaml'
-require_relative '../config'
+require 'robot_sweatshop/config'
 
 def store_config_for_eye
   config = configatron.to_h

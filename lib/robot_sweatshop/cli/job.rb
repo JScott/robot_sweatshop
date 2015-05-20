@@ -1,4 +1,4 @@
-require_relative '../config'
+require 'robot_sweatshop/config'
 
 def default_job
   "---\n# branch_whitelist:\n# - master\n\ncommands:\n- echo \"Hello $WORLD!\"\n\nenvironment:\n  WORLD: Earth\n"

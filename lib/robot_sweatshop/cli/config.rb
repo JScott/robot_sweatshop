@@ -1,4 +1,4 @@
-require_relative '../config'
+require 'robot_sweatshop/config'
 
 def default_config
   File.read "#{__dir__}/../../../config.defaults.yaml"

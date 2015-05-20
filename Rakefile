@@ -7,5 +7,5 @@ task :test do
     add_filter "/vendor/"
     add_filter "/test/"
   end
-  require_relative 'test/run_all'
+  require_relative 'test/all'
 end

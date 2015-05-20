@@ -1,5 +1,5 @@
 require 'fileutils'
-require_relative '../config'
+require 'robot_sweatshop/config'
 
 def notify(type = :success, string)
   color = case type
