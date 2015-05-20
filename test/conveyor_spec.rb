@@ -8,6 +8,7 @@ require_relative 'shared/scaffolding'
 $stdout.sync = true
 
 Kintama.on_start do
+  Setup.empty_conveyor
   @pids = Processes.start %w(conveyor)
 end
 
