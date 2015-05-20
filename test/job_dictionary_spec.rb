@@ -4,16 +4,16 @@ require 'ezmq'
 require 'timeout'
 require 'robot_sweatshop/config'
 require 'robot_sweatshop/connections'
-require_relative 'shared/setup'
+require_relative 'shared/scaffolding'
 require_relative 'shared/helpers' # do I need this?
 $stdout.sync = true
 
 Kintama.on_start do
-  @pid = Setup::process 'job-dictionary'
+  @pids = Processes.start %w(job-dictionary)
 end
 
 Kintama.on_finish do
-  Process.kill 'TERM', @pid
+  Processes.stop @pids
 end
 
 describe 'the Job Dictionary' do

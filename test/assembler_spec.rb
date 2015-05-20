@@ -4,23 +4,20 @@ require 'ezmq'
 require 'timeout'
 require 'robot_sweatshop/config'
 require 'robot_sweatshop/connections'
-require_relative 'shared/setup'
+require_relative 'shared/scaffolding'
 require_relative 'shared/helpers'
 $stdout.sync = true
 
 Kintama.on_start do
-  Setup::clear_conveyor
-  @pids = []
-  @pids.push Setup::process('assembler')
-  @pids.push Setup::process('conveyor')
-  @pids.push Setup::process('payload-parser')
-  @pids.push Setup::process('job-dictionary')
-  @puller = Setup::stub 'Puller', port: configatron.worker_port
-  Setup::test_jobs
+  Setup.empty_conveyor
+  @pids = Processes.start %w(assembler conveyor payload-parser job-dictionary)
+  @puller_thread = Setup.stub 'Puller', port: configatron.worker_port
+  Setup.create_test_jobs
 end
 
 Kintama.on_finish do
-  @pids.each { |pid| Process.kill 'TERM', pid }
+  Processes.stop @pids
+  @puller_thread.kill
 end
 
 describe 'the Job Assembler' do
