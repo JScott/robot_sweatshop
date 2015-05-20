@@ -15,15 +15,6 @@ module Setup
     File.truncate db_file, 0 if File.exist? db_file
   end
 
-  def self.client(port:)
-    client_settings = {
-      port: port, # TODO: socket_settings??
-      encode: -> message { Oj.dump message },
-      decode: -> message { Oj.load message }
-    }
-    EZMQ::Client.new client_settings
-  end
-
   def self.stub(type, port:)
     FileUtils.rm '.test.txt' if File.exist? '.test.txt'
     Thread.new do

@@ -4,6 +4,7 @@ require 'ezmq'
 require 'oj'
 require 'timeout'
 require 'robot_sweatshop/config'
+require 'robot_sweatshop/connections'
 require_relative 'shared/setup'
 require_relative 'shared/helpers'
 $stdout.sync = true
@@ -25,14 +26,11 @@ end
 
 describe 'the Job Assembler' do
   include InputHelper
+  using ExtendedEZMQ
 
   setup do
-    client_settings = {
-      port: configatron.conveyor_port,
-      encode: -> message { Oj.dump message },
-      decode: -> message { Oj.load message }
-    }
-    @client = Setup::client port: configatron.conveyor_port
+    @client = EZMQ::Client.new port: configatron.conveyor_port
+    @client.serialize_with_json!
     clear_stub_output
   end
 
