@@ -25,6 +25,10 @@ describe 'the Payload Parser' do
     @client.serialize_with_json!
   end
 
+  teardown do
+    @client.close
+  end
+
   %w(Bitbucket Github JSON Empty).each do |format|
     given "valid #{format} payloads" do
       setup do
