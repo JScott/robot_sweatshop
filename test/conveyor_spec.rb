@@ -4,15 +4,15 @@ require 'ezmq'
 require 'timeout'
 require 'robot_sweatshop/config'
 require 'robot_sweatshop/connections'
-require_relative 'shared/setup'
+require_relative 'shared/scaffolding'
 $stdout.sync = true
 
 Kintama.on_start do
-  @pid = Setup::process 'conveyor'
+  @pids = Processes.start %w(conveyor)
 end
 
 Kintama.on_finish do
-  Process.kill 'TERM', @pid
+  Processes.stop @pids
 end
 
 describe 'the Conveyor' do

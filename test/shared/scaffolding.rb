@@ -6,13 +6,23 @@ require 'robot_sweatshop/config'
 require 'robot_sweatshop/connections'
 using ExtendedEZMQ
 
-module Setup
-  def self.process(name)
-    input_script = File.expand_path "#{__dir__}/../../bin/sweatshop-#{name}"
-    spawn input_script, out: '/dev/null', err: '/dev/null'
+module Processes
+  def self.start(name_list)
+    pids = []
+    name_list.each do |name|
+      input_script = File.expand_path "#{__dir__}/../../bin/sweatshop-#{name}"
+      pids.push spawn(input_script, out: '/dev/null', err: '/dev/null')
+    end
+    pids
   end
 
-  def self.clear_conveyor
+  def self.stop(pid_list)
+    pid_list.each { |pid| Process.kill 'TERM', pid }
+  end
+end
+
+module Setup
+  def self.empty_conveyor
     db_file = "#{configatron.database_path}/conveyor.db"
     File.truncate db_file, 0 if File.exist? db_file
   end
@@ -32,7 +42,7 @@ module Setup
     file.close
   end
 
-  def self.test_jobs
+  def self.create_test_jobs
     test_jobs = Dir.glob "#{__dir__}/../data/*_job.yaml"
     test_jobs.each { |test_job| FileUtils.cp test_job, configatron.job_path }
   end

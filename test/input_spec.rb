@@ -5,18 +5,18 @@ require 'oj'
 require 'timeout'
 require 'http'
 require 'robot_sweatshop/config'
-require_relative 'shared/setup'
+require_relative 'shared/scaffolding'
 require_relative 'shared/helpers'
 $stdout.sync = true
 
 Kintama.on_start do
-  @pid = Setup::process 'input'
+  @pids = Processes.start %w(input)
   sleep $a_while
-  @server_thread = Setup::stub 'Server', port: configatron.conveyor_port
+  @server_thread = Setup.stub 'Server', port: configatron.conveyor_port
 end
 
 Kintama.on_finish do
-  Process.kill 'TERM', @pid
+  Processes.stop @pids
   @server_thread.kill
 end
 

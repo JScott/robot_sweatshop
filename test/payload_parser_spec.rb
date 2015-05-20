@@ -4,16 +4,16 @@ require 'ezmq'
 require 'timeout'
 require 'robot_sweatshop/config'
 require 'robot_sweatshop/connections'
-require_relative 'shared/setup'
+require_relative 'shared/scaffolding'
 require_relative 'shared/helpers'
 $stdout.sync = true
 
 Kintama.on_start do
-  @pid = Setup::process 'payload-parser'
+  @pids = Processes.start %w(payload-parser)
 end
 
 Kintama.on_finish do
-  Process.kill 'TERM', @pid
+  Processes.stop @pids
 end
 
 describe 'the Payload Parser' do
