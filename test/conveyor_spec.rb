@@ -24,6 +24,10 @@ describe 'the Conveyor' do
     @item = {test: 'item'}
   end
 
+  teardown do
+    @client.close
+  end
+
   should 'enqueue and dequeue items' do
     id = Timeout.timeout($a_moment) do
       @client.request({method: 'enqueue', data: @item}, {})

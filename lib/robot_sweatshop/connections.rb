@@ -9,5 +9,10 @@ module ExtendedEZMQ
       self.encode = -> message { Oj.dump message } unless except_encode_because_of_ezmq_bug
       self.decode = -> message { Oj.load message }
     end
+
+    def close
+      self.socket.close
+      self.context.terminate
+    end
   end
 end

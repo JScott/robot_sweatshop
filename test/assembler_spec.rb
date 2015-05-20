@@ -31,8 +31,7 @@ describe 'the Job Assembler' do
   end
 
   teardown do
-    @client.socket.close
-    @client.context.terminate
+    @client.close
   end
 
   %w(Git JSON MinimalJob).each do |request|

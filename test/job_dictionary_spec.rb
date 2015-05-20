@@ -25,6 +25,10 @@ describe 'the Job Dictionary' do
     @client.serialize_with_json!
   end
 
+  teardown do
+    @client.close
+  end
+
   %w(git_job minimal_job test_job).each do |job_name|
     given "a #{job_name.gsub '_', ' '}" do
       setup do
