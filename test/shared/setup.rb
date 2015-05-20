@@ -3,6 +3,8 @@ require 'ezmq'
 require 'fileutils'
 require 'oj'
 require 'robot_sweatshop/config'
+require 'robot_sweatshop/connections'
+using ExtendedEZMQ
 
 module Setup
   def self.process(name)
@@ -18,7 +20,8 @@ module Setup
   def self.stub(type, port:)
     FileUtils.rm '.test.txt' if File.exist? '.test.txt'
     Thread.new do
-      listener = EZMQ.const_get(type).new socket_settings(port)
+      listener = EZMQ.const_get(type).new port: port
+      listener.serialize_with_json!
       listener.listen { |message| write message }
     end
   end
@@ -27,14 +30,6 @@ module Setup
     file = File.new '.test.txt', 'w'
     file.write message
     file.close
-  end
-
-  def self.socket_settings(port)
-    {
-      port: port,
-      encode: -> message { Oj.dump message },
-      decode: -> message { Oj.load message }
-    }
   end
 
   def self.test_jobs
