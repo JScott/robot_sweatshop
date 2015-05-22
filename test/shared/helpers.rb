@@ -39,14 +39,14 @@ module InputHelper
 
   def job_configuration(type)
     format = 'JSON'
-    format = 'Bitbucket' if type == 'Git' || type == 'UnknownJob'
-    format = 'Github' if type == 'IgnoredBranch'
+    format = 'Bitbucket' if type == 'Git' # develop branch
+    format = 'Github' if type == 'IgnoredBranch' # master branch
     format = 'NonJSON' if type == 'NonJSON'
 
     job = 'test_job'
     job = 'git_job' if type == 'Git' || type == 'IgnoredBranch'
     job = 'minimal_job' if type == 'MinimalJob'
-    job = 'unknown_job' if type == 'unknown_job'
+    job = 'unknown_job' if type == 'UnknownJob' # TODO: why does commenting this out still pass payload parser?!
     job = 'empty_job' if type == 'EmptyJob'
 
     [format, job]
