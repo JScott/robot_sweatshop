@@ -76,6 +76,18 @@ module InputHelper
     File.truncate '.test.txt', 0 # if File.exist? '.test.txt'
   end
 
+  # def example_job(in_context: {}, with_commands: [])
+  #   JSON.generate context: in_context,
+  #                 commands: with_commands,
+  #                 job_name: 'test_job'
+  # end
+
+  # def reset_test_file
+  #   test_file = File.expand_path "#{configatron.workspace_path}/test_job-testingid/test.txt"
+  #   FileUtils.rm_rf test_file
+  #   test_file
+  # end
+
   # def example_payload_request(of_format:)
   #   {
   #     payload: example_raw_payload(of_format: of_format),
@@ -89,18 +101,3 @@ module InputHelper
   #           user_agent: user_agent_for(format)
   # end
 end
-
-
-
-# module JobHelper
-#   def example_job(in_context: {}, with_commands: [])
-#     JSON.generate context: in_context,
-#                   commands: with_commands,
-#                   job_name: 'test_job'
-#   end
-#   def reset_test_file
-#     test_file = File.expand_path "#{configatron.workspace_path}/test_job-testingid/test.txt"
-#     FileUtils.rm_rf test_file
-#     test_file
-#   end
-# end

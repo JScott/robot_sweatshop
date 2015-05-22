@@ -1,17 +1,16 @@
 require 'kintama'
 require 'ezmq'
-require_relative 'shared/process_spawning'
+require 'robot_sweatshop/config'
+require 'robot_sweatshop/connections'
+require_relative 'shared/scaffolding'
 require_relative 'shared/helpers'
 
 describe 'the Worker' do
-  include QueueHelper
-  include JobHelper
+  include InputHelper
 
   setup do
-    @client = EZMQ::Client.new port: 5556
-    @jobs_queue = 'jobs'
-    @test_file = reset_test_file
-    clear_all_queues
+    @pusher = EZMQ::Pusher.new port: configatron.worker_port
+    @pusher.serialize_with_json!
   end
 
   given 'valid job data in \'jobs\'' do
@@ -19,12 +18,6 @@ describe 'the Worker' do
       job = example_job in_context: {custom: 'Hello world!'},
                         with_commands: ['echo $custom','echo $custom > test.txt']
       @client.request "#{@jobs_queue} #{job}"
-    end
-
-    should 'remove it from \'jobs\'' do
-      sleep $for_a_moment
-      response = @client.request @jobs_queue
-      assert_equal '', response
     end
 
     should 'run the dequeued job' do
@@ -48,12 +41,6 @@ describe 'the Worker' do
       invalid_data.each do |_type, datum|
         @client.request "#{@jobs_queue} #{datum}"
       end
-    end
-
-    should 'remove all of it from \'jobs\'' do
-      sleep $for_a_moment
-      response = @client.request @jobs_queue
-      assert_equal '', response
     end
 
     should 'not run anything' do
