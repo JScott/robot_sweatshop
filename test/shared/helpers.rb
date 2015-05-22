@@ -18,7 +18,7 @@ module InputHelper
     "http://localhost:#{configatron.http_port}/payload-for/#{for_job}"
   end
 
-  def job_enqueue(type) # TODO: conveyor_enqueue && type is format?
+  def job_enqueue(type) # TODO: conveyor_data && type is format?
     format, job = payload_configuration type
     {
       method: 'enqueue',
@@ -30,14 +30,14 @@ module InputHelper
     }
   end
 
-  def payload_parser_request(format)
+  def payload_parser_request(format) # TODO: payload_parser_data
     {
       payload: example_raw_payload(format),
       user_agent: user_agent_for(format)
     }
   end
 
-  def worker_push(format)
+  def worker_data
     {
       commands: [
         'echo $custom',
@@ -79,6 +79,10 @@ module InputHelper
     '.test.txt'
   end
 
+  def worker_output
+    "#{configatron.workspace_path}/test_job-testingid/test.txt"
+  end
+
   def stub_output_empty?
     (not File.exist? stub_output) || File.read(stub_output).empty?
   end
@@ -88,16 +92,14 @@ module InputHelper
     File.truncate '.test.txt', 0 # if File.exist? '.test.txt'
   end
 
+  def clear_worker_output
+    FileUtils.rm_rf worker_output
+  end
+
   # def example_job(in_context: {}, with_commands: [])
   #   JSON.generate context: in_context,
   #                 commands: with_commands,
   #                 job_name: 'test_job'
-  # end
-
-  # def reset_test_file
-  #   test_file = File.expand_path "#{configatron.workspace_path}/test_job-testingid/test.txt"
-  #   FileUtils.rm_rf test_file
-  #   test_file
   # end
 
   # def example_job_request(of_type:)

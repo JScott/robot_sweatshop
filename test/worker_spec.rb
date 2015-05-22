@@ -1,3 +1,4 @@
+require 'bundler/setup'
 require 'kintama'
 require 'ezmq'
 require 'robot_sweatshop/config'
@@ -24,23 +25,33 @@ describe 'the Worker' do
   setup do
     @pusher = EZMQ::Pusher.new port: configatron.worker_port
     @pusher.serialize_with_json!
+    clear_worker_output
+    clear_stub_output
+  end
+
+  teardown do
+    @client.close
   end
 
   given 'valid job data is pushed' do
     setup do
-      job = example_job in_context: {custom: 'Hello world!'},
-                        with_commands: ['echo $custom','echo $custom > test.txt']
-      @client.request "#{@jobs_queue} #{job}"
+      clear_worker_output
+      @pusher.send worker_data
+      sleep $a_while # TODO: timeout instead
+      @worker_data = eval File.read(stub_output)
     end
 
-    should 'run the dequeued job' do
-      sleep $for_io_calls
+    should 'run the commands' do
       assert_equal true, File.file?(@test_file)
     end
 
-    should 'run jobs with the context as environment variables' do
-      sleep $for_io_calls
-      assert_equal "Hello world!\n", File.read(@test_file)
+    should 'run with the context as environment variables' do
+      assert_equal "hello world\n", File.read(@test_file)
+    end
+
+    should 'tell the conveyor that job is complete' do
+      assert_equal 'finish', @worker_data[:method]
+      assert_kind_of Fixnum, @worker_data[:data]
     end
   end
 end
