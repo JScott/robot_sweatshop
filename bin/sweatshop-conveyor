@@ -46,16 +46,16 @@ def supported?(method)
   %w(enqueue dequeue lookup finish).include? method
 end
 
-Contract Hash => String
+Contract Hash => Any
 def complete(request)
   arguments = []
-  return Oj.dump send(request[:method], request[:data]) if request[:data]
-  Oj.dump send(request[:method])
+  return send(request[:method], request[:data]) if request[:data]
+  send(request[:method])
 end
 
 puts 'Starting the Conveyor'
 server = EZMQ::Server.new port: configatron.conveyor_port
-server.serialize_with_json! except_encode_because_of_ezmq_bug: true
+server.serialize_with_json!
 server.listen do |request|
   puts "Received: #{request.inspect}"
   next unless request.is_a? Hash
