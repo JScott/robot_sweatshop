@@ -38,24 +38,18 @@ module InputHelper
   end
 
   def job_configuration(type)
-    case type
-    when 'Git'
-      ['Bitbucket', 'git_job'] # develop branch payload
-    when 'JSON'
-      ['JSON', 'test_job']
-    when 'MinimalJob'
-      ['JSON', 'minimal_job']
-    when 'IgnoredBranch'
-      ['Github', 'git_job'] # master branch payload
-    when 'UnknownJob'
-      ['Bitbucket', 'unknown_job']
-    when 'EmptyJob'
-      ['JSON', 'empty_job']
-    when 'NonJSON'
-      ['NonJSON', 'test_job']
-    else
-      ['', '']
-    end
+    format = 'JSON'
+    format = 'Bitbucket' if type == 'Git' || type == 'UnknownJob'
+    format = 'Github' if type == 'IgnoredBranch'
+    format = 'NonJSON' if type == 'NonJSON'
+
+    job = 'test_job'
+    job = 'git_job' if type == 'Git' || type == 'IgnoredBranch'
+    job = 'minimal_job' if type == 'MinimalJob'
+    job = 'unknown_job' if type == 'unknown_job'
+    job = 'empty_job' if type == 'EmptyJob'
+
+    [format, job]
   end
 
   def user_agent_for(format)
