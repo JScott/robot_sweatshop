@@ -42,7 +42,7 @@ module Setup
     file.close
   end
 
-  def self.create_test_jobs
+  def self.create_test_jobs # TODO: populate_test_jobs
     test_jobs = Dir.glob "#{__dir__}/../data/*_job.yaml"
     test_jobs.each { |test_job| FileUtils.cp test_job, configatron.job_path }
   end

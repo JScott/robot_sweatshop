@@ -18,8 +18,8 @@ module InputHelper
     "http://localhost:#{configatron.http_port}/payload-for/#{for_job}"
   end
 
-  def job_enqueue(type)
-    format, job = job_configuration type
+  def job_enqueue(type) # TODO: conveyor_enqueue && type is format?
+    format, job = payload_configuration type
     {
       method: 'enqueue',
       data: {
@@ -37,7 +37,19 @@ module InputHelper
     }
   end
 
-  def job_configuration(type)
+  def worker_push(format)
+    {
+      commands: [
+        'echo $custom',
+        'echo $custom > test.txt'
+      ],
+      context: {custom: 'hello world'},
+      job_name: 'test_job',
+      job_id: 1
+    }
+  end
+
+  def payload_configuration(type)
     format = 'JSON'
     format = 'Bitbucket' if type == 'Git' # develop branch
     format = 'Github' if type == 'IgnoredBranch' # master branch
@@ -88,12 +100,6 @@ module InputHelper
   #   test_file
   # end
 
-  # def example_payload_request(of_format:)
-  #   {
-  #     payload: example_raw_payload(of_format: of_format),
-  #     user_agent: user_agent_for(of_format)
-  #   }
-  # end
   # def example_job_request(of_type:)
   #   format, job_name = job_request_data of_type
   #   Oj.dump payload: example_raw_payload(of_format: format),
