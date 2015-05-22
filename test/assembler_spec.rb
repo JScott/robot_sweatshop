@@ -11,13 +11,13 @@ $stdout.sync = true
 Kintama.on_start do
   Setup.empty_conveyor
   @pids = Processes.start %w(assembler conveyor payload-parser job-dictionary)
-  @puller_thread = Setup.stub 'Puller', port: configatron.worker_port
+  @worker_thread = Setup.stub 'Puller', port: configatron.worker_port
   Setup.create_test_jobs
 end
 
 Kintama.on_finish do
   Processes.stop @pids
-  @puller_thread.kill
+  @worker_thread.kill
 end
 
 describe 'the Job Assembler' do

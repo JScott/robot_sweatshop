@@ -12,12 +12,12 @@ $stdout.sync = true
 Kintama.on_start do
   @pids = Processes.start %w(input)
   sleep $a_while
-  @server_thread = Setup.stub 'Server', port: configatron.conveyor_port
+  @conveyor_thread = Setup.stub 'Server', port: configatron.conveyor_port
 end
 
 Kintama.on_finish do
   Processes.stop @pids
-  @server_thread.kill
+  @conveyor_thread.kill
 end
 
 given 'the HTTP Input' do
