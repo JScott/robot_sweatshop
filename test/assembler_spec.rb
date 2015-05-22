@@ -38,7 +38,7 @@ describe 'the Job Assembler' do
     given "#{request} requests on the Conveyor" do
       setup do
         @client.request(job_enqueue(request),{})
-        sleep $a_moment
+        sleep $a_moment # TODO: timeout instead
         @worker_data = eval File.read(stub_output)
       end
 
