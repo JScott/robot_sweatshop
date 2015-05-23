@@ -10,6 +10,7 @@ $stdout.sync = true
 
 Kintama.on_start do
   @pids = Processes.start %w(job-dictionary)
+  Setup.create_test_jobs
 end
 
 Kintama.on_finish do
@@ -42,6 +43,7 @@ describe 'the Job Dictionary' do
       end
 
       should 'return a defined job object' do
+        p @response
         assert_kind_of Hash, @response[:data]
         no_environment = job_name =~ /empty|minimal/
         has_whitelist = job_name =~ /git/
