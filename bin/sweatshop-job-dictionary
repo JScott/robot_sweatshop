@@ -46,9 +46,8 @@ end
 
 puts 'Started'
 server = EZMQ::Server.new port: configatron.job_dictionary_port
-server.serialize_with_json! except_encode_because_of_ezmq_bug: true
-server.encode = -> m { p m }
+server.serialize_with_json!
 server.listen do |job_name|
   puts "Looking up: #{job_name}"
-  Oj.dump define(job_name)
+  define job_name
 end
