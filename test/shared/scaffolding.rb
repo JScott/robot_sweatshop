@@ -11,6 +11,7 @@ module Processes
     pids = []
     name_list.each do |name|
       input_script = File.expand_path "#{__dir__}/../../bin/sweatshop-#{name}"
+      input_script += ' testingid' if name == 'worker'
       pids.push spawn(input_script, out: '/dev/null', err: '/dev/null')
     end
     pids
