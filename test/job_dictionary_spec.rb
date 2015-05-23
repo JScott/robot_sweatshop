@@ -43,7 +43,6 @@ describe 'the Job Dictionary' do
       end
 
       should 'return a defined job object' do
-        p @response
         assert_kind_of Hash, @response[:data]
         no_environment = job_name =~ /empty|minimal/
         has_whitelist = job_name =~ /git/
