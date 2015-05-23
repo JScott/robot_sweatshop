@@ -30,7 +30,7 @@ describe 'the Worker' do
   end
 
   teardown do
-    @client.close
+    @pusher.close
   end
 
   given 'valid job data is pushed' do
