@@ -42,11 +42,11 @@ describe 'the Worker' do
     end
 
     should 'run the commands' do
-      assert_equal true, File.file?(@test_file)
+      assert_equal true, File.file?(worker_output)
     end
 
     should 'run with the context as environment variables' do
-      assert_equal "hello world\n", File.read(@test_file)
+      assert_equal "hello world\n", File.read(worker_output)
     end
 
     should 'tell the conveyor that job is complete' do
