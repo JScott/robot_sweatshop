@@ -64,9 +64,9 @@ end
 
 puts 'Started'
 server = EZMQ::Server.new port: configatron.payload_parser_port
-server.serialize_with_json! except_encode_because_of_ezmq_bug: true
+server.serialize_with_json!
 server.listen do |request|
   puts "Parsing: #{request}"
   format = detect_format_of request
-  Oj.dump parse(request[:payload], format)
+  parse request[:payload], format
 end
