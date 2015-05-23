@@ -36,7 +36,7 @@ describe 'the Worker' do
   given 'valid job data is pushed' do
     setup do
       clear_worker_output
-      @pusher.send worker_data
+      @pusher.send(worker_data, {})
       sleep $a_while # TODO: timeout instead
       @worker_data = eval File.read(stub_output)
     end

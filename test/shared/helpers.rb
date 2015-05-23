@@ -43,7 +43,7 @@ module InputHelper
         'echo $custom',
         'echo $custom > test.txt'
       ],
-      context: {custom: 'hello world'},
+      context: {'custom' => 'hello world'},
       job_name: 'test_job',
       job_id: 1
     }
