@@ -12,7 +12,7 @@ Kintama.on_start do
   Setup.empty_conveyor
   @pids = Processes.start %w(assembler conveyor payload-parser job-dictionary)
   @worker_thread = Setup.stub 'Puller', port: configatron.worker_port
-  Setup.create_test_jobs
+  Setup.populate_test_jobs
 end
 
 Kintama.on_finish do

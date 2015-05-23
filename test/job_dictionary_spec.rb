@@ -10,7 +10,7 @@ $stdout.sync = true
 
 Kintama.on_start do
   @pids = Processes.start %w(job-dictionary)
-  Setup.create_test_jobs
+  Setup.populate_test_jobs
 end
 
 Kintama.on_finish do
