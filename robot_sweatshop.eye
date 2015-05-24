@@ -27,6 +27,12 @@ Eye.application :robot_sweatshop do
       start_command "#{__dir__}/bin/sweatshop-payload-parser"
       daemonize true
     end
+    process :conveyor do
+      pid_file "#{PID_PATH}/conveyor.pid"
+      stdall "#{LOG_PATH}/conveyor.log"
+      start_command "#{__dir__}/bin/sweatshop-conveyor"
+      daemonize true
+    end
   end
 
   process :input do
@@ -35,22 +41,16 @@ Eye.application :robot_sweatshop do
     start_command "#{__dir__}/bin/sweatshop-input"
     daemonize true
   end
-  process :conveyor do
-    pid_file "#{PID_PATH}/conveyor.pid"
-    stdall "#{LOG_PATH}/conveyor.log"
-    start_command "#{__dir__}/bin/sweatshop-conveyor"
-    daemonize true
-  end
   process :assembler do
     pid_file "#{PID_PATH}/assembler.pid"
     stdall "#{LOG_PATH}/assembler.log"
     start_command "#{__dir__}/bin/sweatshop-assembler"
     daemonize true
   end
-  # process :worker do
-  #   pid_file "#{PID_PATH}/payload_parser.pid"
-  #   stdall "#{LOG_PATH}/payload_parser.log"
-  #   start_command "#{__dir__}/bin/sweatshop-payload-parser" #{configatron.eye.worker_id}
-  #   daemonize true
-  # end
+  process :worker do
+    pid_file "#{PID_PATH}/worker.pid"
+    stdall "#{LOG_PATH}/worker.log"
+    start_command "#{__dir__}/bin/sweatshop-worker"
+    daemonize true
+  end
 end

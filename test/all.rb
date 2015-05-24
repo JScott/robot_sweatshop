@@ -21,3 +21,5 @@ exit_statuses = []
   exit_statuses.push run_test(name)
 end
 exit 1 unless non_zero(exit_statuses).empty?
+
+puts "Everything passed successfully" # TODO: announce gem
