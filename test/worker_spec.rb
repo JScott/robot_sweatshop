@@ -1,6 +1,7 @@
 require 'bundler/setup'
 require 'kintama'
 require 'ezmq'
+require 'timeout'
 require 'robot_sweatshop/config'
 require 'robot_sweatshop/connections'
 require_relative 'shared/scaffolding'
@@ -36,9 +37,11 @@ describe 'the Worker' do
 
   given 'valid job data is pushed' do
     setup do
-      clear_worker_output # TODO: redundant?
       @pusher.send(worker_push, {})
-      sleep $a_while # TODO: timeout instead
+      Timeout.timeout($a_while) do
+        loop until File.exist?(worker_output)
+        loop while File.read(stub_output).empty?
+      end
       @worker_data = eval File.read(stub_output)
     end
 
