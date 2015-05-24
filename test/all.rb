@@ -25,8 +25,8 @@ tests = %w(
   worker
   end-to-end
 )
-
 exit_statuses = []
+
 tests.each do |name|
   exit_statuses.push run_test(name)
 end
