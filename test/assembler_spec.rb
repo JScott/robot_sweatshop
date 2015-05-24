@@ -22,6 +22,7 @@ end
 
 describe 'the Job Assembler' do
   include InputHelper
+  include OutputHelper
   using ExtendedEZMQ
 
   setup do
