@@ -16,8 +16,18 @@ def non_zero(array)
   array.select { |number| number != 0 }
 end
 
+tests = %w(
+  input
+  conveyor
+  payload_parser
+  job_dictionary
+  assembler
+  worker
+  end-to-end
+)
+
 exit_statuses = []
-%w(input conveyor payload_parser job_dictionary assembler worker).each do |name|
+tests.each do |name|
   exit_statuses.push run_test(name)
 end
 exit 1 unless non_zero(exit_statuses).empty?
