@@ -31,7 +31,12 @@ module Setup
   def self.stub(type, port:)
     FileUtils.rm '.test.txt' if File.exist? '.test.txt'
     Thread.new do
-      listener = EZMQ.const_get(type).new port: port
+      listener = case type
+      when 'Puller'
+        EZMQ::Puller.new :connect, port: port
+      else
+        EZMQ.const_get(type).new port: port
+      end
       listener.serialize_with_json!
       listener.listen { |message| write message }
     end

@@ -25,7 +25,7 @@ describe 'the Worker' do
   using ExtendedEZMQ
 
   setup do
-    @pusher = EZMQ::Pusher.new port: configatron.worker_port
+    @pusher = EZMQ::Pusher.new :bind, port: configatron.worker_port
     @pusher.serialize_with_json!
     clear_worker_output
     clear_stub_output
