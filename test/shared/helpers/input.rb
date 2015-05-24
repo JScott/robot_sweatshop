@@ -14,7 +14,7 @@ module InputHelper
     "http://localhost:#{configatron.http_port}/payload-for/#{for_job}"
   end
 
-  def job_enqueue(type) # TODO: conveyor_data && type is format?
+  def conveyor_enqueue(type)
     format, job = payload_configuration type
     {
       method: 'enqueue',
@@ -26,14 +26,14 @@ module InputHelper
     }
   end
 
-  def payload_parser_request(format) # TODO: payload_parser_data
+  def payload_parser_request(format)
     {
       payload: example_raw_payload(format),
       user_agent: user_agent_for(format)
     }
   end
 
-  def worker_data
+  def worker_push
     {
       commands: [
         'echo $custom',
