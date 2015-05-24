@@ -9,11 +9,15 @@ def run_test(component)
       puts line
     end
   end
+  $?.exitstatus
 end
 
-run_test 'input'
-run_test 'conveyor'
-run_test 'payload_parser'
-run_test 'job_dictionary'
-run_test 'assembler'
-run_test 'worker'
+def non_zero(array)
+  array.select { |number| number != 0 }
+end
+
+exit_statuses = []
+%w(input conveyor payload_parser job_dictionary assembler worker).each do |name|
+  exit_statuses.push run_test(name)
+end
+exit 1 unless non_zero(exit_statuses).empty?
