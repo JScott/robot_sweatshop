@@ -1,29 +1,35 @@
+require 'bundler/setup'
 require 'kintama'
 require 'ezmq'
 require 'http'
-require_relative 'shared/process_spawning'
+require_relative 'shared/scaffolding'
 require_relative 'shared/helpers'
 
 describe 'Robot Sweatshop' do
-  include QueueHelper
-  include InHelper
-  include JobHelper
+  include InputHelper
+  include OutputHelper
 
   setup do
-    @client = EZMQ::Client.new port: 5556
-    @test_file = reset_test_file
-    clear_all_queues
+    Setup.empty_conveyor
+    @pids = Processes.start %w(input conveyor payload-parser job-dictionary assembler worker)
+    # `#{__dir__}/../bin/sweatshop start`
+    sleep $a_while
   end
 
-  context "POST git data to the HTTP Input" do
+  teardown do
+    Processes.stop @pids
+    # `#{__dir__}/../bin/sweatshop stop`
+  end
+
+  context "POSTing data to the HTTP Input" do
     setup do
-      url = input_http_url for_job: 'test_job'
-      HTTP.post url, body: example_raw_payload(of_format: 'JSON')
-      sleep $for_io_calls
+      clear_worker_output
+      url = input_url for_job: 'test_job'
+      Timeout.timeout($a_while) { @response = HTTP.post url, body: example_raw_payload('JSON') }
     end
 
-    should 'run jobs with the context as environment variables' do
-      assert_equal "success\n", File.read(@test_file)
+    should 'run the appropriate job' do
+      assert_equal true, File.file?(worker_output)
     end
   end
 end
