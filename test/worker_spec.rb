@@ -20,6 +20,7 @@ end
 
 describe 'the Worker' do
   include InputHelper
+  include OutputHelper
   using ExtendedEZMQ
 
   setup do
