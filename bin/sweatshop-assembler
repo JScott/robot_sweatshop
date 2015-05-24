@@ -72,7 +72,7 @@ end
 puts 'Started'
 @sockets = {
   conveyor: EZMQ::Client.new(port: configatron.conveyor_port),
-  worker: EZMQ::Pusher.new(port: configatron.worker_port),
+  worker: EZMQ::Pusher.new(:bind, port: configatron.worker_port),
   parser: EZMQ::Client.new(port: configatron.payload_parser_port),
   dictionary: EZMQ::Client.new(port: configatron.job_dictionary_port)
 }
