@@ -44,7 +44,7 @@ end
 puts 'Starting'
 @sockets = {
   conveyor: EZMQ::Client.new(port: configatron.conveyor_port),
-  puller: EZMQ::Puller.new(port: configatron.worker_port)
+  puller: EZMQ::Puller.new(:connect, port: configatron.worker_port)
 }
 @sockets.each { |_key, socket| socket.serialize_with_json! }
 
