@@ -1,10 +1,9 @@
 require 'bundler/setup'
-require 'ezmq'
 require 'fileutils'
 require 'oj'
 require 'robot_sweatshop/config'
 require 'robot_sweatshop/connections'
-using ExtendedEZMQ
+require_relative 'stub'
 
 module Setup
   def self.empty_conveyor
@@ -33,45 +32,11 @@ module TestProcess
     pid_list.each { |pid| Process.kill 'TERM', pid }
   end
 
-  class Stub
-    def initialize(type, on_port:)
-      @type = type
-      @port = on_port
-      clear_output
-      @thread = Thread.new { create_listener type, on_port } unless running?
-    end
-
-    def running?
-      not `lsof -i :#{@port}`.empty?
-    end
-
-    def output_file
-      ".test.#{@type}"
-    end
-
-    def clear_output
-      FileUtils.rm output_file if File.exist? output_file
-    end
-
-    def output_empty?
-      (not File.exist? output_file) || File.read(output_file).empty?
-    end
-
-    def create_listener(type, port)
-      listener = case type
-      when 'Puller'
-        EZMQ::Puller.new :connect, port: port
-      else
-        EZMQ.const_get(type).new port: port
-      end
-      listener.serialize_with_json!
-      listener.listen { |message| write message }
-    end
-
-    def write(message)
-      file = File.new output_file, 'w'
-      file.write message
-      file.close
-    end
+  def self.stub(process_name)
+    processes = {
+      conveyor: {type: 'Server', port: configatron.conveyor_port}
+    }
+    process = processes[process_name]
+    Stub.new process[:type], on_port: process[:port]
   end
 end
