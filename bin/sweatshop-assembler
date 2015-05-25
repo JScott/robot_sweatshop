@@ -51,7 +51,8 @@ Contract Hash => [Hash, Hash, String]
 def request_data_for(job)
   payload, error = request @sockets[:parser], job
   definition, error = request @sockets[:dictionary], job[:job_name] if error.empty?
-  [{}, {}, error] unless error.empty?
+  definition ||= {}
+  @sockets[:conveyor].request({method: 'finish', data: job[:job_id]}, {}) unless error.empty?
   [payload, definition, error]
 end
 
