@@ -10,13 +10,11 @@ $stdout.sync = true
 
 Kintama.on_start do
   Setup.empty_conveyor
-  @pids = Processes.start %w(worker)
-  @conveyor_thread = Setup.stub 'Server', port: configatron.conveyor_port
+  @pids = TestProcess.start %w(worker)
 end
 
 Kintama.on_finish do
-  Processes.stop @pids
-  @conveyor_thread.kill
+  TestProcess.stop @pids
 end
 
 describe 'the Worker' do
@@ -25,10 +23,10 @@ describe 'the Worker' do
   using ExtendedEZMQ
 
   setup do
+    @conveyor = TestProcess::Stub.new 'Server', on_port: configatron.conveyor_port
     @pusher = EZMQ::Pusher.new :bind, port: configatron.worker_port
     @pusher.serialize_with_json!
     clear_worker_output
-    clear_stub_output
   end
 
   teardown do
@@ -40,9 +38,9 @@ describe 'the Worker' do
       @pusher.send(worker_push, {})
       Timeout.timeout($a_while) do
         loop until File.exist?(worker_output)
-        loop while File.read(stub_output).empty?
+        loop while @conveyor.output_empty?
       end
-      @worker_data = eval File.read(stub_output)
+      @worker_data = eval File.read(@conveyor.output_file)
     end
 
     should 'run the commands' do

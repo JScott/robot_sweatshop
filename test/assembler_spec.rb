@@ -39,7 +39,6 @@ describe 'the Job Assembler' do
       setup do
         @client.request(conveyor_enqueue(request),{})
         Timeout.timeout($a_while) { loop until File.exist? @worker.output_file }
-        # sleep $a_while # TODO: timeout instead
         @worker_data = eval File.read(@worker.output_file)
       end
 
