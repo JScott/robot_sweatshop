@@ -10,16 +10,12 @@ $stdout.sync = true
 
 Kintama.on_start do
   Setup.empty_conveyor
-  @pids = Processes.start %w(assembler conveyor payload-parser job-dictionary)
-  @worker_thread = Setup.stub 'Puller', port: configatron.worker_port
-  @conveyor_thread = Setup.stub 'Server', port: configatron.conveyor_port
+  @pids = TestProcess.start %w(assembler conveyor payload-parser job-dictionary)
   Setup.populate_test_jobs
 end
 
 Kintama.on_finish do
-  Processes.stop @pids
-  @worker_thread.kill
-  @conveyor_thread.kill
+  TestProcess.stop @pids
 end
 
 describe 'the Job Assembler' do
@@ -28,9 +24,10 @@ describe 'the Job Assembler' do
   using ExtendedEZMQ
 
   setup do
+    @worker = TestProcess::Stub.new 'Puller', on_port: configatron.worker_port
+    @worker.clear_output
     @client = EZMQ::Client.new port: configatron.conveyor_port
     @client.serialize_with_json!
-    clear_stub_output
   end
 
   teardown do
@@ -41,8 +38,8 @@ describe 'the Job Assembler' do
     given "#{request} requests on the Conveyor" do
       setup do
         @client.request(conveyor_enqueue(request),{})
-        sleep $a_moment # TODO: timeout instead
-        @worker_data = eval File.read(stub_output)
+        sleep $a_while # TODO: timeout instead
+        @worker_data = eval File.read(@worker.output_file)
       end
 
       should 'push the parsed payload to a Worker' do
@@ -75,12 +72,14 @@ describe 'the Job Assembler' do
   %w(IgnoredBranch UnknownJob EmptyJob NonJSON).each do |request|
     given "#{request} requests on the Conveyor" do
       setup do
+        # @conveyor = TestProcess::Stub.new 'Server', on_port: configatron.conveyor_port
+        # @conveyor.clear_output
         @client.request(conveyor_enqueue(request),{})
         sleep $a_moment
       end
 
       should 'push nothing to Workers' do
-        assert stub_output_empty?
+        assert @worker.output_empty?
       end
     end
   end
