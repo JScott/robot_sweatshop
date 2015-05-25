@@ -25,7 +25,7 @@ given 'the HTTP Input' do
   %w(Bitbucket Github JSON Empty).each do |format|
     context "POSTing #{format} data" do
       setup do
-        @conveyor = TestProcess::Stub.new 'Server', on_port: configatron.conveyor_port
+        @conveyor = TestProcess.stub :conveyor
         url = input_url for_job: 'test_job'
         Timeout.timeout($a_while) do
           @response = HTTP.post url, body: example_raw_payload(format)
