@@ -23,7 +23,7 @@ describe 'the Worker' do
   using ExtendedEZMQ
 
   setup do
-    @conveyor = TestProcess::Stub.new 'Server', on_port: configatron.conveyor_port
+    @conveyor = TestProcess.stub :conveyor
     @pusher = EZMQ::Pusher.new :bind, port: configatron.worker_port
     @pusher.serialize_with_json!
     clear_worker_output
