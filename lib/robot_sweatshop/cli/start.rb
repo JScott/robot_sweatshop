@@ -12,7 +12,7 @@ end
 
 def start_sweatshop(for_environment:)
   store_config_for_eye
-  eye_config = File.expand_path "#{__dir__}/../../../robot_sweatshop.#{for_environment}.eye"
+  eye_config = File.expand_path "#{__dir__}/../../../robot_sweatshop.eye"
   output = `eye load #{eye_config}`
   if $?.exitstatus != 0
     notify :failure, output
