@@ -40,20 +40,18 @@ def request_job
   raw_job.merge job_id: job_id
 end
 
-Contract EZMQ::Socket, Any => [Hash, String]
+Contract EZMQ::Socket, Any => Hash
 def request(socket, data)
   response = socket.request data, {}
-  puts response[:error] unless response[:error].empty?
-  [response[:data], response[:error]]
+  raise response[:error] unless response[:error].empty?
+  response[:data]
 end
 
-Contract Hash => [Hash, Hash, String]
+Contract Hash => [Hash, Hash]
 def request_data_for(job)
-  payload, error = request @sockets[:parser], job
-  definition, error = request @sockets[:dictionary], job[:job_name] if error.empty?
-  definition ||= {}
-  @sockets[:conveyor].request({method: 'finish', data: job[:job_id]}, {}) unless error.empty?
-  [payload, definition, error]
+  payload = request @sockets[:parser], job
+  definition = request @sockets[:dictionary], job[:job_name]
+  [payload, definition]
 end
 
 Contract Proc => Or[Hash,nil]
@@ -64,10 +62,15 @@ def exponentially_retry
   value
 end
 
-Contract Hash, Or[String, nil] => Bool
-def whitelisted?(definition, branch)
-  return true if definition['branch_whitelist'].nil?
-  definition['branch_whitelist'].include? branch
+Contract Or[Array,nil], Or[String, nil] => nil
+def check_whitelist(whitelist, branch)
+  return if whitelist.nil?
+  raise 'Branch not whitelisted' unless whitelist.include? branch
+end
+
+Contract Fixnum => Bool
+def finish(job_id)
+  @sockets[:conveyor].request({method: 'finish', data: job_id}, {})
 end
 
 puts 'Started'
@@ -82,11 +85,34 @@ puts 'Started'
 
 # TODO: profiler to get a better idea of how long we should wait based on historical information
 loop do
-  job = exponentially_retry { request_job }
-  next if job.nil?
-  payload, definition, error = request_data_for job
-  next unless error.empty?
-  next unless whitelisted?(definition, payload['branch'])
-  assembled_job = assemble job, payload, definition
-  @sockets[:worker].send(assembled_job, {}) unless assembled_job.empty?
+  begin
+    job = exponentially_retry { request_job }
+    next if job.nil?
+    payload, definition = request_data_for job
+    check_whitelist definition['branch_whitelist'], payload['branch']
+    assembled_job = assemble job, payload, definition
+    @sockets[:worker].send(assembled_job, {})
+  rescue RuntimeError => error
+    p error.message
+    finish job[:job_id]
+    next
+  end
 end
+
+# job_data = Fiber.new do
+#   timer = 0
+#   loop do
+#     timer += 1
+#     sleep 3
+#     data = get_some_data
+#     Fiber.yield data
+#   end
+# end
+
+# loop do
+#   job = exponentially_retry { request_job }
+#   next if job.nil?
+#   payload, definition, error = request_data_for job
+#   next unless whitelisted?(definition, payload['branch'])
+#   assembled_job = assemble job, payload, definition
+#   @sock
