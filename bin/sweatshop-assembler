@@ -54,14 +54,6 @@ def request_data_for(job)
   [payload, definition]
 end
 
-Contract Proc => Or[Hash,nil]
-def exponentially_retry
-  sleep @timer.next_interval
-  value = yield if block_given?
-  @timer.clear unless value.nil?
-  value
-end
-
 Contract Or[Array,nil], Or[String, nil] => nil
 def check_whitelist(whitelist, branch)
   return if whitelist.nil?
@@ -73,6 +65,18 @@ def finish(job_id)
   @sockets[:conveyor].request({method: 'finish', data: job_id}, {})
 end
 
+job_search = Fiber.new do
+  # TODO: profiler to get a better idea of how long we should wait based on historical information
+  timer = ExponentialBackoff.new 0.1, 3
+  loop do
+    sleep timer.next_interval
+    job = request_job
+    next if job.nil?
+    timer.clear
+    Fiber.yield job
+  end
+end
+
 puts 'Started'
 @sockets = {
   conveyor: EZMQ::Client.new(port: configatron.conveyor_port),
@@ -81,38 +85,17 @@ puts 'Started'
   dictionary: EZMQ::Client.new(port: configatron.job_dictionary_port)
 }
 @sockets.each { |_key, socket| socket.serialize_with_json! }
-@timer = ExponentialBackoff.new 0.1, 3
 
-# TODO: profiler to get a better idea of how long we should wait based on historical information
 loop do
+  job = job_search.resume
   begin
-    job = exponentially_retry { request_job }
-    next if job.nil?
     payload, definition = request_data_for job
     check_whitelist definition['branch_whitelist'], payload['branch']
     assembled_job = assemble job, payload, definition
     @sockets[:worker].send(assembled_job, {})
   rescue RuntimeError => error
-    p error.message
+    puts error.message
     finish job[:job_id]
     next
   end
 end
-
-# job_data = Fiber.new do
-#   timer = 0
-#   loop do
-#     timer += 1
-#     sleep 3
-#     data = get_some_data
-#     Fiber.yield data
-#   end
-# end
-
-# loop do
-#   job = exponentially_retry { request_job }
-#   next if job.nil?
-#   payload, definition, error = request_data_for job
-#   next unless whitelisted?(definition, payload['branch'])
-#   assembled_job = assemble job, payload, definition
-#   @sock
