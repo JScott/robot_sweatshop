@@ -25,7 +25,7 @@ describe 'the Job Assembler' do
 
   setup do
     @worker = TestProcess::Stub.new 'Puller', on_port: configatron.worker_port
-    @worker.clear_output
+    # @conveyor = TestProcess::Stub.new 'Server', on_port: configatron.conveyor_port
     @client = EZMQ::Client.new port: configatron.conveyor_port
     @client.serialize_with_json!
   end
@@ -38,7 +38,8 @@ describe 'the Job Assembler' do
     given "#{request} requests on the Conveyor" do
       setup do
         @client.request(conveyor_enqueue(request),{})
-        sleep $a_while # TODO: timeout instead
+        Timeout.timeout($a_while) { loop until File.exist? @worker.output_file }
+        # sleep $a_while # TODO: timeout instead
         @worker_data = eval File.read(@worker.output_file)
       end
 
@@ -72,8 +73,6 @@ describe 'the Job Assembler' do
   %w(IgnoredBranch UnknownJob EmptyJob NonJSON).each do |request|
     given "#{request} requests on the Conveyor" do
       setup do
-        # @conveyor = TestProcess::Stub.new 'Server', on_port: configatron.conveyor_port
-        # @conveyor.clear_output
         @client.request(conveyor_enqueue(request),{})
         sleep $a_moment
       end
@@ -81,6 +80,10 @@ describe 'the Job Assembler' do
       should 'push nothing to Workers' do
         assert @worker.output_empty?
       end
+
+      should 'tell the Conveyor that the job is finished'
+      # testing needs a real conveyor so I can't stub a fake one
+      # to test that finish is actually called
     end
   end
 end
