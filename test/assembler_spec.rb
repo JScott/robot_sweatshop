@@ -38,7 +38,7 @@ describe 'the Job Assembler' do
     given "#{request} requests on the Conveyor" do
       setup do
         @client.request(conveyor_enqueue(request),{})
-        Timeout.timeout($a_while) { loop until File.exist? @worker.output_file }
+        Timeout.timeout($a_while) { loop while @worker.output_empty? }
         @worker_data = eval File.read(@worker.output_file)
       end
 
@@ -81,8 +81,9 @@ describe 'the Job Assembler' do
       end
 
       should 'tell the Conveyor that the job is finished'
-      # testing needs a real conveyor so I can't stub a fake one
-      # to test that finish is actually called
+      # testing needs a real conveyor to grab the jobs from
+      # so it would require much refactoring and complexity to stub a fake one
+      # in order to test that finish is actually called
     end
   end
 end
