@@ -73,10 +73,5 @@ module TestProcess
       file.write message
       file.close
     end
-
-    def kill
-      @thread.kill
-      # loop while @thread.alive?
-    end
   end
 end
