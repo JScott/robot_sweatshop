@@ -24,7 +24,7 @@ describe 'the Job Assembler' do
   using ExtendedEZMQ
 
   setup do
-    @worker = TestProcess::Stub.new 'Puller', on_port: configatron.worker_port
+    @worker = TestProcess.stub :worker
     # @conveyor = TestProcess::Stub.new 'Server', on_port: configatron.conveyor_port
     @client = EZMQ::Client.new port: configatron.conveyor_port
     @client.serialize_with_json!
