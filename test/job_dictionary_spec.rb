@@ -9,12 +9,12 @@ require_relative 'shared/helpers' # do I need this?
 $stdout.sync = true
 
 Kintama.on_start do
-  @pids = Processes.start %w(job-dictionary)
+  @pids = TestProcess.start %w(job-dictionary)
   Setup.populate_test_jobs
 end
 
 Kintama.on_finish do
-  Processes.stop @pids
+  TestProcess.stop @pids
 end
 
 describe 'the Job Dictionary' do

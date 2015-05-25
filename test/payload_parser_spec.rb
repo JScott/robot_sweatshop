@@ -9,11 +9,11 @@ require_relative 'shared/helpers'
 $stdout.sync = true
 
 Kintama.on_start do
-  @pids = Processes.start %w(payload-parser)
+  @pids = TestProcess.start %w(payload-parser)
 end
 
 Kintama.on_finish do
-  Processes.stop @pids
+  TestProcess.stop @pids
 end
 
 describe 'the Payload Parser' do

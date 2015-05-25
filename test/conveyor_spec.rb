@@ -9,11 +9,11 @@ $stdout.sync = true
 
 Kintama.on_start do
   Setup.empty_conveyor
-  @pids = Processes.start %w(conveyor)
+  @pids = TestProcess.start %w(conveyor)
 end
 
 Kintama.on_finish do
-  Processes.stop @pids
+  TestProcess.stop @pids
 end
 
 describe 'the Conveyor' do
