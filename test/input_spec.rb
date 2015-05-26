@@ -22,7 +22,7 @@ given 'the HTTP Input' do
   include InputHelper
   include OutputHelper
 
-  %w(Bitbucket Github JSON Empty).each do |format|
+  %w(Bitbucket Github JSON Empty EmptyJSON).each do |format|
     context "POSTing #{format} data" do
       setup do
         @conveyor = TestProcess.stub :conveyor

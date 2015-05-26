@@ -29,7 +29,7 @@ describe 'the Payload Parser' do
     @client.close
   end
 
-  %w(Bitbucket Github JSON Empty).each do |format|
+  %w(Bitbucket Github JSON Empty EmptyJSON).each do |format|
     given "valid #{format} payloads" do
       setup do
         payload = payload_parser_request format
@@ -46,7 +46,7 @@ describe 'the Payload Parser' do
         assert_kind_of Hash, @response[:data]
         keys = Payload.hash_keys
         keys = %w(test1 test2) if format == 'JSON'
-        keys = [] if format == 'Empty'
+        keys = [] if format =~ /Empty/
         keys.each do |key|
           payload = @response[:data]
           assert_not_nil payload[key]
