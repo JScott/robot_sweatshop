@@ -17,13 +17,13 @@ Robot Sweatshop is a single-purpose CI server that runs collections of arbitrary
 
 # Usage
 
-Drop the `--auto` flag to create the job interactively. You can specify which branches will trigger the job, which commands will be run, and any environment variables you might need.
+Drop the `--auto` flag to create the job interactively. You can specify which branches will trigger the job, which commands will be run, and any environment variables you might need. See [the wiki](https://github.com/JScott/robot_sweatshop/wiki/Job-configuration) for more details.
 
 Robot Sweatshop uses [Eye](https://github.com/kostya/eye) to handle its processes so you can use its commandline tool to monitor their status.
 
 # Configuration
 
-By default, Robot Sweatshop looks in your current working path to configure and run. You can supply a custom configuration with `sweatshop config [local|user|system]`. Read [the wiki](https://github.com/JScott/robot_sweatshop/wiki) for more information.
+By default, Robot Sweatshop looks in your current working path to configure and run. You can supply a custom configuration with `sweatshop config [local|user|system]`. See [the wiki](https://github.com/JScott/robot_sweatshop/wiki) for more information.
 
 # Supported payload formats
 
@@ -34,7 +34,7 @@ By default, Robot Sweatshop looks in your current working path to configure and 
 
 # Security
 
-You probably don't want to run Robot Sweatshop as a sudo user. Create a testing user and group and point to them in the configuration file to run Robot Sweatshop processes with those permissions.
+You probably don't want to run Robot Sweatshop as a sudo user. Create a testing user and group and run `sweatshop start` as them.
 
 # Roadmap
 

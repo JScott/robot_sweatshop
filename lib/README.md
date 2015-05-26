@@ -7,6 +7,7 @@ input -> conveyor
 assembler <-> conveyor
 
 assembler <-> payload-parser
+assembler <-> job-dictionary
 { payload:, user_agent: } <-> { payload:, error: }
 
 assembler -> worker
