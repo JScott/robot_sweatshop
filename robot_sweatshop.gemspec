@@ -21,7 +21,6 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency 'eye'
   gem.add_runtime_dependency 'colorize' # TODO: replace with rainbow
   gem.add_runtime_dependency 'configatron'
-  gem.add_runtime_dependency 'moneta' # TODO: needed with stubborn_queue?
   gem.add_runtime_dependency 'contracts'
   gem.add_runtime_dependency 'sinatra'
   gem.add_runtime_dependency 'ezmq'
