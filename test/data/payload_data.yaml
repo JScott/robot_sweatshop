@@ -1,6 +1,7 @@
 ---
 # http://www.url-encode-decode.com/
 empty: ''
+emptyjson: '{}'
 nonjson: not json
 json: '{"test1": "value", "test2": "value"}'
 bitbucket: |

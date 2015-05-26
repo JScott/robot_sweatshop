@@ -34,7 +34,7 @@ describe 'the Job Assembler' do
     @client.close
   end
 
-  %w(Git JSON MinimalJob).each do |request|
+  %w(Git JSON MinimalJob EmptyJSON).each do |request|
     given "#{request} requests on the Conveyor" do
       setup do
         @client.request conveyor_enqueue(request)
@@ -58,6 +58,8 @@ describe 'the Job Assembler' do
       should 'build the context with a parsed payload' do
         if request == 'Git'
           assert_equal 'develop', @worker_data[:context]['branch']
+        elsif request == 'EmptyJSON'
+          assert_equal true, @worker_data[:context].empty?
         else
           assert_equal 'value', @worker_data[:context]['test1']
         end

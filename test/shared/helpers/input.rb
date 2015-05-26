@@ -50,10 +50,11 @@ module InputHelper
     format = 'Bitbucket' if type == 'Git' # develop branch
     format = 'Github' if type == 'IgnoredBranch' # master branch
     format = 'NonJSON' if type == 'NonJSON'
+    format = 'EmptyJSON' if type == 'EmptyJSON'
 
     job = 'test_job'
     job = 'git_job' if type == 'Git' || type == 'IgnoredBranch'
-    job = 'minimal_job' if type == 'MinimalJob'
+    job = 'minimal_job' if type == 'MinimalJob' || type == 'EmptyJSON'
     job = 'unknown_job' if type == 'UnknownJob' # TODO: why does commenting this out still pass payload parser?!
     job = 'empty_job' if type == 'EmptyJob'
 
