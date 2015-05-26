@@ -12,6 +12,7 @@ using ExtendedEZMQ
 
 Contract Hash => Hash
 def sanitize(data)
+  return {} if data.empty?
   data = data.map { |key, value| {key => value.to_s} }
   data.reduce(:merge)
 end
