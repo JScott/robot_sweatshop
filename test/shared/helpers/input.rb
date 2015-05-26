@@ -11,7 +11,7 @@ module InputHelper
   end
 
   def input_url(for_job: 'test_job')
-    "http://localhost:#{configatron.http_port}/payload-for/#{for_job}"
+    "http://localhost:#{configatron.http_port}/run/#{for_job}"
   end
 
   def conveyor_enqueue(type)

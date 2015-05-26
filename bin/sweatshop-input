@@ -18,7 +18,7 @@ get '/' do
   'Everything\'s on schedule!'
 end
 
-post '/payload-for/:job_name' do
+post '/run/:job_name' do
   puts "Received payload for #{params['job_name']}"
   request.body.rewind
   payload = request.body.read
