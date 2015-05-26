@@ -40,11 +40,9 @@ You probably don't want to run Robot Sweatshop as a sudo user. Create a testing 
 
 1.0
 
-- Improved architecture:
-
-![Improved architecture diagram](http://40.media.tumblr.com/8a5b6ca59c0d93c4ce6fc6b733932a5f/tumblr_nko478zp9N1qh941oo1_1280.jpg)
-
-- Support for multiple workers
+- Docs on architecture
+- Easier way to run multiple workers
+- Mascot
 
 Beyond
 

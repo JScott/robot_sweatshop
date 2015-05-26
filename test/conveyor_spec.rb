@@ -31,17 +31,17 @@ describe 'the Conveyor' do
 
   should 'enqueue and dequeue items' do
     id = Timeout.timeout($a_moment) do
-      @client.request({method: 'enqueue', data: @item}, {})
-      @client.request({method: 'dequeue'}, {})
+      @client.request method: 'enqueue', data: @item
+      @client.request method: 'dequeue'
     end
     assert_kind_of Fixnum, id
   end
 
   should 'lookup items by ID' do
     item = Timeout.timeout($a_moment) do
-      @client.request({method: 'enqueue', data: @item}, {})
-      id = @client.request({method: 'dequeue'}, {})
-      @client.request({method: 'lookup', data: id}, {})
+      @client.request method: 'enqueue', data: @item
+      id = @client.request method: 'dequeue'
+      @client.request method: 'lookup', data: id
     end
     assert_equal @item, item
   end
@@ -49,7 +49,7 @@ describe 'the Conveyor' do
   should 'return nothing when given invalid data' do
     response = Timeout.timeout($a_moment) do
       @client.request 'not json'
-      @client.request({method: 'invalid'}, {})
+      @client.request method: 'invalid'
       @client.request ''
       @client.request 'assurance that the server is still up'
     end
@@ -58,9 +58,9 @@ describe 'the Conveyor' do
 
   should 'finish items by ID to prevent requeueing' do
     response = Timeout.timeout($a_moment) do
-      @client.request({method: 'enqueue', data: @item}, {})
-      id = @client.request({method: 'dequeue'}, {})
-      @client.request({method: 'finish', data: id}, {})
+      @client.request method: 'enqueue', data: @item
+      id = @client.request method: 'dequeue'
+      @client.request method: 'finish', data: id
     end
     assert_not_equal '', response
   end

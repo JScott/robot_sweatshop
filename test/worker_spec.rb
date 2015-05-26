@@ -35,9 +35,9 @@ describe 'the Worker' do
 
   given 'valid job data is pushed' do
     setup do
-      @pusher.send(worker_push, {})
+      @pusher.send worker_push
       Timeout.timeout($a_while) do
-        loop until File.exist?(worker_output)
+        loop until File.exist? worker_output
         loop while @conveyor.output_empty?
       end
       @worker_data = eval File.read(@conveyor.output_file)
