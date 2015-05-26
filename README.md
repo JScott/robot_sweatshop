@@ -12,7 +12,7 @@ Robot Sweatshop is a single-purpose CI server that runs collections of arbitrary
 - `gem install robot_sweatshop`
 - `sweatshop start` ([you may need sudo on OSX](https://github.com/JScott/robot_sweatshop/wiki))
 - `sweatshop job example --auto`
-- `curl -X POST http://localhost:8080/payload-for/example`
+- `curl -d '' localhost:8080/payload-for/example`
 - `cat .robot_sweatshop/log/job-worker.log`
 
 # Usage
@@ -43,10 +43,11 @@ You probably don't want to run Robot Sweatshop as a sudo user. Create a testing 
 - Docs on architecture
 - Easier way to run multiple workers
 - Mascot
+- take a look at beefcake for data versioning/serialization
 
 Beyond
 
 - Better logging for the processes
 - CLI configuration via chomp and/or flags
-- Common scrips such as git repo syncing and creating a job run ID
+- Common scrips such as git repo syncing and creating a job run ID (see: [sweatshop-tears](https://github.com/JScott/sweatshop-tears))
 - Use [eye-http](https://github.com/kostya/eye-http) for the '/' route?
