@@ -23,6 +23,7 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency 'configatron'
   gem.add_runtime_dependency 'contracts'
   gem.add_runtime_dependency 'sinatra'
+  gem.add_runtime_dependency 'sinatra-cross_origin'
   gem.add_runtime_dependency 'ezmq'
   gem.add_runtime_dependency 'stubborn_queue'
   gem.add_runtime_dependency 'oj'

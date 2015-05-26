@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 require 'bundler/setup'
 require 'sinatra'
+require 'sinatra/cross_origin'
 require 'ezmq'
 require 'robot_sweatshop/config'
 require 'robot_sweatshop/connections'
@@ -12,6 +13,7 @@ configure do
   set :run, true
   set :conveyor, EZMQ::Client.new(port: configatron.conveyor_port)
   settings.conveyor.serialize_with_json!
+  enable :cross_origin if configatron.http_cross_origin
 end
 
 get '/' do
