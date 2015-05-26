@@ -37,9 +37,9 @@ describe 'the Job Assembler' do
   %w(Git JSON MinimalJob).each do |request|
     given "#{request} requests on the Conveyor" do
       setup do
-        @client.request(conveyor_enqueue(request),{})
+        @client.request conveyor_enqueue(request)
         Timeout.timeout($a_while) { loop while @worker.output_empty? }
-        @worker_data = eval File.read(@worker.output_file)
+        @worker_data = eval File.read(@worker.output_file) # TODO: oh god why
       end
 
       should 'push the parsed payload to a Worker' do
@@ -72,7 +72,7 @@ describe 'the Job Assembler' do
   %w(IgnoredBranch UnknownJob EmptyJob NonJSON).each do |request|
     given "#{request} requests on the Conveyor" do
       setup do
-        @client.request(conveyor_enqueue(request),{})
+        @client.request conveyor_enqueue(request)
         sleep $a_moment
       end
 

@@ -32,9 +32,9 @@ describe 'the Payload Parser' do
   %w(Bitbucket Github JSON Empty).each do |format|
     given "valid #{format} payloads" do
       setup do
-        payload = payload_parser_request(format)
+        payload = payload_parser_request format
         @response = Timeout.timeout($a_while) do
-          @client.request(payload, {})
+          @client.request payload
         end
       end
 
@@ -59,9 +59,9 @@ describe 'the Payload Parser' do
   %w(NonJSON).each do |format|
     given "#{format} payloads" do
       setup do
-        payload = payload_parser_request(format)
+        payload = payload_parser_request format
         @response = Timeout.timeout($a_while) do
-          @client.request(payload, {})
+          @client.request payload
         end
       end
 
