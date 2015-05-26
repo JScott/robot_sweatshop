@@ -2,7 +2,6 @@
 require 'bundler/setup'
 require 'ezmq'
 require 'stubborn_queue'
-require 'oj'
 require 'contracts'
 require 'robot_sweatshop/config'
 require 'robot_sweatshop/connections'
@@ -20,7 +19,7 @@ include Contracts
 Contract Hash => Fixnum
 def enqueue(item)
   puts "enqueue #{item}"
-  @items.enqueue Oj.dump(item)
+  @items.enqueue item
 end
 
 Contract None => Or[Fixnum,nil]
@@ -32,7 +31,7 @@ end
 Contract Fixnum => Hash
 def lookup(id)
   puts "lookup #{id}"
-  Oj.load @items.lookup(id)
+  @items.lookup(id)
 end
 
 Contract Fixnum => Bool
