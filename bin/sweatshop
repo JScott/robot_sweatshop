@@ -16,13 +16,20 @@ command :job do |c|
   c.syntax = 'sweatshop job <name>'
   c.description = 'Creates and edits jobs.'
   c.option '--auto', 'Create the file without opening the editor.'
-  # c.option '--list', 'List the existing jobs configured.'
   c.action do |args, options|
     options.default :auto => false
     raise "Specify a job name as the command argument." if args.count < 1
     job_file = CLI::Job.path_for args.first
     CLI.create job_file, with_contents: CLI::Job.default
     CLI.edit job_file unless options.auto
+  end
+end
+
+command :'job-list' do |c|
+  c.syntax = 'sweatshop job-list'
+  c.description = 'Lists available job configurations.'
+  c.action do |args, options|
+    CLI::Job.list
   end
 end
 
@@ -58,11 +65,10 @@ command :stop do |c|
   end
 end
 
-command :tears do |c|
-  c.syntax = 'sweatshop stop'
-  c.description = 'Stop the Sweatshop.'
-  c.action do
-    CLI.notify :info, `eye stop robot_sweatshop`
-  end
-end
+# command :tears do |c|
+#   c.syntax = 'sweatshop tears <command> [arguments]'
+#   c.description = 'Package management for script extensions.'
+#   c.action do
+#   end
+# end
 
