@@ -38,7 +38,8 @@ module InputHelper
       commands: [
         'echo $custom',
         'echo $custom > test.txt',
-        'custom_script'
+        'custom_script',
+        'bad command about nothing'
       ],
       context: {'custom' => 'hello world'},
       job_name: 'test_job',
