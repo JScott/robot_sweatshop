@@ -33,8 +33,7 @@ end
 
 Contract Hash, String => nil
 def execute(context, command)
-  puts "Executing '#{command}'..."
-  # TODO: path.split(' ') to bypass the shell when we're not using env vars
+  puts "Executing '#{command}'"
   begin
     stream_command context, command
   rescue Errno::ENOENT => error
