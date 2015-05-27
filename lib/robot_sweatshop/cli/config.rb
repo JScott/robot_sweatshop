@@ -1,16 +1,20 @@
 require 'robot_sweatshop/config'
 
-def default_config
-  File.read "#{__dir__}/../../../config.defaults.yaml"
-end
+module CLI
+  module Config
+    def self.default
+      File.read "#{__dir__}/../../../config.defaults.yaml"
+    end
 
-def get_config_path(for_scope: 'local')
-  case for_scope
-  when 'system'
-    "/etc/robot_sweatshop/config.yaml"
-  when 'user'
-    "~/.robot_sweatshop/config.yaml"
-  else
-    ".robot_sweatshop/config.yaml"
+    def self.path(scope)
+      case scope
+      when 'system'
+        "/etc/robot_sweatshop/config.yaml"
+      when 'user'
+        "~/.robot_sweatshop/config.yaml"
+      else
+        ".robot_sweatshop/config.yaml"
+      end
+    end
   end
 end

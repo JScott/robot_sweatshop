@@ -16,16 +16,13 @@ command :job do |c|
   c.syntax = 'sweatshop job <name>'
   c.description = 'Creates and edits jobs.'
   c.option '--auto', 'Create the file without opening the editor.'
+  # c.option '--list', 'List the existing jobs configured.'
   c.action do |args, options|
     options.default :auto => false
-    if args.count < 1
-      notify :failure, "Specify a job name as the command argument."
-      exit 1
-    else
-      job_file = get_job_path for_job: args.first
-      create job_file, with_contents: default_job
-      edit job_file unless options.auto
-    end
+    raise "Specify a job name as the command argument." if args.count < 1
+    job_file = CLI::Job.path_for args.first
+    CLI.create job_file, with_contents: CLI::Job.default
+    CLI.edit job_file unless options.auto
   end
 end
 
@@ -35,9 +32,10 @@ command :config do |c|
   c.option '--auto', 'Create the file without opening the editor.'
   c.action do |args, options|
     options.default :auto => false
-    config_file = get_config_path for_scope: args.first
-    create config_file, with_contents: default_config
-    edit config_file unless options.auto
+    for_scope = args.first || 'local'
+    config_file = CLI::Config.path for_scope
+    CLI.create config_file, with_contents: CLI::Config.default
+    CLI.edit config_file unless options.auto
   end
 end
 
@@ -48,7 +46,7 @@ command :start do |c|
   c.action do |_args, options|
     options.default :testing => false
     environment = options.testing ? 'testing' : 'production'
-    start_sweatshop for_environment: environment
+    CLI::Start.sweatshop for_environment: environment
   end
 end
 
@@ -56,6 +54,15 @@ command :stop do |c|
   c.syntax = 'sweatshop stop'
   c.description = 'Stop the Sweatshop.'
   c.action do
-    notify :info, `eye stop robot_sweatshop`
+    CLI.notify :info, `eye stop robot_sweatshop`
   end
 end
+
+command :tears do |c|
+  c.syntax = 'sweatshop stop'
+  c.description = 'Stop the Sweatshop.'
+  c.action do
+    CLI.notify :info, `eye stop robot_sweatshop`
+  end
+end
+
