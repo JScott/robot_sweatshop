@@ -11,6 +11,7 @@ $stdout.sync = true
 Kintama.on_start do
   Setup.empty_conveyor
   @pids = TestProcess.start %w(worker)
+  Setup.populate_scripts
 end
 
 Kintama.on_finish do

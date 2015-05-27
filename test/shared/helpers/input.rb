@@ -39,9 +39,13 @@ module InputHelper
         'echo $custom',
         'echo $custom > test.txt',
         'custom_script',
+        'custom_script >> test.txt',
         'bad command about nothing'
       ],
-      context: {'custom' => 'hello world'},
+      context: {
+        'PATH' => "#{ENV['PATH']}:#{File.expand_path configatron.scripts_path}",
+        'custom' => 'hello world'
+      },
       job_name: 'test_job',
       job_id: 1
     }

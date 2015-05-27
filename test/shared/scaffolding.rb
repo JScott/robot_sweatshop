@@ -13,7 +13,12 @@ module Setup
 
   def self.populate_test_jobs
     test_jobs = Dir.glob "#{__dir__}/../data/*_job.yaml"
-    test_jobs.each { |test_job| FileUtils.cp test_job, configatron.job_path }
+    test_jobs.each { |job| FileUtils.cp job, configatron.job_path }
+  end
+
+  def self.populate_scripts
+    test_scripts = Dir.glob "#{__dir__}/../data/*_script"
+    test_scripts.each { |script| FileUtils.cp script, configatron.scripts_path }
   end
 end
 
