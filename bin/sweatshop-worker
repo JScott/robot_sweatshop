@@ -22,8 +22,14 @@ def from_workspace(named:)
   Dir.chdir(path) { yield if block_given? }
 end
 
+Contract String => String
+def ensure_shell_for(command)
+  "#{command};"
+end
+
 Contract Hash, String => Maybe[IO]
 def stream_command(context, command)
+  command = ensure_shell_for command
   IO.popen(context, command) do |io_stream|
     while line = io_stream.gets
       puts line
