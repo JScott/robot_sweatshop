@@ -1,5 +1,4 @@
 #!/usr/bin/env ruby
-require 'bundler/setup'
 require 'sinatra'
 require 'sinatra/cross_origin'
 require 'ezmq'

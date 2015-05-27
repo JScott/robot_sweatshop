@@ -1,4 +1,4 @@
-Job lifecycle:
+# Job Lifecycle
 
 ```
 input -> conveyor
@@ -19,3 +19,27 @@ assembler -> worker
 
 context is passed around with string keys because it's user provided
 everything else is passed with symbol keys
+
+# Services
+
+sweatshop-conveyor
+```
+{ method:, data: }
+
+id = enqueue(item)
+id = dequeue
+item = lookup(id)
+something = finish(id)
+```
+
+sweatshop-payload-parser
+```
+req: { payload:, user_agent: }
+rep: { data:, error: }
+```
+
+sweatshop-job-dictionary
+```
+req: { job_name: }
+rep: { data:, error: }
+```
