@@ -22,14 +22,23 @@ def from_workspace(named:)
   Dir.chdir(path) { yield if block_given? }
 end
 
-Contract Hash, String => nil
-def execute(context, command)
-  puts "Executing '#{command}'..."
-  # TODO: path.split(' ') to bypass the shell when we're not using env vars
+Contract Hash, String => Maybe[IO]
+def stream_command(context, command)
   IO.popen(context, command) do |io_stream|
     while line = io_stream.gets
       puts line
     end
+  end
+end
+
+Contract Hash, String => nil
+def execute(context, command)
+  puts "Executing '#{command}'..."
+  # TODO: path.split(' ') to bypass the shell when we're not using env vars
+  begin
+    stream_command context, command
+  rescue Errno::ENOENT => error
+    puts error.message
   end
   puts "Execution complete with exit status: #{$?.exitstatus}"
 end
