@@ -4,6 +4,7 @@ logfile_path: .robot_sweatshop/log
 job_path: .robot_sweatshop/jobs
 workspace_path: .robot_sweatshop/workspaces
 database_path: .robot_sweatshop/db
+scripts_path: .robot_sweatshop/scripts
 http_port: 8080
 http_bind: 0.0.0.0
 http_cross_origin: true

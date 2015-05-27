@@ -48,7 +48,11 @@ describe 'the Worker' do
     end
 
     should 'run with the context as environment variables' do
-      assert_equal "hello world\n", File.read(worker_output)
+      assert_match /hello world/, File.read(worker_output)
+    end
+
+    should 'run with custom scripts in the path' do
+      assert_match /custom/, File.read(worker_output)
     end
 
     should 'tell the conveyor that job is complete' do
