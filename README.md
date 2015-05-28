@@ -44,6 +44,10 @@ You probably don't want to run Robot Sweatshop as a sudo user. Create a testing 
 - Easier way to run multiple workers
 - Mascot
 
+1.1
+
+- push/pull out node that worker streams output to
+
 Beyond
 
 - Jenkins-to-Sweatshop job converting script
