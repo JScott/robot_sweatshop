@@ -20,7 +20,7 @@ end
 Contract String => String
 def add_scripts_path_to(existing_path)
   scripts_path = File.expand_path configatron.scripts_path
-  "#{existing_path}:#{scripts_path}"
+  p "#{existing_path}:#{scripts_path}"
 end
 
 Contract Maybe[Hash], Hash => Hash

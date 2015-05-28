@@ -63,7 +63,7 @@ describe 'the Job Assembler' do
         if request == 'Git'
           assert_equal 'develop', @worker_data[:context]['branch']
         elsif request == 'EmptyJSON'
-          assert_equal true, @worker_data[:context].empty?
+          assert_equal ['PATH'], @worker_data[:context].keys
         else
           assert_equal 'value', @worker_data[:context]['test1']
         end
