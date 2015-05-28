@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+require 'bundler/setup'
 require 'yaml'
 require 'contracts'
 require 'exponential_backoff'
@@ -17,15 +18,17 @@ def sanitize(data)
 end
 
 Contract String => String
-def add_script_path_to(existing_path)
-  "#{existing_path}:#{File.expand_path configatron.scripts_path}"
+def add_scripts_path_to(existing_path)
+  scripts_path = File.expand_path configatron.scripts_path
+  "#{existing_path}:#{scripts_path}"
 end
 
-Contract Hash, Hash => Hash
-def job_context(job_environment = {}, context_from_payload)
+Contract Maybe[Hash], Hash => Hash
+def job_context(job_environment, context_from_payload)
+  job_environment ||= {}
   environment = sanitize job_environment.merge(context_from_payload)
   path = environment['PATH'] || ENV['PATH']
-  environment.merge 'PATH' => add_script_path_to(path)
+  environment.merge 'PATH' => add_scripts_path_to(path)
 end
 
 Contract Hash, Hash, Hash => Hash

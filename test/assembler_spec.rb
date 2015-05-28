@@ -1,4 +1,3 @@
-require 'bundler/setup'
 require 'kintama'
 require 'ezmq'
 require 'timeout'
@@ -53,6 +52,11 @@ describe 'the Job Assembler' do
           assert_kind_of String, key
           assert_kind_of String, value
         end
+      end
+
+      should 'append scripts_path to the PATH and add it to the context' do
+        scripts_path = File.expand_path configatron.scripts_path
+        assert_match /#{scripts_path}/, @worker_data[:context]['PATH']
       end
 
       should 'build the context with a parsed payload' do
