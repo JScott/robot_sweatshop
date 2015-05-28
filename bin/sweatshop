@@ -1,14 +1,13 @@
 #!/usr/bin/env ruby
 require 'yaml'
 require 'commander/import'
-require 'colorize'
 require 'robot_sweatshop/cli'
 require 'robot_sweatshop/config'
 require 'robot_sweatshop/create-config-directories'
 
 program :name, 'Robot Sweatshop'
 program :version, '0.4.4'
-program :description, 'A lightweight, unopinionated CI server'
+program :description, 'A lightweight, nonopinionated CI server'
 program :help, 'Author', 'Justin Scott <jvscott@gmail.com>'
 
 command :job do |c|

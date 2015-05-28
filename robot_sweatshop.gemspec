@@ -6,7 +6,7 @@ Gem::Specification.new do |gem|
   gem.email       = 'jvscott@gmail.com'
   gem.homepage    = 'http://www.github.com/jscott/robot_sweatshop/'
   gem.summary     = 'Robot Sweatshop'
-  gem.description = 'A lightweight, unopinionated CI server.'
+  gem.description = 'A lightweight, nonopinionated CI server.'
 
   gem.files         = `git ls-files`.split("\n")
   gem.test_files    = `git ls-files -- test/**/*`.split("\n")

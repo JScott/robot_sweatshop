@@ -1,6 +1,6 @@
 AllCops:
   Exclude:
-    - kintama/**/*
+    - test/**/*
     - vendor/**/*
 
 Style/Encoding:
