@@ -54,5 +54,4 @@ Beyond
 - Take a look at beefcake for data versioning/serialization
 - Better logging for the processes
 - CLI configuration via chomp and/or flags
-- Common scrips such as git repo syncing and creating a job run ID (see: [sweatshop-tears](https://github.com/JScott/sweatshop-tears))
 - Use [eye-http](https://github.com/kostya/eye-http) for the '/' route?
