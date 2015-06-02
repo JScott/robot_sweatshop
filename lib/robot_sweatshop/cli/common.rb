@@ -1,26 +1,16 @@
 require 'fileutils'
 require 'robot_sweatshop/config'
+require 'terminal-announce'
 
 module CLI
-  def self.notify(type = :success, string)
-    colors = {
-      success: :green,
-      failure: :red,
-      warning: :yellow,
-      info: :light_blue
-    }
-    color = colors[type] || ''
-    puts "[#{type.to_s.capitalize.colorize(color)}] #{string}"
-  end
-
   def self.edit(file)
     editor = ENV['EDITOR']
     if editor
-      CLI.notify :info, "Manually editing file '#{file}'"
+      Announce.info "Manually editing file '#{file}'"
       system editor, file
     else
-      CLI.notify :warning, "No editor specified in $EDITOR environment variable"
-      CLI.notify :info, "Displaying file contents instead"
+      Announce.warning "No editor specified in $EDITOR environment variable"
+      Announce.info "Displaying file contents instead"
       system 'cat', file
     end
   end
@@ -28,11 +18,11 @@ module CLI
   def self.create(file, with_contents: '')
     file = File.expand_path file
     if File.file?(file)
-      CLI.notify :info, "'#{file}' already exists"
+    Announce.info "'#{file}' already exists"
     else
       FileUtils.mkdir_p File.dirname(file)
       File.write file, with_contents
-      CLI.notify :success, "Created new file '#{file}'"
+      Announce.success "Created new file '#{file}'"
     end
   end
 end

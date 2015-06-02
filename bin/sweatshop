@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 require 'yaml'
 require 'commander/import'
+require 'terminal-announce'
 require 'robot_sweatshop/cli'
 require 'robot_sweatshop/config'
 require 'robot_sweatshop/create-config-directories'
@@ -59,14 +60,18 @@ command :stop do |c|
   c.syntax = 'sweatshop stop'
   c.description = 'Stop the Sweatshop.'
   c.action do
-    CLI.notify :info, `eye stop robot_sweatshop`
+    Announce.info `eye stop robot_sweatshop`
   end
 end
 
 # command :gears do |c|
-#   c.syntax = 'sweatshop gears <command> [arguments]'
-#   c.description = 'Package management for script extensions.'
+#   c.syntax = 'sweatshop gears'
+#   c.description = 'Initialize Sweatshop Gears, package management for Robot Sweatshop.'
 #   c.action do
+#     begin
+#       `sweatshop-gears`
+#     rescue Errno::ENOENT
+#       Announce.failure 'Sweatshop Gears not found. Run `gem install sweatshop-gears`'
+#     end
 #   end
 # end
-
