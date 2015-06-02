@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+require 'bundler/setup'
 require 'yaml'
 require 'commander/import'
 require 'terminal-announce'
@@ -64,14 +65,14 @@ command :stop do |c|
   end
 end
 
-# command :gears do |c|
-#   c.syntax = 'sweatshop gears'
-#   c.description = 'Initialize Sweatshop Gears, package management for Robot Sweatshop.'
-#   c.action do
-#     begin
-#       `sweatshop-gears`
-#     rescue Errno::ENOENT
-#       Announce.failure 'Sweatshop Gears not found. Run `gem install sweatshop-gears`'
-#     end
-#   end
-# end
+command :gears do |c|
+  c.syntax = 'sweatshop gears ...'
+  c.description = 'See `sweatshop-gears --help`'
+  c.action do |args, options|
+    begin
+      `sweatshop-gears #{args.join ' '}`
+    rescue Errno::ENOENT
+      Announce.failure 'Sweatshop Gears not found. Run `gem install sweatshop-gears`'
+    end
+  end
+end
