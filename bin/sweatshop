@@ -1,5 +1,4 @@
 #!/usr/bin/env ruby
-require 'bundler/setup'
 require 'yaml'
 require 'commander/import'
 require 'terminal-announce'
@@ -68,11 +67,12 @@ end
 command :gears do |c|
   c.syntax = 'sweatshop gears ...'
   c.description = 'See `sweatshop-gears --help`'
-  c.action do |args, options|
+  c.option '--path'
+  c.action do
     begin
-      `sweatshop-gears #{args.join ' '}`
+      system "sweatshop-gears #{ARGV[1..-1].join ' '}"
     rescue Errno::ENOENT
-      Announce.failure 'Sweatshop Gears not found. Run `gem install sweatshop-gears`'
+      Announce.failure 'Sweatshop Gears not found. Run `gem install sweatshop_gears`'
     end
   end
 end
