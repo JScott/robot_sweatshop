@@ -16,8 +16,8 @@ command :job do |c|
   c.description = 'Creates and edits jobs.'
   c.option '--auto', 'Create the file without opening the editor.'
   c.action do |args, options|
-    options.default :auto => false
-    raise "Specify a job name as the command argument." if args.count < 1
+    options.default auto: false
+    fail 'Specify a job name as the command argument.' if args.count < 1
     job_file = CLI::Job.path_for args.first
     CLI.create job_file, with_contents: CLI::Job.default
     CLI.edit job_file unless options.auto
@@ -27,7 +27,7 @@ end
 command :'job-list' do |c|
   c.syntax = 'sweatshop job-list'
   c.description = 'Lists available job configurations.'
-  c.action do |args, options|
+  c.action do
     CLI::Job.list
   end
 end
@@ -37,7 +37,7 @@ command :config do |c|
   c.description = 'Creates and edits the user configuration file.'
   c.option '--auto', 'Create the file without opening the editor.'
   c.action do |args, options|
-    options.default :auto => false
+    options.default auto: false
     for_scope = args.first || 'local'
     config_file = CLI::Config.path for_scope
     CLI.create config_file, with_contents: CLI::Config.default
@@ -50,7 +50,7 @@ command :start do |c|
   c.description = 'Start the Sweatshop.'
   c.option '--testing', 'Load the testing Eye configuration.'
   c.action do |_args, options|
-    options.default :testing => false
+    options.default testing: false
     environment = options.testing ? 'testing' : 'production'
     CLI::Start.sweatshop for_environment: environment
   end

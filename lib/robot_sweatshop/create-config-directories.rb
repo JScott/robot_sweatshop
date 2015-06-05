@@ -10,9 +10,7 @@ end
 
 config = configatron.to_h
 config.each do |key, value|
-  if key.to_s.match /_path/
-    create_path File.expand_path(value)
-  end
+  create_path File.expand_path(value) if key.to_s.match(/_path/)
 end
 %w(pidfile_path logfile_path).each do |path|
   create_path File.expand_path("#{configatron[path]}/gears")

@@ -14,7 +14,7 @@ def json?(string)
   begin
     Oj.load string
     true
-  rescue Oj::ParseError => e
+  rescue Oj::ParseError
     false
   end
 end
@@ -48,8 +48,8 @@ def payload_hash_from(payload, format)
 end
 
 Contract Hash, Hash => Hash
-def formatted(payload={}, error:'')
-  {data: payload, error: error}
+def formatted(payload = {}, error:'')
+  { data: payload, error: error }
 end
 
 Contract String, String => Hash

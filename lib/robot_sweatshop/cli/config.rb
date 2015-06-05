@@ -1,6 +1,7 @@
 require 'robot_sweatshop/config'
 
 module CLI
+  # Methods for configuring Robot Sweatshop
   module Config
     def self.default
       File.read "#{__dir__}/../../../config.defaults.yaml"
@@ -9,11 +10,11 @@ module CLI
     def self.path(scope)
       case scope
       when 'system'
-        "/etc/robot_sweatshop/config.yaml"
+        '/etc/robot_sweatshop/config.yaml'
       when 'user'
-        "~/.robot_sweatshop/config.yaml"
+        '~/.robot_sweatshop/config.yaml'
       else
-        ".robot_sweatshop/config.yaml"
+        '.robot_sweatshop/config.yaml'
       end
     end
   end

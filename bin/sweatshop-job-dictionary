@@ -16,12 +16,12 @@ end
 Contract String => Or[Hash, nil]
 def load_if_exists(config_path)
   puts "Reading job configuration from #{config_path}"
-  YAML.load_file config_path if File.exists? config_path
+  YAML.load_file config_path if File.exist? config_path
 end
 
 Contract None => Hash
 def empty_config
-  puts "Job configuration not found or empty"
+  puts 'Job configuration not found or empty'
   {}
 end
 
@@ -31,8 +31,8 @@ def load_config_for(job_name)
 end
 
 Contract Hash, Hash => Hash
-def formatted(payload={}, error:'')
-  {data: payload, error: error}
+def formatted(payload = {}, error: '')
+  { data: payload, error: error }
 end
 
 Contract String => Hash

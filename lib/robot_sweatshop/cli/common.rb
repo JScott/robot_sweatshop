@@ -2,6 +2,7 @@ require 'fileutils'
 require 'robot_sweatshop/config'
 require 'terminal-announce'
 
+# Methods common to every CLI command
 module CLI
   def self.edit(file)
     editor = ENV['EDITOR']
@@ -9,8 +10,8 @@ module CLI
       Announce.info "Manually editing file '#{file}'"
       system editor, file
     else
-      Announce.warning "No editor specified in $EDITOR environment variable"
-      Announce.info "Displaying file contents instead"
+      Announce.warning 'No editor specified in $EDITOR environment variable'
+      Announce.info 'Displaying file contents instead'
       system 'cat', file
     end
   end
@@ -18,7 +19,7 @@ module CLI
   def self.create(file, with_contents: '')
     file = File.expand_path file
     if File.file?(file)
-    Announce.info "'#{file}' already exists"
+      Announce.info "'#{file}' already exists"
     else
       FileUtils.mkdir_p File.dirname(file)
       File.write file, with_contents

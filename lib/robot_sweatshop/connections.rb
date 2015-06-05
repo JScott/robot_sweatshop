@@ -2,6 +2,7 @@ require 'ezmq'
 require 'oj'
 require 'robot_sweatshop/config'
 
+# Add some common methods to ZMQ sockets that get repeated everywhere
 module ExtendedEZMQ
   refine EZMQ::Socket do
     def serialize_with_json!
@@ -10,8 +11,8 @@ module ExtendedEZMQ
     end
 
     def close
-      self.socket.close
-      self.context.terminate
+      socket.close
+      context.terminate
     end
   end
 end

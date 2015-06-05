@@ -12,8 +12,8 @@ using ExtendedEZMQ
 Contract Hash => Hash
 def sanitize(data)
   return {} if data.empty?
-  data = data.map { |key, value| {key => value.to_s} }
-  data.reduce(:merge)
+  data = data.map { |key, value| { key => value.to_s } }
+  data.reduce :merge
 end
 
 Contract Hash => String
@@ -40,11 +40,11 @@ def assemble(job, payload, definition)
   }
 end
 
-Contract None => Or[Hash,nil]
+Contract None => Maybe[Hash]
 def request_job
-  job_id = @sockets[:conveyor].request({method: 'dequeue'}, {})
+  job_id = @sockets[:conveyor].request method: 'dequeue'
   return nil if job_id.nil?
-  raw_job = @sockets[:conveyor].request({method: 'lookup', data: job_id}, {})
+  raw_job = @sockets[:conveyor].request method: 'lookup', data: job_id
   puts "Assembling: '#{raw_job}'"
   raw_job.merge job_id: job_id
 end
@@ -52,7 +52,7 @@ end
 Contract EZMQ::Socket, Any => Hash
 def request(socket, data)
   response = socket.request data, {}
-  raise response[:error] unless response[:error].empty?
+  fail response[:error] unless response[:error].empty?
   response[:data]
 end
 
@@ -63,15 +63,15 @@ def request_data_for(job)
   [payload, definition]
 end
 
-Contract Or[Array,nil], Or[String, nil] => nil
+Contract Maybe[Array], Maybe[String] => nil
 def check_whitelist(whitelist, branch)
   return if whitelist.nil?
-  raise 'Branch not whitelisted' unless whitelist.include? branch
+  fail 'Branch not whitelisted' unless whitelist.include? branch
 end
 
 Contract Fixnum => Bool
 def finish(job_id)
-  @sockets[:conveyor].request({method: 'finish', data: job_id}, {})
+  @sockets[:conveyor].request method: 'finish', data: job_id
 end
 
 job_search = Fiber.new do
@@ -101,7 +101,7 @@ loop do
     payload, definition = request_data_for job
     check_whitelist definition['branch_whitelist'], payload['branch']
     assembled_job = assemble job, payload, definition
-    @sockets[:worker].send(assembled_job, {})
+    @sockets[:worker].send assembled_job
   rescue RuntimeError => error
     puts error.message
     finish job[:job_id]

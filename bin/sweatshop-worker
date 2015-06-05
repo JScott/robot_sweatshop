@@ -50,7 +50,7 @@ end
 
 Contract Fixnum => nil
 def finish(id)
-  @sockets[:conveyor].request({method: 'finish', data: id}, {})
+  @sockets[:conveyor].request({ method: 'finish', data: id }, {})
   puts "Job finished.\n\n"
 end
 

@@ -21,9 +21,9 @@ def enqueue(item)
   @items.enqueue item
 end
 
-Contract None => Or[Fixnum,nil]
+Contract None => Maybe[Fixnum]
 def dequeue
-  puts "dequeue"
+  puts 'dequeue'
   @items.dequeue
 end
 
@@ -46,7 +46,6 @@ end
 
 Contract Hash => Any
 def complete(request)
-  arguments = []
   return send(request[:method], request[:data]) if request[:data]
   send(request[:method])
 end

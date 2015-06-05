@@ -5,9 +5,9 @@ configatron.reset!
 
 configurations = [
   "#{__dir__}/../../config.defaults.yaml",
-  "/etc/robot_sweatshop/config.yaml",
-  "~/.robot_sweatshop/config.yaml",
-  ".robot_sweatshop/config.yaml",
+  '/etc/robot_sweatshop/config.yaml',
+  '~/.robot_sweatshop/config.yaml',
+  '.robot_sweatshop/config.yaml'
 ]
 
 configurations.each do |config_path|

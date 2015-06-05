@@ -1,9 +1,19 @@
 require 'robot_sweatshop/config'
 
 module CLI
+  # Methods for creating and editing jobs
   module Job
     def self.default
-      "---\n# branch_whitelist:\n# - master\n\ncommands:\n- echo \"Hello $WORLD!\"\n\nenvironment:\n  WORLD: Earth\n"
+      "---
+      # branch_whitelist:
+      # - master
+
+      commands:
+      - echo \"Hello $WORLD!\"
+
+      environment:
+        WORLD: Earth
+      "
     end
 
     def self.path_for(job)
