@@ -7,7 +7,7 @@ require 'robot_sweatshop/config'
 require 'robot_sweatshop/create-config-directories'
 
 program :name, 'Robot Sweatshop'
-program :version, '0.4.5'
+program :version, '0.4.6'
 program :description, 'A lightweight, nonopinionated CI server'
 program :help, 'Author', 'Justin Scott <jvscott@gmail.com>'
 
