@@ -109,3 +109,6 @@ DEPENDENCIES
   rake
   robot_sweatshop!
   simplecov
+
+BUNDLED WITH
+   1.10.2
