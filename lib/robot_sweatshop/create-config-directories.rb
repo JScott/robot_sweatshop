@@ -15,6 +15,5 @@ config.each do |key, value|
   end
 end
 %w(pidfile_path logfile_path).each do |path|
-  p File.expand_path("#{configatron[path]}/gears")
   create_path File.expand_path("#{configatron[path]}/gears")
 end

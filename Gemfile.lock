@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    robot_sweatshop (0.4.4)
+    robot_sweatshop (0.4.5)
       bundler
       commander
       configatron
