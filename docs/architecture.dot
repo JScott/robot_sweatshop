@@ -1,0 +1,22 @@
+digraph architecture {
+  label="Robot Sweatshop Processes"
+  labelloc="top"
+
+  I [label="Input"]
+  A [label="Assembler"]
+  W [label="Worker"]
+  subgraph cluster_0 {
+    label="Req/Rep Services"
+    labelloc="bottom"
+    style="dashed"
+    C [label="Conveyor"]
+    P [label="Payload Parser"]
+    D [label="Job Dictionary"]
+  }
+
+  I->C [taillabel="1..*"]
+  A->C [dir="both"]
+  A->P [dir="both"]
+  A->D [dir="both"]
+  A->W [headlabel="1..*",labeldistance=2]
+}
