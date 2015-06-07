@@ -40,13 +40,13 @@ You probably don't want to run Robot Sweatshop as a sudo user. Create a testing 
 
 1.0
 
-- Docs on architecture
-- Easier way to run multiple workers
 - Mascot
 
 1.1
 
-- push/pull out node that worker streams output to
+- Easier way to run multiple workers
+- Push/pull out node that worker streams output to
+- Add worker tags to output so it can all go to one file
 
 Beyond
 
