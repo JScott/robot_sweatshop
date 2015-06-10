@@ -1,11 +1,9 @@
 require 'fileutils'
 
 def create_path(path)
-  begin
-    FileUtils.mkdir_p path
-  rescue Errno::EACCES
-    puts "Permission denied to create '#{path}'"
-  end
+  FileUtils.mkdir_p path
+rescue Errno::EACCES
+  puts "Permission denied to create '#{path}'"
 end
 
 config = configatron.to_h

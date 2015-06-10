@@ -11,12 +11,10 @@ using ExtendedEZMQ
 
 Contract String => Bool
 def json?(string)
-  begin
-    Oj.load string
-    true
-  rescue Oj::ParseError
-    false
-  end
+  Oj.load string
+  true
+rescue Oj::ParseError
+  false
 end
 
 Contract String => Bool
@@ -40,11 +38,9 @@ end
 
 Contract String, String => Or[Hash, nil]
 def payload_hash_from(payload, format)
-  begin
-    Object.const_get("#{format}Payload").new(payload).to_hash
-  rescue NameError
-    nil
-  end
+  Object.const_get("#{format}Payload").new(payload).to_hash
+rescue NameError
+  nil
 end
 
 Contract Hash, Hash => Hash
