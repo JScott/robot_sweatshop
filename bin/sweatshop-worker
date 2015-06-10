@@ -31,9 +31,7 @@ Contract Hash, String => Maybe[IO]
 def stream_command(context, command)
   command = ensure_shell_for command
   IO.popen(context, command) do |stream|
-    until stream.eof?
-      puts stream.gets
-    end
+    puts stream.gets until stream.eof? # TODO: stdout not being tested properly
   end
 end
 
