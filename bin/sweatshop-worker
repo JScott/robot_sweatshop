@@ -30,9 +30,9 @@ end
 Contract Hash, String => Maybe[IO]
 def stream_command(context, command)
   command = ensure_shell_for command
-  IO.popen(context, command) do |io_stream|
-    while line = io_stream.gets
-      puts line
+  IO.popen(context, command) do |stream|
+    until stream.eof?
+      puts stream.gets
     end
   end
 end
