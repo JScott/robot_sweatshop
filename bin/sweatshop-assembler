@@ -75,7 +75,8 @@ def finish(job_id)
 end
 
 job_search = Fiber.new do
-  # TODO: profiler to get a better idea of how long we should wait based on historical information
+  # TODO: profiler to get a better idea of how long we should
+  #       wait based on historical information
   timer = ExponentialBackoff.new 0.1, 3
   loop do
     sleep timer.next_interval
