@@ -5,11 +5,14 @@ require 'robot_sweatshop/config'
 module CLI
   # Methods for starting Robot Sweatshop
   module Start
-    def self.store_config_for_eye
-      config = configatron.to_h
-      config = config.each do |key, value|
-        config[key] = File.expand_path value if key.to_s.match(/_path/)
+    def self.expand_paths_in(config_hash)
+      config_hash.each do |key, value|
+        config_hash[key] = File.expand_path value if key.to_s.match(/_path/)
       end
+    end
+
+    def self.store_config_for_eye
+      config = expand_paths_in configatron.to_h
       config[:working_path] = Dir.pwd
       File.write '/tmp/.robot_sweatshop-eye-config.yaml', config.to_yaml
     end
