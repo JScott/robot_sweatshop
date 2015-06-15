@@ -1,7 +1,8 @@
 require 'yaml'
 
 # TODO: per-user temp file
-CONFIG = YAML.load_file '/tmp/.robot_sweatshop-eye-config.yaml'
+CONFIG_PATH = File.expand_path '~/.robot_sweatshop/compiled_config.yaml'
+CONFIG = YAML.load_file CONFIG_PATH
 PID_PATH = CONFIG[:pidfile_path]
 LOG_PATH = CONFIG[:logfile_path]
 
