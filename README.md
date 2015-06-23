@@ -44,6 +44,7 @@ You probably don't want to run Robot Sweatshop as a sudo user. Create a testing 
 
 1.1
 
+- Use something appropriate than TCP for ZMQ connections
 - Easier way to run multiple workers
 - Push/pull out node that worker streams output to
 - Add worker tags to output so it can all go to one file
