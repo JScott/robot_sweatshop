@@ -3,10 +3,37 @@
 <head>
   <meta charset="UTF-8" />
   <title>Robot Sweatshop</title>
+  <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+  <script>
+    var QueueJob = function() {
+      var job = $('select#job').val();
+      var data = $('textarea#data').val();
+      $.post("http://localhost:#{configatron.input_port}/run/"+job, data);
+    }
+  </script>
+  <style>
+    button { background-color: #00db00; padding: 10px 20px; font-size: 1.2em; }
+  </style>
 </head>
 
 <body>
   <h1>Robot Sweatshop</h1>
+
+  <h2>Big Green Button</h2>
+  <form class="job_runner">
+    <label for="job">Select job</label>
+    <select id="job">
+      <% for job in jobs %>
+      <option value="<%= job %>"><%= job %></option>
+      <% end %>
+    </select>
+    <br><br>
+    <label for="data">Data payload</label>
+    <textarea id="data">{}</textarea>
+    <br><br>
+    <button type="button" onclick="QueueJob()">Queue Job</button>
+  </form>
+
   <h2>Logs</h2>
   <ul>
     <% for log in logs %>
