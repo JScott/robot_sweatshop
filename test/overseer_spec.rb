@@ -28,6 +28,10 @@ given 'the Overseer' do
       assert_not_equal 0, links.count
     end
   end
+  context '/log' do
+    setup { Timeout.timeout($a_while) { @response = HTTP.get overseer_url('log') } }
+    should('redirect') { assert_equal 303, @response.code }
+  end
   context '/log?for=worker' do
     setup { Timeout.timeout($a_while) { @response = HTTP.get overseer_url('log?for=worker') } }
     should('respond') { assert_equal 200, @response.code }
