@@ -27,6 +27,11 @@ given 'the Overseer' do
       links = page.css('a').select { |link| link.text.include? 'worker' }
       assert_not_equal 0, links.count
     end
+    should('have a form for running jobs') do
+      page = Nokogiri::HTML(@response.to_s)
+      form = page.css('form.job_runner')
+      assert_not_equal 0, form.count
+    end
   end
   context '/log' do
     setup { Timeout.timeout($a_while) { @response = HTTP.get overseer_url('log') } }
