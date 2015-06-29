@@ -1,0 +1,7 @@
+<h1>Robot Sweatshop</h1>
+<h2>Services</h2>
+<ul>
+  <% for log in logs %>
+  <li><a href="/log?for=<%= log %>"><%= log %></a></li>
+  <% end %>
+</ul>

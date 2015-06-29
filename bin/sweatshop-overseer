@@ -2,6 +2,9 @@
 require 'sinatra'
 require 'sinatra/cross_origin'
 require 'robot_sweatshop/config'
+require 'robot_sweatshop/overseer'
+
+helpers OverseerHelper
 
 configure do
   set :port, configatron.overseer_port
@@ -11,5 +14,5 @@ configure do
 end
 
 get '/' do
-  'Everything\'s on schedule!'
+  frontpage
 end
