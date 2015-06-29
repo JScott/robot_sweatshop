@@ -8,10 +8,12 @@ module OverseerHelper
 
   def frontpage
     context = { logs: log_list }
-    p context
     template = File.read "#{__dir__}/templates/index.html.eruby"
     eruby = Erubis::Eruby.new template
-    p eruby
     eruby.result context
+  end
+
+  def log_page_for(process)
+    ''
   end
 end

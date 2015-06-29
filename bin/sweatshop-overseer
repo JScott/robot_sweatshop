@@ -16,3 +16,8 @@ end
 get '/' do
   frontpage
 end
+
+get '/log' do
+  process = params[:for]
+  log_page_for process
+end
