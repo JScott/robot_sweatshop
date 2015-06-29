@@ -36,6 +36,12 @@ Eye.application :robot_sweatshop do
     end
   end
 
+  process :overseer do
+    pid_file "#{PID_PATH}/overseer.pid"
+    stdall "#{LOG_PATH}/overseer.log"
+    start_command "#{__dir__}/bin/sweatshop-overseer"
+    daemonize true
+  end
   process :input do
     pid_file "#{PID_PATH}/input.pid"
     stdall "#{LOG_PATH}/input.log"
