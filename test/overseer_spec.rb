@@ -18,7 +18,7 @@ end
 given 'the Overseer' do
   include OverseerHelper
 
-  context 'the front-page' do
+  context 'the root path' do
     setup { Timeout.timeout($a_while) { @response = HTTP.get overseer_url } }
     should('respond') { assert_equal 200, @response.code }
   end

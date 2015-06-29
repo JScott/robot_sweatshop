@@ -16,7 +16,7 @@ configure do
 end
 
 get '/' do
-  'Everything\'s on schedule!'
+  'Usage: POST /run/<job-name>'
 end
 
 post '/run/:job_name' do

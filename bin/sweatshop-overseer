@@ -1,0 +1,15 @@
+#!/usr/bin/env ruby
+require 'sinatra'
+require 'sinatra/cross_origin'
+require 'robot_sweatshop/config'
+
+configure do
+  set :port, configatron.overseer_port
+  set :bind, configatron.http_bind
+  set :run, true
+  enable :cross_origin if configatron.http_cross_origin
+end
+
+get '/' do
+  'Everything\'s on schedule!'
+end
