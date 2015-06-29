@@ -31,5 +31,11 @@ given 'the Overseer' do
   context '/log' do
     setup { Timeout.timeout($a_while) { @response = HTTP.get overseer_log_url('worker') } }
     should('respond') { assert_equal 200, @response.code }
+    should('show logs from file') do
+      page = Nokogiri::HTML(@response.to_s)
+      log = File.read "#{configatron.logfile_path}/worker.log"
+      output = page.css('.raw_output').first
+      assert_match /#{log}/, output.text
+    end
   end
 end
