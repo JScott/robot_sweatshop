@@ -14,6 +14,12 @@ module OverseerHelper
   end
 
   def log_page_for(process)
-    ''
+    context = {
+      process: process,
+      raw_log: File.read("#{configatron.logfile_path}/#{process}.log")
+    }
+    template = File.read "#{__dir__}/templates/log.html.eruby"
+    eruby = Erubis::Eruby.new template
+    eruby.result context
   end
 end

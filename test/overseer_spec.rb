@@ -28,14 +28,14 @@ given 'the Overseer' do
       assert_not_equal 0, links.count
     end
   end
-  context '/log' do
-    setup { Timeout.timeout($a_while) { @response = HTTP.get overseer_log_url('worker') } }
+  context '/log?for=worker' do
+    setup { Timeout.timeout($a_while) { @response = HTTP.get overseer_url('log?for=worker') } }
     should('respond') { assert_equal 200, @response.code }
     should('show logs from file') do
       page = Nokogiri::HTML(@response.to_s)
       log = File.read "#{configatron.logfile_path}/worker.log"
-      output = page.css('.raw_output').first
-      assert_match /#{log}/, output.text
+      output = page.css('.raw_log').first
+      assert_equal log, output.text, 'Expected raw log output'
     end
   end
 end

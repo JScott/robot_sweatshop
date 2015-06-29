@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Robot Sweatshop - <%= process %> log</title>
+</head>
+
+<body>
+  <h1>Raw <%= process %> log</h1>
+  <a href="/">Back</a>
+  <pre class="raw_log"><%= raw_log %></pre>
+  <a href="#">Top</a>
+</body>
+</html>
