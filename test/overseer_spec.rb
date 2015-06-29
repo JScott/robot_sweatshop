@@ -19,7 +19,7 @@ end
 given 'the Overseer' do
   include OverseerHelper
 
-  context 'the root path' do
+  context '/' do
     setup { Timeout.timeout($a_while) { @response = HTTP.get overseer_url } }
     should('respond') { assert_equal 200, @response.code }
     should('link to process logs') do
@@ -27,5 +27,9 @@ given 'the Overseer' do
       links = page.css('a').select { |link| link.text.include? 'worker' }
       assert_not_equal 0, links.count
     end
+  end
+  context '/log' do
+    setup { Timeout.timeout($a_while) { @response = HTTP.get overseer_log_url('worker') } }
+    should('respond') { assert_equal 200, @response.code }
   end
 end
