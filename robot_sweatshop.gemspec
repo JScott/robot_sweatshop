@@ -33,4 +33,5 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'kintama'
   gem.add_development_dependency 'http'
   gem.add_development_dependency 'simplecov'
+  gem.add_development_dependency 'nokogiri'
 end
