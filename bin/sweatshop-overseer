@@ -18,6 +18,7 @@ get '/' do
 end
 
 get '/log' do
+  redirect to('/'), 303 if params[:for].nil?
   process = params[:for]
   log_page_for process
 end
