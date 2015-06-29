@@ -21,6 +21,8 @@ Drop the `--auto` flag to create the job interactively. You can specify which br
 
 Robot Sweatshop uses [Eye](https://github.com/kostya/eye) to handle its processes so you can use its commandline tool to monitor their status.
 
+Oh yeah, and there's a front end in case you want to run and watch jobs without using a console. By default it runs on port 10554.
+
 # Configuration
 
 By default, Robot Sweatshop looks in your current working path to configure and run. You can supply a custom configuration with `sweatshop config [local|user|system]`. See [the wiki](https://github.com/JScott/robot_sweatshop/wiki) for more information.
