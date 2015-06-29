@@ -15,7 +15,8 @@ module OverseerHelper
   def frontpage
     context = {
       jobs: job_list,
-      logs: log_list
+      logs: log_list,
+      input_port: configatron.input_port
     }
     template = File.read "#{__dir__}/templates/index.html.eruby"
     eruby = Erubis::Eruby.new template
