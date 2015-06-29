@@ -1,3 +1,5 @@
+require 'terminal-announce'
+
 # Because of needing to isolate processes, I can't run all tests in one call.
 # This means that I have multiple sets of results which isn't nice, but the
 #   tests are largely for the sake of TDD anyway.
@@ -23,6 +25,7 @@ tests = %w(
   job_dictionary
   assembler
   worker
+  overseer
   end-to-end
 )
 exit_statuses = []
@@ -30,6 +33,12 @@ exit_statuses = []
 tests.each do |name|
   exit_statuses.push run_test(name)
 end
-exit 1 unless non_zero(exit_statuses).empty?
-
-puts "Everything passed successfully" # TODO: announce gem
+if non_zero(exit_statuses).empty?
+  Announce.success 'Everything passed'
+else
+  Announce.failiure 'Tests failed:'
+  tests.each_with_index do |test, index|
+    puts "#{test} - #{exit_statuses[index]}"
+  end
+  exit 1
+end
