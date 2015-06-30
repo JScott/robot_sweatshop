@@ -1,11 +1,12 @@
 digraph architecture {
-  label="Robot Sweatshop Processes"
+  label="Robot Sweatshop process interaction"
   labelloc="top"
 
+  O [label="Overseer",shape=box]
   I [label="Input"]
   A [label="Assembler"]
   W [label="Worker"]
-  subgraph cluster_0 {
+  subgraph cluster_services {
     label="Req/Rep Services"
     labelloc="bottom"
     style="dashed"
@@ -14,9 +15,13 @@ digraph architecture {
     D [label="Job Dictionary"]
   }
 
-  I->C [taillabel="1..*"]
+  O->I
+  I->C
   A->C [dir="both"]
   A->P [dir="both"]
   A->D [dir="both"]
   A->W [headlabel="1..*",labeldistance=2]
+  W->C
+
+  { rank=same; I W A }
 }
