@@ -36,9 +36,10 @@ end
 if non_zero(exit_statuses).empty?
   Announce.success 'Everything passed'
 else
-  Announce.failiure 'Tests failed:'
-  tests.each_with_index do |test, index|
-    puts "#{test} - #{exit_statuses[index]}"
+  failed_tests = tests.each_with_index.select do |test, index|
+    exit_statuses[index] != 0
   end
+  failed_tests.map! { |test| test[0] }
+  Announce.failure "Tests failed: #{failed_tests.join ', '}"
   exit 1
 end
