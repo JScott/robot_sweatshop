@@ -1,0 +1,9 @@
+---
+# branch_whitelist:
+# - master
+
+commands:
+- echo "Hello $WORLD!"
+
+environment:
+  WORLD: Earth

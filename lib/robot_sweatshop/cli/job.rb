@@ -4,16 +4,7 @@ module CLI
   # Methods for creating and editing jobs
   module Job
     def self.default
-      "---
-      # branch_whitelist:
-      # - master
-
-      commands:
-      - echo \"Hello $WORLD!\"
-
-      environment:
-        WORLD: Earth
-      "
+      File.read "#{__dir__}/../templates/default_job.yaml"
     end
 
     def self.path_for(job)
