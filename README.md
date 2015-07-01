@@ -12,8 +12,8 @@ Robot Sweatshop is a single-purpose CI server that runs collections of arbitrary
 - `gem install robot_sweatshop`
 - `sweatshop start`
 - `sweatshop job example --auto`
-- `curl -d '' localhost:8080/run/example`
-- `cat .robot_sweatshop/log/job-worker.log`
+- `curl -d '' localhost:10555/run/example`
+- `cat .robot_sweatshop/log/worker.log`
 
 # Usage
 
