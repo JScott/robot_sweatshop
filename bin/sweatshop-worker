@@ -31,7 +31,7 @@ Contract Hash, String => Maybe[IO]
 def stream_command(context, command)
   command = ensure_shell_for command
   IO.popen(context, command) do |stream|
-    puts stream.gets until stream.eof? # TODO: stdout not being tested properly
+    puts stream.gets until stream.eof?
   end
 end
 
@@ -52,6 +52,11 @@ def finish(id)
   puts "Job finished.\n\n"
 end
 
+Contract Array, Hash => Any
+def run(commands, context = {})
+  commands.each { |command| execute context, command }
+end
+
 puts 'Starting'
 @sockets = {
   conveyor: EZMQ::Client.new(port: configatron.conveyor_port),
@@ -62,8 +67,7 @@ puts 'Starting'
 @sockets[:puller].listen do |data|
   puts "Running: #{data}"
   from_workspace named: data[:job_name] do
-    context = data[:context] || {}
-    data[:commands].each { |command| execute context, command }
+    run data[:commands], data[:context]
   end
   finish data[:job_id]
 end
