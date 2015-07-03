@@ -56,6 +56,10 @@ describe 'the Worker' do
       assert_match /custom/, File.read(worker_output)
     end
 
+    should 'run implicit jobs' do
+      assert_match /implicit/, File.read(worker_output)
+    end
+
     should 'tell the conveyor that job is complete' do
       assert_equal 'finish', @worker_data[:method]
       assert_kind_of Fixnum, @worker_data[:data]

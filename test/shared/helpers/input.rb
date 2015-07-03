@@ -33,6 +33,11 @@ module InputHelper
     }
   end
 
+  def implicit_job
+    job = { 'commands' => ['echo $this'], 'environment' => ['implicit'] }
+    YAML.dump job
+  end
+
   def worker_push
     {
       commands: [
@@ -40,7 +45,8 @@ module InputHelper
         'echo $custom > test.txt',
         'custom_script',
         'custom_script >> test.txt',
-        'bad command about nothing'
+        'bad command about nothing',
+        "echo '#{implicit_job}' > .robot_sweatshop.yaml"
       ],
       context: {
         'PATH' => "#{ENV['PATH']}:#{File.expand_path configatron.scripts_path}",
