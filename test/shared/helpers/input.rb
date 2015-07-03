@@ -34,7 +34,10 @@ module InputHelper
   end
 
   def implicit_job
-    job = { 'commands' => ['echo $this'], 'environment' => ['implicit'] }
+    job = {
+      'commands' => ['echo $this'],
+      'environment' => { 'this' => 'implicit'}
+    }
     YAML.dump job
   end
 
