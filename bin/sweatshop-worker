@@ -52,9 +52,17 @@ def finish(id)
   puts "Job finished.\n\n"
 end
 
-Contract Array, Hash => Any
-def run(commands, context = {})
+Contract Hash, Array => Any
+def run(context = {}, commands)
   commands.each { |command| execute context, command }
+end
+
+Contract None => Any
+def run_implicit_job
+  implicit_job_file = '.robot_sweatshop.yaml'
+  return unless File.exist? implicit_job_file
+  implicit_job = YAML.load_file implicit_job_file
+  run implicit_job['environment'], implicit_job['commands']
 end
 
 puts 'Starting'
@@ -67,13 +75,8 @@ puts 'Starting'
 @sockets[:puller].listen do |data|
   puts "Running: #{data}"
   from_workspace named: data[:job_name] do
-    run data[:commands], data[:context]
-    puts `ls`
-    if File.exist? '.robot_sweatshop.yaml'
-      puts "WOAH"
-      implicit_job = YAML.load_file '.robot_sweatshop.yaml'
-      run implicit_job['commands'], implicit_job['environment']
-    end
+    run data[:context], data[:commands]
+    run_implicit_job
   end
   finish data[:job_id]
 end
