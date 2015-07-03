@@ -27,19 +27,19 @@ def ensure_shell_for(command)
   "#{command};"
 end
 
-Contract Hash, String => Maybe[IO]
-def stream_command(context, command)
+Contract String, Hash => Maybe[IO]
+def stream(command, with_context:)
   command = ensure_shell_for command
-  IO.popen(context, command) do |stream|
+  IO.popen(with_context, command) do |stream|
     puts stream.gets until stream.eof?
   end
 end
 
-Contract Hash, String => nil
-def execute(context, command)
+Contract String, Hash => nil
+def execute(command, context)
   puts "Executing '#{command}'"
   begin
-    stream_command context, command
+    stream command, with_context: context
   rescue Errno::ENOENT => error
     puts error.message
   end
@@ -52,9 +52,9 @@ def finish(id)
   puts "Job finished.\n\n"
 end
 
-Contract Hash, Array => Any
-def run(context = {}, commands)
-  commands.each { |command| execute context, command }
+Contract Array, Hash => Any
+def run(commands, with_context: {})
+  commands.each { |command| execute command, with_context }
 end
 
 Contract None => Any
@@ -62,7 +62,7 @@ def run_implicit_job
   implicit_job_file = '.robot_sweatshop.yaml'
   return unless File.exist? implicit_job_file
   implicit_job = YAML.load_file implicit_job_file
-  run implicit_job['environment'], implicit_job['commands']
+  run implicit_job['commands'], with_context: implicit_job['environment']
 end
 
 puts 'Starting'
@@ -75,7 +75,7 @@ puts 'Starting'
 @sockets[:puller].listen do |data|
   puts "Running: #{data}"
   from_workspace named: data[:job_name] do
-    run data[:context], data[:commands]
+    run data[:commands], with_context: data[:context]
     run_implicit_job
   end
   finish data[:job_id]
