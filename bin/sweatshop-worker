@@ -68,6 +68,12 @@ puts 'Starting'
   puts "Running: #{data}"
   from_workspace named: data[:job_name] do
     run data[:commands], data[:context]
+    puts `ls`
+    if File.exist? '.robot_sweatshop.yaml'
+      puts "WOAH"
+      implicit_job = YAML.load_file '.robot_sweatshop.yaml'
+      run implicit_job['commands'], implicit_job['environment']
+    end
   end
   finish data[:job_id]
 end
