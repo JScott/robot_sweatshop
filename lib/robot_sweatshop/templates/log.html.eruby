@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <title>Robot Sweatshop - <%= process %> log</title>
+  <style>
+    pre { width: 100%; }
+  </style>
 </head>
 
 <body>

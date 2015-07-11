@@ -48,11 +48,8 @@ end
 command :start do |c|
   c.syntax = 'sweatshop start [options]'
   c.description = 'Start the Sweatshop.'
-  c.option '--testing', 'Load the testing Eye configuration.'
   c.action do |_args, options|
-    options.default testing: false
-    environment = options.testing ? 'testing' : 'production'
-    CLI::Start.sweatshop for_environment: environment
+    CLI::Start.sweatshop
   end
 end
 
@@ -64,13 +61,7 @@ command :stop do |c|
   end
 end
 
-command :restart do |c|
-  c.syntax = 'sweatshop restart'
-  c.description = 'Restart the Sweatshop.'
-  c.action do
-    Announce.info `eye restart robot_sweatshop`
-  end
-end
+alias_command :restart, :start
 
 command :gears do |c|
   c.syntax = 'sweatshop gears ...'
