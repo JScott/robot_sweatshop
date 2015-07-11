@@ -23,7 +23,7 @@ given 'the Overseer' do
     should('respond') { assert_equal 200, @response.code }
     should('link to process logs') do
       page = Nokogiri::HTML(@response.to_s)
-      links = page.css('a').select { |link| link.text.include? 'worker' }
+      links = page.css('a').select { |link| link.text.include? 'overseer' }
       assert_not_equal 0, links.count
     end
     should('have a form for running jobs') do
@@ -36,12 +36,12 @@ given 'the Overseer' do
     setup { Timeout.timeout($a_while) { @response = HTTP.get overseer_url('log') } }
     should('redirect') { assert_equal 303, @response.code }
   end
-  context '/log?for=worker' do
-    setup { Timeout.timeout($a_while) { @response = HTTP.get overseer_url('log?for=worker') } }
+  context '/log?for=overseer' do
+    setup { Timeout.timeout($a_while) { @response = HTTP.get overseer_url('log?for=overseer') } }
     should('respond') { assert_equal 200, @response.code }
     should('show logs from file') do
       page = Nokogiri::HTML(@response.to_s)
-      log = File.read "#{configatron.logfile_path}/worker.log"
+      log = File.read "#{configatron.logfile_path}/overseer.log"
       output = page.css('.raw_log').first
       assert_equal log, output.text, 'Expected raw log output'
     end
