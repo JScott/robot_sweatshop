@@ -16,7 +16,7 @@ module OverseerHelper
     context = {
       jobs: job_list,
       logs: log_list,
-      api_port: configatron.api_port
+      api_url: configatron.api_url
     }
     template = File.read "#{__dir__}/templates/index.html.eruby"
     eruby = Erubis::Eruby.new template
