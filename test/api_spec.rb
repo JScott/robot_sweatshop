@@ -1,4 +1,3 @@
-require 'bundler/setup'
 require 'kintama'
 require 'ezmq'
 require 'oj'
