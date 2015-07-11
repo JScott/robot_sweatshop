@@ -3,13 +3,13 @@ require 'erubis'
 # Helper methods for the Overseer Sinatra server
 module OverseerHelper
   def log_list
-    %w(assembler conveyor input job-dictionary payload-parser worker)
+    log_path = File.expand_path "#{configatron.logfile_path}"
+    Dir.glob("#{log_path}/*.log").map { |path| File.basename path, '.log' }
   end
 
   def job_list
-    log_path = File.expand_path "#{configatron.job_path}"
-    p log_path, Dir.glob("#{log_path}/*.yaml")
-    Dir.glob("#{log_path}/*.yaml").map { |path| File.basename path, '.yaml' }
+    job_path = File.expand_path "#{configatron.job_path}"
+    Dir.glob("#{job_path}/*.yaml").map { |path| File.basename path, '.yaml' }
   end
 
   def frontpage
