@@ -1,4 +1,3 @@
-require 'bundler/setup'
 require 'yaml'
 require 'oj'
 require 'robot_sweatshop/payload'

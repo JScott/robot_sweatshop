@@ -1,4 +1,3 @@
-require 'bundler/setup'
 require 'fileutils'
 require 'oj'
 require 'robot_sweatshop/config'

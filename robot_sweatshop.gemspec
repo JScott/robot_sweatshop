@@ -15,7 +15,6 @@ Gem::Specification.new do |gem|
 
   gem.required_ruby_version = '>= 2.1'
 
-  gem.add_runtime_dependency 'bundler'
   gem.add_runtime_dependency 'faker'
   gem.add_runtime_dependency 'commander'
   gem.add_runtime_dependency 'eye'
