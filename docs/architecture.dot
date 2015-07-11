@@ -2,26 +2,26 @@ digraph architecture {
   label="Robot Sweatshop process interaction"
   labelloc="top"
 
-  O [label="Overseer",shape=box]
-  I [label="Input"]
-  A [label="Assembler"]
-  W [label="Worker"]
+  overseer [label="Overseer",shape=box]
+  api [label="API"]
+  assembler [label="Assembler"]
+  worker [label="Worker"]
   subgraph cluster_services {
     label="Req/Rep Services"
     labelloc="bottom"
     style="dashed"
-    C [label="Conveyor"]
-    P [label="Payload Parser"]
-    D [label="Job Dictionary"]
+    conveyor [label="Conveyor"]
+    parser [label="Payload Parser"]
+    dictionary [label="Job Dictionary"]
   }
 
-  O->I
-  I->C
-  A->C [dir="both"]
-  A->P [dir="both"]
-  A->D [dir="both"]
-  A->W [headlabel="1..*",labeldistance=2]
-  W->C
+  overseer->api
+  api->conveyor
+  assembler->conveyor [dir="both"]
+  assembler->parser [dir="both"]
+  assembler->dictionary [dir="both"]
+  assembler->worker [headlabel="1..*",labeldistance=2]
+  worker->conveyor
 
-  { rank=same; I W A }
+  { rank=same; api worker assembler }
 }

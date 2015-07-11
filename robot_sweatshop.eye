@@ -42,10 +42,10 @@ Eye.application :robot_sweatshop do
     start_command "#{__dir__}/bin/sweatshop-overseer"
     daemonize true
   end
-  process :input do
-    pid_file "#{PID_PATH}/input.pid"
-    stdall "#{LOG_PATH}/input.log"
-    start_command "#{__dir__}/bin/sweatshop-input"
+  process :api do
+    pid_file "#{PID_PATH}/api.pid"
+    stdall "#{LOG_PATH}/api.log"
+    start_command "#{__dir__}/bin/sweatshop-api"
     daemonize true
   end
   process :assembler do

@@ -10,7 +10,7 @@
 POST payload /run/:job
 ```
 
-## input
+## api
 
 ```
 PUSH {

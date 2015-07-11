@@ -7,7 +7,7 @@ require 'robot_sweatshop/connections'
 using ExtendedEZMQ
 
 configure do
-  set :port, configatron.input_port
+  set :port, configatron.api_port
   set :bind, configatron.http_bind
   set :run, true
   set :conveyor, EZMQ::Client.new(port: configatron.conveyor_port)

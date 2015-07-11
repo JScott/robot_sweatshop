@@ -11,7 +11,7 @@ describe 'Robot Sweatshop' do
 
   setup do
     Setup.empty_conveyor
-    @pids = TestProcess.start %w(input conveyor payload-parser job-dictionary assembler worker)
+    @pids = TestProcess.start %w(api conveyor payload-parser job-dictionary assembler worker)
     Setup.populate_test_jobs
     sleep $a_while
   end
@@ -20,10 +20,10 @@ describe 'Robot Sweatshop' do
     TestProcess.stop @pids
   end
 
-  context "POSTing data to the HTTP Input" do
+  context "POSTing data to the API" do
     setup do
       clear_worker_output
-      url = input_url for_job: 'test_job'
+      url = job_running_url for_job: 'test_job'
       Timeout.timeout($a_while) { @response = HTTP.post url, body: example_raw_payload('JSON') }
     end
 

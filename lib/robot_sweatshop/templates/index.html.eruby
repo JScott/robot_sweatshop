@@ -8,8 +8,8 @@
     var QueueJob = function() {
       var job = $('select#job').val();
       var data = $('textarea#data').val();
-      console.log("http://localhost:<%= input_port %>/run/"+job);
-      $.post("http://localhost:<%= input_port %>/run/"+job, data);
+      console.log("http://localhost:<%= api_port %>/run/"+job);
+      $.post("http://localhost:<%= api_port %>/run/"+job, data);
     }
   </script>
   <style>

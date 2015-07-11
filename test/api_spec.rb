@@ -10,7 +10,7 @@ require_relative 'shared/helpers'
 $stdout.sync = true
 
 Kintama.on_start do
-  @pids = TestProcess.start %w(input)
+  @pids = TestProcess.start %w(api)
   sleep $a_while
 end
 
@@ -26,7 +26,7 @@ given 'the HTTP Input' do
     context "POSTing #{format} data" do
       setup do
         @conveyor = TestProcess.stub :conveyor
-        url = input_url for_job: 'test_job'
+        url = job_running_url for_job: 'test_job'
         Timeout.timeout($a_while) do
           @response = HTTP.post url, body: example_raw_payload(format)
         end

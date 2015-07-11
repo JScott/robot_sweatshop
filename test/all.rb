@@ -19,7 +19,7 @@ def non_zero(array)
 end
 
 tests = %w(
-  input
+  api
   conveyor
   payload_parser
   job_dictionary

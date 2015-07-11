@@ -3,7 +3,7 @@ require 'erubis'
 # Helper methods for the Overseer Sinatra server
 module OverseerHelper
   def log_list
-    %w(assembler conveyor input job-dictionary payload-parser worker)
+    %w(api assembler conveyor job-dictionary payload-parser worker)
   end
 
   def job_list
@@ -16,7 +16,7 @@ module OverseerHelper
     context = {
       jobs: job_list,
       logs: log_list,
-      input_port: configatron.input_port
+      api_port: configatron.api_port
     }
     template = File.read "#{__dir__}/templates/index.html.eruby"
     eruby = Erubis::Eruby.new template

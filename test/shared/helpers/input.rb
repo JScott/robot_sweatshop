@@ -10,8 +10,8 @@ module InputHelper
     payload_strings[format.downcase]
   end
 
-  def input_url(for_job: 'test_job')
-    "http://localhost:#{configatron.input_port}/run/#{for_job}"
+  def job_running_url(for_job: 'test_job')
+    "http://localhost:#{configatron.api_port}/run/#{for_job}"
   end
 
   def conveyor_enqueue(type)
