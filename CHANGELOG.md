@@ -6,7 +6,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Multiple worker support
 
-## [0.4.10] - not quite
+## [0.4.10] - 2015-07-13
 ### Added
 - Started using a change log
 
