@@ -1,6 +1,7 @@
 require 'kintama'
 require 'ezmq'
 require 'http'
+require 'timeout'
 require_relative 'shared/scaffolding'
 require_relative 'shared/helpers'
 
