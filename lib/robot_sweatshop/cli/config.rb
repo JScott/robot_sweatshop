@@ -9,10 +9,7 @@ module CLI
     end
 
     def self.path(scope)
-      case scope
-      when 'system'
-        '/etc/robot_sweatshop/config.yaml'
-      when 'user'
+      if scope == 'user'
         '~/.robot_sweatshop/config.yaml'
       else
         '.robot_sweatshop/config.yaml'

@@ -6,12 +6,12 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Multiple worker support
 
-### Removed
-- `sweatshop config system` for convention over configuration
-
 ## [0.4.10] - not quite
 ### Added
 - Started using a change log
+
+### Removed
+- `sweatshop config system` for convention over configuration
 
 ### Changed
 - Input server being transformed into the API server
