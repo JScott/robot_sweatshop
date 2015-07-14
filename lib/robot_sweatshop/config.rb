@@ -1,5 +1,6 @@
 require 'configatron'
 require 'yaml'
+require 'terminal-announce'
 
 configatron.reset!
 
@@ -16,6 +17,8 @@ configurations.each do |config_path|
     hash = YAML.load_file config_path
     configatron.configure_from_hash hash
   end
+rescue ArgumentError => error
+  Announce.info "Couldn't load '#{config_path}': #{error.message}"
 end
 
 require 'robot_sweatshop/create-config-directories'
