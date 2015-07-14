@@ -6,7 +6,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Multiple worker support
 
-## [0.4.11] - 2015-07-14
+## [0.4.12] - 2015-07-14
 ### Fixed
 - Config erroring out if you don't have a home path
 
