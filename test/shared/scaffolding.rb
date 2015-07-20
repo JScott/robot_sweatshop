@@ -41,7 +41,8 @@ module TestProcess
   def self.stub(process_name)
     process = {
       conveyor: {type: 'Server', port: configatron.conveyor_port},
-      worker:   {type: 'Puller', port: configatron.worker_port}
+      worker:   {type: 'Puller', port: configatron.worker_port},
+      logger:   {type: 'Subscriber', port: configatron.output_port}
     }[process_name]
     Stub.new process[:type], on_port: process[:port]
   end
