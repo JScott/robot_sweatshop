@@ -39,7 +39,7 @@ class Stub
   end
 
   def write(message)
-    file = File.new output_file, 'a'
+    file = File.new output_file, 'w'
     file.write message
     file.close
   end

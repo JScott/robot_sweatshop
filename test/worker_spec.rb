@@ -24,9 +24,13 @@ describe 'the Worker' do
 
   setup do
     @conveyor = TestProcess.stub :conveyor
-    @logger = TestProcess.stub :logger
+    @workspace_file = "#{configatron.workspace_path}/test_job-testingid/test.txt"
     @pusher = EZMQ::Pusher.new :bind, port: configatron.worker_port
     @pusher.serialize_with_json!
+    @pusher.send worker_push
+    Timeout.timeout($a_while) do
+      loop while @conveyor.output_empty?
+    end
   end
 
   teardown do
@@ -35,12 +39,7 @@ describe 'the Worker' do
 
   given 'valid job data is pushed' do
     setup do
-      @pusher.send worker_push
-      Timeout.timeout($a_while) do
-        loop while @logger.output_empty?
-        loop while @conveyor.output_empty?
-      end
-      @logger_data = File.read @logger.output_file
+      @logger_data = File.read @workspace_file
       @conveyor_data = eval File.read(@conveyor.output_file)
     end
 
@@ -57,7 +56,7 @@ describe 'the Worker' do
     end
 
     should 'run implicit jobs' do
-      assert_match /#{ENV['USER']}/, @logger_data
+      assert_match /implicit/, @logger_data
     end
 
     should 'tell the conveyor that job is complete' do
