@@ -24,9 +24,10 @@ describe 'the Worker' do
 
   setup do
     @conveyor = TestProcess.stub :conveyor
-    @logger = TestProcess.stub :logger
+    @output = TestProcess.stub :output
     @pusher = EZMQ::Pusher.new :bind, port: configatron.worker_port
     @pusher.serialize_with_json!
+    clear_worker_output
   end
 
   teardown do
@@ -37,32 +38,31 @@ describe 'the Worker' do
     setup do
       @pusher.send worker_push
       Timeout.timeout($a_while) do
-        loop while @logger.output_empty?
+        loop until File.exist? worker_output
         loop while @conveyor.output_empty?
       end
-      @logger_data = File.read @logger.output_file
-      @conveyor_data = eval File.read(@conveyor.output_file)
+      @worker_data = eval File.read(@conveyor.output_file)
     end
 
     should 'run the commands' do
-      assert_not_equal '', @logger_data
+      assert_equal true, File.file?(worker_output)
     end
 
     should 'run with the context as environment variables' do
-      assert_match /hello world/, @logger_data
+      assert_match /hello world/, File.read(worker_output)
     end
 
     should 'run with custom scripts in the path' do
-      assert_match /custom/, @logger_data
+      assert_match /custom/, File.read(worker_output)
     end
 
     should 'run implicit jobs' do
-      assert_match /#{ENV['USER']}/, @logger_data
+      assert_match /implicit/, File.read(worker_output)
     end
 
     should 'tell the conveyor that job is complete' do
-      assert_equal 'finish', @conveyor_data[:method]
-      assert_kind_of Fixnum, @conveyor_data[:data]
+      assert_equal 'finish', @worker_data[:method]
+      assert_kind_of Fixnum, @worker_data[:data]
     end
   end
 end

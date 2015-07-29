@@ -1,0 +1,15 @@
+#!/usr/bin/env ruby
+require 'ezmq'
+require 'contracts'
+require 'robot_sweatshop/config'
+require 'robot_sweatshop/connections'
+using ExtendedEZMQ
+include Contracts
+
+@subscriber = EZMQ::Subscriber.new port: configatron.logger_port, topic: ''
+@subscriber.serialize_with_json!
+puts 'Starting'
+
+@subscriber.listen do |message, topic|
+  puts "[#{Time.now.utc}][#{topic}] #{message}"
+end

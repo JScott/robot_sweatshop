@@ -16,3 +16,20 @@ module ExtendedEZMQ
     end
   end
 end
+
+module EZMQ
+  class Logger
+    using ExtendedEZMQ
+
+    def initialize(process)
+      @process = process
+      @logger = EZMQ::Publisher.new port: configatron.logger_port
+      @logger.serialize_with_json!
+    end
+
+    def write(text)
+      @logger.send text, topic: @process
+      nil
+    end
+  end
+end

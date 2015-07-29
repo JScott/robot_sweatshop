@@ -16,7 +16,7 @@ include Contracts
 Contract Hash, Proc => Any
 def from_workspace(named:)
   workspace = "#{named}-#{@worker_id}"
-  puts "Workspace: #{workspace}"
+  @sockets[:logger].write "Workspace: #{workspace}"
   path = File.expand_path "#{configatron.workspace_path}/#{workspace}"
   FileUtils.mkpath path
   Dir.chdir(path) { yield if block_given? }
@@ -31,25 +31,25 @@ Contract String, Hash => Maybe[IO]
 def stream(command, with_context:)
   command = ensure_shell_for command
   IO.popen(with_context, command) do |stream|
-    puts stream.gets until stream.eof?
+    @sockets[:logger].write stream.gets until stream.eof?
   end
 end
 
 Contract String, Hash => nil
 def execute(command, context)
-  puts "Executing '#{command}'"
+  @sockets[:logger].write "Executing '#{command}'"
   begin
     stream command, with_context: context
   rescue Errno::ENOENT => error
-    puts error.message
+    @sockets[:logger].write error.message
   end
-  puts "Execution complete with exit status: #{$?.exitstatus}"
+  @sockets[:logger].write "Execution complete with exit status: #{$?.exitstatus}"
 end
 
 Contract Fixnum => nil
 def finish(id)
   @sockets[:conveyor].request({ method: 'finish', data: id }, {})
-  puts "Job finished.\n\n"
+  @sockets[:logger].write "Job finished.\n\n"
 end
 
 Contract Array, Hash => Any
@@ -65,15 +65,16 @@ def run_implicit_job
   run implicit_job['commands'], with_context: implicit_job['environment']
 end
 
-puts 'Starting'
 @sockets = {
   conveyor: EZMQ::Client.new(port: configatron.conveyor_port),
   puller: EZMQ::Puller.new(:connect, port: configatron.worker_port)
 }
 @sockets.each { |_key, socket| socket.serialize_with_json! }
+@sockets[:logger] = EZMQ::Logger.new 'worker'
+@sockets[:logger].write 'Starting'
 
 @sockets[:puller].listen do |data|
-  puts "Running: #{data}"
+  @sockets[:logger].write "Running: #{data}"
   from_workspace named: data[:job_name] do
     run data[:commands], with_context: data[:context]
     run_implicit_job

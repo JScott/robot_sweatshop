@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    robot_sweatshop (0.4.9)
+    robot_sweatshop (0.4.12)
       commander
       configatron
       contracts

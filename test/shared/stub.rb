@@ -29,6 +29,8 @@ class Stub
     listener = case type
     when 'Puller'
       EZMQ::Puller.new :connect, port: port
+    when 'Subscriber'
+      EZMQ::Subscriber.new port: port, topic: ''
     else
       EZMQ.const_get(type).new port: port
     end
@@ -37,7 +39,7 @@ class Stub
   end
 
   def write(message)
-    file = File.new output_file, 'w'
+    file = File.new output_file, 'a'
     file.write message
     file.close
   end
