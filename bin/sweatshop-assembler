@@ -5,7 +5,6 @@ require 'exponential_backoff'
 require 'ezmq'
 require 'robot_sweatshop/config'
 require 'robot_sweatshop/connections'
-$stdout.sync = true
 include Contracts
 using ExtendedEZMQ
 

@@ -5,10 +5,8 @@ require 'fileutils'
 require 'contracts'
 require 'robot_sweatshop/config'
 require 'robot_sweatshop/connections'
-using ExtendedEZMQ
-$stdout.sync = true
-$stderr.sync = true
 include Contracts
+using ExtendedEZMQ
 
 # TODO: check existing worker ids. it'd be a problem to share a workspace
 @worker_id = ARGV[0] || "#{Faker::Name.first_name}"
