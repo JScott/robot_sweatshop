@@ -15,13 +15,13 @@ end
 
 Contract String => Or[Hash, nil]
 def load_if_exists(config_path)
-  puts "Reading job configuration from #{config_path}"
+  @sockets[:logger].write "Reading job configuration from #{config_path}"
   YAML.load_file config_path if File.exist? config_path
 end
 
 Contract None => Hash
 def empty_config
-  puts 'Job configuration not found or empty'
+  @sockets[:logger].write 'Job configuration not found or empty'
   {}
 end
 
@@ -43,10 +43,16 @@ def define(job_name)
   formatted config
 end
 
-puts 'Started'
-server = EZMQ::Server.new port: configatron.job_dictionary_port
-server.serialize_with_json!
-server.listen do |job_name|
-  puts "Looking up: #{job_name}"
+@sockets = {
+  server: EZMQ::Server.new(port: configatron.job_dictionary_port),
+  logger: EZMQ::Logger.new('job_dictionary')
+}
+@sockets.each do |key, socket|
+  socket.serialize_with_json! unless key == :logger
+end
+
+@sockets[:logger].write 'Started'
+@sockets[:server].listen do |job_name|
+  @sockets[:logger].write "Looking up: #{job_name}"
   define job_name
 end

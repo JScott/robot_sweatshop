@@ -58,7 +58,7 @@ end
   socket.serialize_with_json! unless key == :logger
 end
 
-@sockets[:logger].write 'Starting the Conveyor'
+@sockets[:logger].write 'Started'
 @sockets[:server].listen do |request|
   @sockets[:logger].write "Received: #{request.inspect}"
   next unless request.is_a? Hash
