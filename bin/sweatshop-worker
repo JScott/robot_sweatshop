@@ -67,12 +67,14 @@ end
 
 @sockets = {
   conveyor: EZMQ::Client.new(port: configatron.conveyor_port),
-  puller: EZMQ::Puller.new(:connect, port: configatron.worker_port)
+  puller: EZMQ::Puller.new(:connect, port: configatron.worker_port),
+  logger: EZMQ::Logger.new('worker')
 }
-@sockets.each { |_key, socket| socket.serialize_with_json! }
-@sockets[:logger] = EZMQ::Logger.new 'worker'
-@sockets[:logger].write 'Starting'
+@sockets.each do |key, socket|
+  socket.serialize_with_json! unless key == :logger
+end
 
+@sockets[:logger].write 'Starting'
 @sockets[:puller].listen do |data|
   @sockets[:logger].write "Running: #{data}"
   from_workspace named: data[:job_name] do

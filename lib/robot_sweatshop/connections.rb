@@ -17,6 +17,7 @@ module ExtendedEZMQ
   end
 end
 
+# A logger that publishes what it writes
 module EZMQ
   class Logger
     using ExtendedEZMQ
