@@ -10,6 +10,7 @@ configure do
   set :port, configatron.api_port
   set :bind, configatron.http_bind
   set :run, true
+  set :log, EZMQ::Logger.new('api')
   set :conveyor, EZMQ::Client.new(port: configatron.conveyor_port)
   settings.conveyor.serialize_with_json!
   enable :cross_origin if configatron.http_cross_origin
@@ -20,7 +21,7 @@ get '/' do
 end
 
 post '/run/:job_name' do
-  puts "Received payload for #{params['job_name']}"
+  settings.log.write "Received payload for #{params['job_name']}"
   request.body.rewind
   payload = request.body.read
   hash = {
