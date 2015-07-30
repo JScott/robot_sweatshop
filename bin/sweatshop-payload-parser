@@ -57,11 +57,17 @@ def parse(raw_payload, format)
   formatted payload
 end
 
-puts 'Started'
-server = EZMQ::Server.new port: configatron.payload_parser_port
-server.serialize_with_json!
-server.listen do |request|
-  puts "Parsing: #{request}"
+@sockets = {
+  server: EZMQ::Server.new(port: configatron.payload_parser_port),
+  logger: EZMQ::Logger.new('payload_parser')
+}
+@sockets.each do |key, socket|
+  socket.serialize_with_json! unless key == :logger
+end
+
+@sockets[:logger].write 'Started'
+@sockets[:server].listen do |request|
+  @sockets[:logger].write "Parsing: #{request}"
   format = detect_format_of request
   parse request[:payload], format
 end
