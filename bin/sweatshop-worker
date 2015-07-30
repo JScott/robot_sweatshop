@@ -74,7 +74,7 @@ end
   socket.serialize_with_json! unless key == :logger
 end
 
-@sockets[:logger].write 'Starting'
+@sockets[:logger].write 'Started'
 @sockets[:puller].listen do |data|
   @sockets[:logger].write "Running: #{data}"
   from_workspace named: data[:job_name] do

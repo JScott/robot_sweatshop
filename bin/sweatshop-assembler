@@ -45,7 +45,7 @@ def request_job
   job_id = @sockets[:conveyor].request method: 'dequeue'
   return nil if job_id.nil?
   raw_job = @sockets[:conveyor].request method: 'lookup', data: job_id
-  puts "Assembling: '#{raw_job}'"
+  @sockets[:logger].write "Assembling: '#{raw_job}'"
   raw_job.merge job_id: job_id
 end
 
@@ -87,15 +87,18 @@ job_search = Fiber.new do
   end
 end
 
-puts 'Started'
 @sockets = {
   conveyor: EZMQ::Client.new(port: configatron.conveyor_port),
   worker: EZMQ::Pusher.new(:bind, port: configatron.worker_port),
   parser: EZMQ::Client.new(port: configatron.payload_parser_port),
-  dictionary: EZMQ::Client.new(port: configatron.job_dictionary_port)
+  dictionary: EZMQ::Client.new(port: configatron.job_dictionary_port),
+  logger: EZMQ::Logger.new('assembler')
 }
-@sockets.each { |_key, socket| socket.serialize_with_json! }
+@sockets.each do |key, socket|
+  socket.serialize_with_json! unless key == :logger
+end
 
+@sockets[:logger].write 'Started'
 loop do
   job = job_search.resume
   begin
@@ -104,7 +107,7 @@ loop do
     assembled_job = assemble job, payload, definition
     @sockets[:worker].send assembled_job
   rescue RuntimeError => error
-    puts error.message
+    @sockets[:logger].write error.message
     finish job[:job_id]
     next
   end
