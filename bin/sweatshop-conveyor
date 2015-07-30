@@ -17,25 +17,25 @@ include Contracts
 
 Contract Hash => Fixnum
 def enqueue(item)
-  puts "enqueue #{item}"
+  @sockets[:logger].write "enqueue #{item}"
   @items.enqueue item
 end
 
 Contract None => Maybe[Fixnum]
 def dequeue
-  puts 'dequeue'
+  @sockets[:logger].write 'dequeue'
   @items.dequeue
 end
 
 Contract Fixnum => Hash
 def lookup(id)
-  puts "lookup #{id}"
+  @sockets[:logger].write "lookup #{id}"
   @items.lookup(id)
 end
 
 Contract Fixnum => Bool
 def finish(id)
-  puts "finish #{id}"
+  @sockets[:logger].write "finish #{id}"
   @items.finish id
 end
 
@@ -50,11 +50,17 @@ def complete(request)
   send(request[:method])
 end
 
-puts 'Starting the Conveyor'
-server = EZMQ::Server.new port: configatron.conveyor_port
-server.serialize_with_json!
-server.listen do |request|
-  puts "Received: #{request.inspect}"
+@sockets = {
+  server: EZMQ::Server.new(port: configatron.conveyor_port),
+  logger: EZMQ::Logger.new('conveyor')
+}
+@sockets.each do |key, socket|
+  socket.serialize_with_json! unless key == :logger
+end
+
+@sockets[:logger].write 'Starting the Conveyor'
+@sockets[:server].listen do |request|
+  @sockets[:logger].write "Received: #{request.inspect}"
   next unless request.is_a? Hash
   next unless supported? request[:method]
   complete request
