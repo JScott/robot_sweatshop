@@ -68,7 +68,7 @@ end
 @sockets = {
   conveyor: EZMQ::Client.new(port: configatron.conveyor_port),
   puller: EZMQ::Puller.new(:connect, port: configatron.worker_port),
-  logger: EZMQ::Logger.new('worker')
+  logger: EZMQ::Logger.new("worker-#{@worker_id}")
 }
 @sockets.each do |key, socket|
   socket.serialize_with_json! unless key == :logger
