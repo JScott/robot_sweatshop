@@ -24,7 +24,7 @@ module EZMQ
 
     def initialize(process)
       @process = process
-      @logger = EZMQ::Publisher.new port: configatron.logger_port
+      @logger = EZMQ::Publisher.new :connect, port: configatron.reflector_port
       @logger.serialize_with_json!
       @user = `whoami`.chomp
       @host = `hostname`.chomp

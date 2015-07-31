@@ -7,7 +7,7 @@ require_relative 'shared/helpers'
 $stdout.sync = true
 
 Kintama.on_start do
-  @pids = TestProcess.start %w(overseer)
+  @pids = TestProcess.start %w(overseer logger)
   sleep $a_while
 end
 

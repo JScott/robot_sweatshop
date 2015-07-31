@@ -4,8 +4,13 @@ require 'robot_sweatshop/config'
 require 'robot_sweatshop/connections'
 using ExtendedEZMQ
 
-subscriber = EZMQ::Subscriber.new port: configatron.logger_port, topic: 'robot-sweatshop-logging'
-subscriber.serialize_with_json!
+@sockets = {
+  subscriber: EZMQ::Subscriber.new(:bind, port: configatron.logger_port, topic: 'robot-sweatshop-logging'),
+  reflector: EZMQ::Publisher.new(:bind, port: configatron.reflector_port)
+}
+@sockets.each do |key, socket|
+  socket.serialize_with_json! unless key == :logger
+end
 
 def write(text, for_process:)
   log_file = File.expand_path "#{configatron.logfile_path}/#{for_process}.log"
@@ -15,6 +20,7 @@ def write(text, for_process:)
 end
 
 write 'Started', for_process: 'logger'
-subscriber.listen do |data, topic|
+@sockets[:subscriber].listen do |data, topic|
   write data[:text], for_process: data[:process]
+  @sockets[:reflector].send data, topic: topic
 end
