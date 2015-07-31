@@ -4,9 +4,9 @@ require 'robot_sweatshop/config'
 require 'robot_sweatshop/connections'
 using ExtendedEZMQ
 
-@subscriber = EZMQ::Subscriber.new port: configatron.logger_port, topic: ''
-@subscriber.serialize_with_json!
+subscriber = EZMQ::Subscriber.new port: configatron.logger_port, topic: 'robot-sweatshop-logging'
+subscriber.serialize_with_json!
 
-@subscriber.listen do |message, topic|
-  puts "[#{Time.now.utc}][#{topic}] #{message}"
+subscriber.listen do |data, topic|
+  puts "[#{Time.now.utc}][#{data[:process]}] #{data[:text]}"
 end

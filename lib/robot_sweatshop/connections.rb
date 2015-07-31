@@ -26,10 +26,18 @@ module EZMQ
       @process = process
       @logger = EZMQ::Publisher.new port: configatron.logger_port
       @logger.serialize_with_json!
+      @user = `whoami`.chomp
+      @host = `hostname`.chomp
     end
 
     def write(text)
-      @logger.send text, topic: @process
+      data = {
+        text: text,
+        process: @process,
+        user: @user,
+        host: @host
+      }
+      @logger.send data, topic: 'robot-sweatshop-logging'
       nil
     end
   end

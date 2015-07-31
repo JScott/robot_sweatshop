@@ -3,7 +3,6 @@ require 'sinatra'
 require 'sinatra/cross_origin'
 require 'robot_sweatshop/config'
 require 'robot_sweatshop/overseer'
-
 helpers OverseerHelper
 
 configure do
