@@ -7,6 +7,14 @@ using ExtendedEZMQ
 subscriber = EZMQ::Subscriber.new port: configatron.logger_port, topic: 'robot-sweatshop-logging'
 subscriber.serialize_with_json!
 
+def write(text, for_process:)
+  log_file = File.expand_path "#{configatron.logfile_path}/#{for_process}.log"
+  File.open log_file, 'a' do |log|
+    log.write "[#{Time.now.utc}] #{text}\n"
+  end
+end
+
+write 'Started', for_process: 'logger'
 subscriber.listen do |data, topic|
-  puts "[#{Time.now.utc}][#{data[:process]}] #{data[:text]}"
+  write data[:text], for_process: data[:process]
 end
