@@ -5,6 +5,7 @@ require 'contracts'
 require 'robot_sweatshop/config'
 require 'robot_sweatshop/connections'
 using ExtendedEZMQ
+include Contracts
 
 queue_settings = {
   name: 'test',
@@ -12,8 +13,6 @@ queue_settings = {
   file: "#{configatron.database_path}/conveyor.db"
 }
 @items = StubbornQueue.new queue_settings
-$stdout.sync = true
-include Contracts
 
 Contract Hash => Fixnum
 def enqueue(item)
