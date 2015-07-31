@@ -53,7 +53,7 @@ Eye.application :robot_sweatshop do
     daemonize true
   end
   process :logger do
-    pid_file "#{PID_FILE}/logger.pid"
+    pid_file "#{PID_PATH}/logger.pid"
     start_command "#{__dir__}/bin/sweatshop-logger"
     daemonize true
   end
