@@ -19,8 +19,14 @@ def write(text, for_process:)
   end
 end
 
+def parse_worker_id_from(data)
+  process, worker_id = data[:process].split '-'
+  data.merge process: process, text: "[#{worker_id}] #{data[:text]}"
+end
+
 write 'Started', for_process: 'logger'
 @sockets[:subscriber].listen do |data, topic|
+  data = parse_worker_id_from data if data[:process] =~ /worker/
   write data[:text], for_process: data[:process]
   @sockets[:reflector].send data, topic: topic
 end
