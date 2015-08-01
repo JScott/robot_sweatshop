@@ -26,6 +26,7 @@ tests = %w(
   assembler
   worker
   overseer
+  logger
   end-to-end
 )
 exit_statuses = []
