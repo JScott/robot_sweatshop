@@ -1,10 +1,14 @@
 # Change Log
-All notable changes to this project will be documented in this file.
-This project adheres to [Semantic Versioning](http://semver.org/).
+All notable changes to this project will be documented in this file as specified by [http://keepachangelog.com/](http://keepachangelog.com/). This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased][unreleased]
 ### Added
 - Multiple worker support
+
+## [0.4.13] - 2015-07-31
+### Added
+- Logging over ZMQ
+- The Logger process to write files and reflect messages
 
 ## [0.4.12] - 2015-07-14
 ### Fixed
