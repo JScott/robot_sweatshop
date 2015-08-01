@@ -30,7 +30,7 @@ class Stub
     when 'Puller'
       EZMQ::Puller.new :connect, port: port
     when 'Subscriber'
-      EZMQ::Subscriber.new port: port, topic: ''
+      EZMQ::Subscriber.new port: port, topic: 'robot-sweatshop-logging'
     else
       EZMQ.const_get(type).new port: port
     end
