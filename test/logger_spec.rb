@@ -14,8 +14,8 @@ Kintama.on_finish do
   TestProcess.stop @pids
 end
 
-describe 'the Conveyor' do
-  given 'data from the custom Logger' do
+describe 'the Logger' do
+  given 'log data from a process' do
     setup do
       @custom_logger = TestProcess.stub :logger
       EZMQ::Logger.new('test_spec').write 'success'
