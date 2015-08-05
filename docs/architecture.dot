@@ -1,5 +1,5 @@
 digraph architecture {
-  label="Robot Sweatshop process interaction"
+  label="Robot Sweatshop process interaction\n(Logger not shown)\n "
   labelloc="top"
 
   overseer [label="Overseer",shape=box]

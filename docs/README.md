@@ -72,6 +72,18 @@ PUSH {
 }
 ```
 
+## logger
+```
+PUB {
+  text String
+  process String
+  user String
+  host String
+}
+```
+
 # Notes
 
 Context is passed around with string keys because it's user provided. Everything else is passed with symbol keys
+
+Anything published to the logger will be republished to the reflector port
