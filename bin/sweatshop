@@ -11,8 +11,8 @@ program :version, '0.4.13'
 program :description, 'A lightweight, nonopinionated CI server'
 program :help, 'Author', 'Justin Scott <jvscott@gmail.com>'
 
-command :job do |c|
-  c.syntax = 'sweatshop job <name>'
+command :plan do |c|
+  c.syntax = 'sweatshop plan <name>'
   c.description = 'Creates and edits jobs.'
   c.option '--auto', 'Create the file without opening the editor.'
   c.action do |args, options|

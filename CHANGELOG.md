@@ -5,6 +5,9 @@ All notable changes to this project will be documented in this file as specified
 ### Added
 - Multiple worker support
 
+### Changed
+- `sweatshop job` renamed `sweatshop plan`
+
 ## [0.4.13] - 2015-07-31
 ### Added
 - Logging over ZMQ

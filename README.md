@@ -11,7 +11,7 @@ Robot Sweatshop is a single-purpose CI server that runs collections of arbitrary
 - install [ZMQ as described in the EZMQ gem](https://github.com/colstrom/ezmq#operating-system-notes)
 - `gem install robot_sweatshop`
 - `sweatshop start`
-- `sweatshop job example --auto`
+- `sweatshop plan example --auto`
 - `curl -d '' localhost:10555/run/example`
 - `cat .robot_sweatshop/log/worker.log`
 
