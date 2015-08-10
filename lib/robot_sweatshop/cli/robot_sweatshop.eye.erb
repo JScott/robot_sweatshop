@@ -1,6 +1,5 @@
 require 'yaml'
 
-# TODO: per-user temp file
 CONFIG_PATH = File.expand_path '~/.robot_sweatshop/compiled_config.yaml'
 CONFIG = YAML.load_file CONFIG_PATH
 PID_PATH = CONFIG[:pidfile_path]
