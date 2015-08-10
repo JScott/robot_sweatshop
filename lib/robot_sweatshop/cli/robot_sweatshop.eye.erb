@@ -34,9 +34,9 @@ Eye.application :robot_sweatshop do
 
   group 'workers' do
   <% worker_count.times do |index| %>
-    process :worker_<%= index %> do
-      pid_file "#{PID_PATH}/worker_<%= index %>.pid"
-      start_command "sweatshop-worker <%= index %>"
+    process :worker_<%= index+1 %> do
+      pid_file "#{PID_PATH}/worker_<%= index+1 %>.pid"
+      start_command "sweatshop-worker <%= index+1 %>"
       daemonize true
     end
   <% end %>
