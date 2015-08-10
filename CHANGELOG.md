@@ -1,7 +1,9 @@
 # Change Log
 All notable changes to this project will be documented in this file as specified by [http://keepachangelog.com/](http://keepachangelog.com/). This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased][unreleased]
+## [Unreleased] - unreleased
+
+## [1.0.0] - 2015-08-10
 ### Added
 - Multiple worker support
 
