@@ -17,17 +17,17 @@ Eye.application :robot_sweatshop do
   group 'services' do
     process :job_dictionary do
       pid_file "#{PID_PATH}/job-dictionary.pid"
-      start_command "#{__dir__}/bin/sweatshop-job-dictionary"
+      start_command "sweatshop-job-dictionary"
       daemonize true
     end
     process :payload_parser do
       pid_file "#{PID_PATH}/payload-parser.pid"
-      start_command "#{__dir__}/bin/sweatshop-payload-parser"
+      start_command "sweatshop-payload-parser"
       daemonize true
     end
     process :conveyor do
       pid_file "#{PID_PATH}/conveyor.pid"
-      start_command "#{__dir__}/bin/sweatshop-conveyor"
+      start_command "sweatshop-conveyor"
       daemonize true
     end
   end
@@ -36,7 +36,7 @@ Eye.application :robot_sweatshop do
   <% worker_count.times do |index| %>
     process :worker_<%= index %> do
       pid_file "#{PID_PATH}/worker_<%= index %>.pid"
-      start_command "#{__dir__}/bin/sweatshop-worker <%= index %>"
+      start_command "sweatshop-worker <%= index %>"
       daemonize true
     end
   <% end %>
@@ -44,22 +44,22 @@ Eye.application :robot_sweatshop do
 
   process :overseer do
     pid_file "#{PID_PATH}/overseer.pid"
-    start_command "#{__dir__}/bin/sweatshop-overseer"
+    start_command "sweatshop-overseer"
     daemonize true
   end
   process :api do
     pid_file "#{PID_PATH}/api.pid"
-    start_command "#{__dir__}/bin/sweatshop-api"
+    start_command "sweatshop-api"
     daemonize true
   end
   process :assembler do
     pid_file "#{PID_PATH}/assembler.pid"
-    start_command "#{__dir__}/bin/sweatshop-assembler"
+    start_command "sweatshop-assembler"
     daemonize true
   end
   process :logger do
     pid_file "#{PID_PATH}/logger.pid"
-    start_command "#{__dir__}/bin/sweatshop-logger"
+    start_command "sweatshop-logger"
     daemonize true
   end
 end
