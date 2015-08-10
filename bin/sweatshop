@@ -24,7 +24,7 @@ command :plan do |c|
   end
 end
 
-command :config do |c|
+command :configure do |c|
   c.syntax = 'sweatshop config [options]'
   c.description = 'Creates and edits the user configuration file.'
   c.option '--auto', 'Create the file without opening the editor.'
