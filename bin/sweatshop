@@ -24,14 +24,6 @@ command :plan do |c|
   end
 end
 
-command :'job-list' do |c|
-  c.syntax = 'sweatshop job-list'
-  c.description = 'Lists available job configurations.'
-  c.action do
-    CLI::Job.list
-  end
-end
-
 command :config do |c|
   c.syntax = 'sweatshop config [options]'
   c.description = 'Creates and edits the user configuration file.'
