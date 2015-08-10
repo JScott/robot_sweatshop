@@ -7,16 +7,16 @@ module CLI
   # Methods for starting Robot Sweatshop
   module Start
     def self.sweatshop
-      Announce.info `eye stop robot_sweatshop`
+      Announce.info `eye stop robot_sweatshop:workers`
       load_eye_config
-      Announce.info `eye start robot_sweatshop`
+      Announce.info `eye restart robot_sweatshop`
     end
 
     def self.load_eye_config
       Config.compile_to_file
       output = `eye load #{generate_eye_config}`
       fail output if $?.exitstatus != 0
-      Announce.success "Robot Sweatshop workers loaded"
+      Announce.success "Robot Sweatshop loaded"
       Announce.info 'Run \'eye --help\' for more info on debugging'
     end
 
