@@ -32,6 +32,16 @@ Eye.application :robot_sweatshop do
     end
   end
 
+  group 'workers' do
+  <% worker_count.times do |index| %>
+    process :worker_<%= index %> do
+      pid_file "#{PID_PATH}/worker_<%= index %>.pid"
+      start_command "#{__dir__}/bin/sweatshop-worker <%= index %>"
+      daemonize true
+    end
+  <% end %>
+  end
+
   process :overseer do
     pid_file "#{PID_PATH}/overseer.pid"
     start_command "#{__dir__}/bin/sweatshop-overseer"
@@ -45,11 +55,6 @@ Eye.application :robot_sweatshop do
   process :assembler do
     pid_file "#{PID_PATH}/assembler.pid"
     start_command "#{__dir__}/bin/sweatshop-assembler"
-    daemonize true
-  end
-  process :worker do
-    pid_file "#{PID_PATH}/worker.pid"
-    start_command "#{__dir__}/bin/sweatshop-worker"
     daemonize true
   end
   process :logger do
