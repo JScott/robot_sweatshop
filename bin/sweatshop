@@ -25,10 +25,10 @@ command :plan do |c|
 end
 
 command :configure do |c|
-  c.syntax = 'sweatshop config [options]'
-  c.description = 'Creates and edits the user configuration file.'
+  c.syntax = 'sweatshop configure [options]'
+  c.description = 'Creates and edits the configuration file.'
   c.option '--auto', 'Create the file without opening the editor.'
-  c.option '--user', 'Create a user-level config instead of at the local path.'
+  c.option '--user', 'Create the file in the user\'s home directory instead of in the local path.'
   c.action do |args, options|
     options.default auto: false
     options.default user: false
