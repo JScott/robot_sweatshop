@@ -8,8 +8,8 @@ module CLI
       File.read "#{__dir__}/../../../config.defaults.yaml"
     end
 
-    def self.path(scope)
-      if scope == 'user'
+    def self.path(for_user: false)
+      if for_user
         '~/.robot_sweatshop/config.yaml'
       else
         '.robot_sweatshop/config.yaml'

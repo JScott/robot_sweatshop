@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file as specified
 - Multiple worker support
 
 ### Changed
+- `sweatshop config` now takes a `--user` flag instead of looking for string arguments
 - `sweatshop job` renamed `sweatshop plan`
 
 ## [0.4.13] - 2015-07-31

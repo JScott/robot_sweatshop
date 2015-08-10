@@ -28,10 +28,11 @@ command :config do |c|
   c.syntax = 'sweatshop config [options]'
   c.description = 'Creates and edits the user configuration file.'
   c.option '--auto', 'Create the file without opening the editor.'
+  c.option '--user', 'Create a user-level config instead of at the local path.'
   c.action do |args, options|
     options.default auto: false
-    for_scope = args.first || 'local'
-    config_file = CLI::Config.path for_scope
+    options.default user: false
+    config_file = CLI::Config.path for_user: options.user
     CLI.create config_file, with_contents: CLI::Config.default
     CLI.edit config_file unless options.auto
   end
