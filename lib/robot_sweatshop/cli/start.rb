@@ -6,17 +6,21 @@ require 'erubis'
 module CLI
   # Methods for starting Robot Sweatshop
   module Start
-    def self.sweatshop(with_worker_count: 1)
+    def self.sweatshop
+      Announce.info `eye stop robot_sweatshop`
+      load_eye_config
+      Announce.info `eye start robot_sweatshop`
+    end
+
+    def self.load_eye_config
       Config.compile_to_file
-      eye_config = generate_eye_config with_worker_count
-      output = `eye load #{eye_config}`
+      output = `eye load #{generate_eye_config}`
       fail output if $?.exitstatus != 0
-      Announce.success "Robot Sweatshop loaded"
-      Announce.info `eye restart robot_sweatshop`
+      Announce.success "Robot Sweatshop workers loaded"
       Announce.info 'Run \'eye --help\' for more info on debugging'
     end
 
-    def self.generate_eye_config(worker_count)
+    def self.generate_eye_config
       template = File.read "#{__dir__}/robot_sweatshop.eye.erb"
       eruby = Erubis::Eruby.new template
       compiled_config = eruby.result worker_count: configatron.worker_count
