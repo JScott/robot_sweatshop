@@ -1,0 +1,6 @@
+- Mascot/logo
+- Use something appropriate than TCP for ZMQ connections
+- Jenkins-to-Sweatshop job converting script
+- Take a look at beefcake for data versioning/serialization
+- CLI configuration via chomp and/or flags
+- Use [eye-http](https://github.com/kostya/eye-http) somewhere?

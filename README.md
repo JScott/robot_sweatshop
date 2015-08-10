@@ -43,24 +43,3 @@ By default, Robot Sweatshop looks in your current working path to configure and 
 ## Security
 
 You probably don't want to run Robot Sweatshop as a sudo user. Create a testing user and group and run `sweatshop start` as them.
-
-## Roadmap
-
-1.0
-
-- Mascot/logo
-
-1.1
-
-- Use something appropriate than TCP for ZMQ connections
-- Easier way to run multiple workers
-- Push/pull out node that worker streams output to
-- Add worker tags to output so it can all go to one file
-
-Beyond
-
-- Jenkins-to-Sweatshop job converting script
-- Take a look at beefcake for data versioning/serialization
-- Better logging for the processes
-- CLI configuration via chomp and/or flags
-- Use [eye-http](https://github.com/kostya/eye-http) for the '/' route?
