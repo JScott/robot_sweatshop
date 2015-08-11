@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    robot_sweatshop (0.4.13)
+    robot_sweatshop (1.0.0)
       commander
       configatron
       contracts
@@ -14,6 +14,7 @@ PATH
       sinatra
       sinatra-cross_origin
       stubborn_queue
+      sweatshop_gears
       terminal-announce
 
 GEM
@@ -28,7 +29,7 @@ GEM
     commander (4.3.4)
       highline (~> 1.7.2)
     configatron (4.5.0)
-    contracts (0.9)
+    contracts (0.11.0)
     daybreak (0.3.0)
     docile (1.1.5)
     domain_name (0.5.24)
@@ -50,6 +51,7 @@ GEM
       ffi-rzmq-core (>= 1.0.1)
     ffi-rzmq-core (1.0.3)
       ffi (~> 1.9)
+    git (1.2.9.1)
     highline (1.7.2)
     http (0.8.12)
       addressable (~> 2.3)
@@ -72,6 +74,11 @@ GEM
     rack (1.6.4)
     rack-protection (1.5.3)
       rack
+    rack-proxy (0.5.17)
+      rack
+    rack-reverse-proxy (0.8.1)
+      rack (>= 1.0.0)
+      rack-proxy (~> 0.5)
     rainbow (2.0.0)
     rake (10.4.2)
     redislike (0.2.5)
@@ -93,6 +100,15 @@ GEM
       daybreak
       moneta
       redislike
+    sweatshop_gears (1.0.5)
+      bundler
+      commander
+      contracts
+      erubis
+      git
+      rack-reverse-proxy
+      sinatra
+      terminal-announce
     terminal-announce (1.0.0)
       bundler
       contracts

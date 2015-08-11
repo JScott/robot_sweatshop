@@ -42,4 +42,8 @@ By default, Robot Sweatshop looks in your current working path to configure and 
 
 ## Security
 
-You probably don't want to run Robot Sweatshop as a sudo user. Create a testing user and group and run `sweatshop start` as them.
+You probably don't want to run Robot Sweatshop as a sudo user. Create a sandboxed user and group and run `sweatshop start` as them.
+
+## Extra scripts
+
+You're probably going to be doing the same stuff over and over, like `git clone` or `git pull` depending on if the repo already exists in the workspace. Check out [Sweatshop Gears](), package management that comes bundled with Robot Sweatshop.

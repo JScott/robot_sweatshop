@@ -28,6 +28,7 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency 'oj'
   gem.add_runtime_dependency 'exponential-backoff'
   gem.add_runtime_dependency 'erubis'
+  gem.add_runtime_dependency 'sweatshop_gears'
 
   gem.add_development_dependency 'rake'
   gem.add_development_dependency 'kintama'

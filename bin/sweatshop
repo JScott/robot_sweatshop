@@ -61,10 +61,6 @@ command :gears do |c|
   c.description = 'See `sweatshop-gears --help`'
   c.option '--path'
   c.action do
-    begin
-      system "sweatshop-gears #{ARGV[1..-1].join ' '}"
-    rescue Errno::ENOENT
-      Announce.failure 'Sweatshop Gears not found. Run `gem install sweatshop_gears`'
-    end
+    system "sweatshop-gears #{ARGV[1..-1].join ' '}"
   end
 end
