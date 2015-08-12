@@ -44,6 +44,6 @@ By default, Robot Sweatshop looks in your current working path to configure and 
 
 You probably don't want to run Robot Sweatshop as a sudo user. Create a sandboxed user and group and run `sweatshop start` as them.
 
-## Extra scripts
+## Extending functionality
 
-You're probably going to be doing the same stuff over and over, like `git clone` or `git pull` depending on if the repo already exists in the workspace. Check out `sweatshop-gears --help`, provided by [Sweatshop Gears](https://github.com/JScott/sweatshop-gears-cli). This is essentially package management for scripts and processes that comes bundled with Robot Sweatshop.
+For extension scripts and processes, check out [Sweatshop Gears](https://github.com/JScott/sweatshop-gears-cli) with `sweatshop-gears --help`. This is essentially helper package management that comes bundled with Robot Sweatshop.
