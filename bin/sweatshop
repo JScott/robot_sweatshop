@@ -55,12 +55,3 @@ command :stop do |c|
 end
 
 alias_command :restart, :start
-
-command :gears do |c|
-  c.syntax = 'sweatshop gears ...'
-  c.description = 'See `sweatshop-gears --help`'
-  c.option '--path'
-  c.action do
-    system "sweatshop-gears #{ARGV[1..-1].join ' '}"
-  end
-end
