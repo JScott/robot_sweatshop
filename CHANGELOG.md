@@ -3,6 +3,16 @@ All notable changes to this project will be documented in this file as specified
 
 ## [Unreleased] - unreleased
 
+## [1.0.1] - 2015-08-12
+### Changed
+- More documentation around Sweatshop Gears
+
+### Added
+- Dependency on `sweatshop_gears`
+
+### Removed
+- `sweatshop gears` got confusing and complex, use `sweatshop-gears` instead which is guaranteed to be there now
+
 ## [1.0.0] - 2015-08-10
 ### Added
 - Multiple worker support
