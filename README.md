@@ -1,4 +1,5 @@
-[![Gem Version](https://badge.fury.io/rb/robot_sweatshop.svg)](http://badge.fury.io/rb/robot_sweatshop) [![Join the chat at https://gitter.im/JScott/robot_sweatshop](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/JScott/robot_sweatshop?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Gem Version](https://badge.fury.io/rb/robot_sweatshop.svg)](http://badge.fury.io/rb/robot_sweatshop) 
+[![Freenode IRC](https://img.shields.io/badge/Freenode%20IRC-%23robot__sweatshop-brightgreen.svg)](https://webchat.freenode.net/?channels=robot_sweatshop)
 
 # Robot Sweatshop
 
